@@ -1,0 +1,400 @@
+:root {
+    --bg-color: #f0f0f0;
+    --text-color: #333;
+    --header-bg: #d3d3d3;
+    --card-bg: linear-gradient(135deg, #cce7f6 0%, #a8d8ff 100%);
+    --footer-color: #666;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --group-bg: rgba(255, 255, 255, 0.3);
+    --group-title: #4a5568;
+    --transition-time: 0.2s;
+    --max-width: 1440px;
+    --dropdown-bg: white;
+    --copy-btn-bg: rgba(255, 255, 255, 0.7);
+    --copy-btn-hover: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --header-bg: #2d2d2d;
+    --card-bg: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+    --footer-color: #888;
+    --shadow-color: rgba(255, 255, 255, 0.1);
+    --group-bg: rgba(0, 0, 0, 0.2);
+    --group-title: #cbd5e0;
+    --dropdown-bg: #333;
+    --copy-btn-bg: rgba(0, 0, 0, 0.5);
+    --copy-btn-hover: rgba(0, 0, 0, 0.7);
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+header {
+    background-color: var(--header-bg);
+    padding: 1.2rem;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    position: relative;
+}
+
+.header-container h1 {
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* 服务组导航样式 */
+.group-navigation {
+    position: relative;
+    z-index: 100;
+}
+
+.group-nav-toggle {
+    background: var(--bg-color);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.group-nav-toggle:hover {
+    background: var(--text-color);
+    color: var(--bg-color);
+}
+
+.group-nav-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 200px;
+    max-height: 0;
+    overflow: hidden;
+    background: var(--dropdown-bg);
+    border-radius: 6px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    margin-top: 5px;
+}
+
+.group-nav-dropdown.active {
+    max-height: 400px;
+    opacity: 1;
+    visibility: visible;
+    overflow-y: auto;
+}
+
+.group-nav-item {
+    padding: 10px 15px;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text-color);
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    transition: background-color 0.2s;
+}
+
+.group-nav-item:hover {
+    background-color: var(--group-bg);
+}
+
+.theme-switch {
+    background: var(--header-bg);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px var(--shadow-color);
+    transition: all 0.3s ease;
+    z-index: 10;
+    touch-action: manipulation;
+}
+
+.theme-switch:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.search-container {
+    margin: 1rem 0 2rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border-radius: 24px;
+    border: 2px solid var(--group-bg);
+    background: var(--group-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    max-width: 100%;
+    -webkit-appearance: none;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--text-color);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-group {
+    background: var(--group-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    scroll-margin-top: 100px; /* 用于滚动定位 */
+}
+
+.service-group__title {
+    font-size: 1.1em;
+    margin: 0 0 1.2rem;
+    position: relative;
+    padding-left: 1rem;
+    color: var(--group-title);
+    line-height: 1.3;
+}
+
+.service-group__title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 1.2em;
+    background: var(--text-color);
+    border-radius: 2px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.service-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 1rem;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    border: none;
+    color: inherit;
+    font-size: 0.95em;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    line-height: 1.4;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.service-card:active {
+    transform: scale(0.97) translateY(0);
+}
+
+.service-card:focus {
+    outline: 2px solid var(--text-color);
+    outline-offset: 2px;
+}
+
+.service-card__badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 0.75em;
+}
+
+/* 复制按钮样式 */
+.copy-url-btn {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: var(--copy-btn-bg);
+    border: none;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s, background-color 0.2s;
+    z-index: 2;
+    padding: 0;
+    font-size: 12px;
+}
+
+.copy-url-btn:hover {
+    opacity: 1;
+    background-color: var(--copy-btn-hover);
+}
+
+.copy-url-btn:active {
+    transform: scale(0.9);
+}
+
+.service-card:hover .copy-url-btn {
+    opacity: 1;
+}
+
+.copy-success {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--header-bg);
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.copy-success.show {
+    opacity: 1;
+}
+
+footer {
+    background-color: var(--header-bg);
+    padding: 1rem;
+    text-align: center;
+    margin-top: auto;
+    box-shadow: 0 -2px 4px var(--shadow-color);
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1.2rem 1rem;
+    }
+
+    .search-container {
+        padding: 0 0.5rem;
+        margin: 0.5rem 0 1.5rem;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .service-group {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 10px;
+    }
+
+    .service-group__title {
+        font-size: 1em;
+        margin-bottom: 1rem;
+        padding-left: 0.75rem;
+    }
+
+    .service-group__title::before {
+        width: 3px;
+        height: 1em;
+    }
+
+    .service-card {
+        min-height: 70px;
+        font-size: 0.9em;
+        padding: 0.8rem;
+        border-radius: 8px;
+    }
+
+    .group-nav-toggle {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+
+    .header-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .header-container h1 {
+        order: -1;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .group-navigation {
+        margin-right: 15px;
+    }
+
+    footer {
+        padding: 0.8rem;
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-container h1 {
+        font-size: 1.3em;
+    }
+
+    .search-input {
+        padding: 0.7rem 1rem;
+        font-size: 0.95em;
+    }
+}

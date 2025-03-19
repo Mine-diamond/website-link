@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Mine的个人导航站 - 快速访问常用服务">
+    <title>Mine导航站</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="group-navigation">
+                <button class="group-nav-toggle" aria-label="服务组导航">服务组跳转 ▼</button>
+                <div class="group-nav-dropdown">
+                    <!-- 将通过JS动态填充 -->
+                </div>
+            </div>
+            <h1>Mine导航站</h1>
+            <button class="theme-switch" aria-label="切换主题" onclick="ThemeManager.toggle()">🌓</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="search-container">
+            <input type="text" 
+                   id="searchInput" 
+                   placeholder="搜索服务..." 
+                   class="search-input"
+                   aria-label="服务搜索">
+        </div>
+
+        <main>
+            <!-- 动态生成的服务分组 -->
+        </main>
+    </div>
+
+    <footer>
+        © <span id="currentYear"></span> Mine的成长空间 | 版本 2.3
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
