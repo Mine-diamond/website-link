@@ -1,15 +1,29 @@
 const NavigationManager = {
     init() {
-        // 等待分组渲染完毕，再创建导航
-        if (document.querySelectorAll('.service-group').length > 0) {
+        // 创建一个标志来跟踪是否已经初始化
+        this.initialized = false;
+        
+        // 立即尝试初始化
+        this.tryInitialize();
+        
+        // 同时也监听groupsRendered事件，以防服务组尚未渲染完成
+        document.addEventListener('groupsRendered', () => {
+            this.tryInitialize();
+        });
+    },
+    
+    tryInitialize() {
+        // 如果已经初始化过，就不再初始化
+        if (this.initialized) {
+            return;
+        }
+        
+        // 检查是否已经有服务组渲染完成
+        const serviceGroups = document.querySelectorAll('.service-group');
+        if (serviceGroups.length > 0) {
             this.createGroupNavigationDropdown();
             this.initEventListeners();
-        } else {
-            // 如果分组尚未渲染，等待渲染完成事件
-            document.addEventListener('groupsRendered', () => {
-                this.createGroupNavigationDropdown();
-                this.initEventListeners();
-            });
+            this.initialized = true;
         }
     },
     
@@ -63,46 +77,36 @@ const NavigationManager = {
         // 点击导航项滚动到对应分组
         dropdown.addEventListener('click', (e) => {
             if (e.target.classList.contains('group-nav-item')) {
-                const targetId = e.target.dataset.target;
-                const targetElement = document.getElementById(targetId);
+                const title = e.target.textContent;
                 
-                console.log('点击的导航项:', e.target.textContent);
-                console.log('目标ID:', targetId);
-                console.log('目标元素:', targetElement);
+                console.log('点击的导航项:', title);
                 
-                if (targetElement) {
+                // 通过标题查找目标元素
+                const groups = document.querySelectorAll('.service-group');
+                const targetGroup = [...groups].find(group => 
+                    group.querySelector('.service-group__title').textContent === title
+                );
+                
+                if (targetGroup) {
                     // 滚动到目标元素
-                    targetElement.scrollIntoView({
+                    targetGroup.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
                     });
                     
                     // 高亮目标元素
-                    targetElement.style.boxShadow = '0 0 0 3px var(--text-color)';
+                    targetGroup.style.boxShadow = '0 0 0 3px var(--text-color)';
                     setTimeout(() => {
-                        targetElement.style.boxShadow = '';
+                        targetGroup.style.boxShadow = '';
                     }, 2000);
                     
                     // 关闭下拉菜单
                     dropdown.classList.remove('active');
                 } else {
-                    console.error(`找不到目标元素: ${targetId}`);
-                    // 尝试按索引查找并滚动
-                    const index = parseInt(e.target.dataset.index, 10);
-                    const groups = document.querySelectorAll('.service-group');
-                    if (!isNaN(index) && groups[index]) {
-                        groups[index].scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                        groups[index].style.boxShadow = '0 0 0 3px var(--text-color)';
-                        setTimeout(() => {
-                            groups[index].style.boxShadow = '';
-                        }, 2000);
-                        dropdown.classList.remove('active');
-                    }
+                    console.error(`找不到标题为 "${title}" 的服务组`);
                 }
             }
         });
     }
+    
 };
