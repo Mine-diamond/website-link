@@ -8,6 +8,7 @@ const appConfig = {
                 { label: 'webUI AI服务入口', url: 'http://localhost:3000', badge: '本机' },
                 { label: 'DeepSeek开放平台', url: 'https://platform.deepseek.com/' },
                 { label: 'DeepSeek', url: 'https://chat.deepseek.com/', badge: '网页' },
+                { label: 'chatGPT', url: 'https://chatGPT.com/', badge: '网页' },
                 { label: 'Gemini', url: 'https://gemini.google.com/app', badge: '网页' },
                 { label: 'Gemini', url: 'https://aistudio.google.com/app/apikey?hl=zh-cn', badge: '密钥api' },
                 { label: 'Gemini', url: 'https://console.cloud.google.com/apis/api/generativelanguage.googleapis.com/metrics?project=gen-lang-client-0843974581', badge: '流量数据' },
