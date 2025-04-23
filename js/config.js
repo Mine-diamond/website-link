@@ -30,6 +30,13 @@ const appConfig = {
             ]
         },
         {
+            title: '我的项目',
+            items: [
+                { label: 'pet fight game', url: 'https://github.com/Mine-diamond/petFightGame' },
+                { label: 'RHyardQuickOperation', url: 'https://github.com/Mine-diamond/RHyardQuickOperation' }
+            ]
+        },
+        {
             title: '其他服务',
             items: [
                 { label: 'Mine WP（已弃用）', url: 'http://localhost:8881/', badge: '已弃用' },
