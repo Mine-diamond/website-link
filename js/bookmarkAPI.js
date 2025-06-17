@@ -30,7 +30,7 @@ class BookmarkAPI {
     }
 
     // 获取所有书签
-    async getBookmarksmarks() {
+    async getBookmarks() {
         return await this.request('/bookmarks');
     }
 
@@ -59,7 +59,7 @@ class BookmarkAPI {
     }
 
     // 搜索书签
-    async searchBookmarksmarks(query, tags = [], importance = null) {
+    async searchBookmarks(query, tags = [], importance = null) {
         const params = new URLSearchParams();
         
         if (query) params.append('q', query);
