@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收藏夹 - YyMing</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 收藏夹特有样式 */
+        .bookmark-actions {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .add-bookmark-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .bookmark-search {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+        
+        .bookmark-card {
+            position: relative;
+        }
+        
+        .bookmark-card .card-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .bookmark-card:hover .card-actions {
+            opacity: 1;
+        }
+        
+        .card-actions button {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            margin: 0 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .importance-stars {
+            color: #ffd700;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .bookmark-tags {
+            margin-top: 8px;
+        }
+        
+        .bookmark-tags .tag {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部导航 -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="header-title">收藏夹</h1>
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link">导航站</a>
+                    <a href="bookmarks.html" class="nav-link active">收藏夹</a>
+                    <button id="theme-toggle" class="theme-toggle" title="切换主题">🌙</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- 操作栏 -->
+        <div class="bookmark-actions">
+            <button class="add-bookmark-btn" onclick="openAddBookmarkModal()">+ 添加书签</button>
+            <input type="text" class="bookmark-search" id="search-input" placeholder="搜索书签..." onkeyup="searchBookmarks()">
+            <select id="importance-filter" onchange="filterBookmarks()">
+                <option value="">所有重要程度</option>
+                <option value="5">5星</option>
+                <option value="4">4星以上</option>
+                <option value="3">3星以上</option>
+                <option value="2">2星以上</option>
+                <option value="1">1星以上</option>
+            </select>
+        </div>
+
+        <!-- 书签网格 -->
+        <div class="cards-grid" id="bookmarks-grid">
+            <!-- 书签卡片将通过JS动态生成 -->
+        </div>
+
+        <!-- 加载状态 -->
+        <div id="loading" class="loading" style="display: none;">
+            正在加载...
+        </div>
+
+        <!-- 空状态 -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <h3>还没有书签</h3>
+            <p>点击上方按钮添加你的第一个书签吧！</p>
+        </div>
+    </div>
+
+    <!-- 添加/编辑书签模态框 -->
+    <div id="bookmark-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 id="modal-title">添加书签</h2>
+            <form id="bookmark-form">
+                <div class="form-group">
+                    <label>标题 *</label>
+                    <input type="text" id="bookmark-title" required>
+                </div>
+                <div class="form-group">
+                    <label>URL *</label>
+                    <input type="url" id="bookmark-url" required>
+                </div>
+                <div class="form-group">
+                    <label>标签</label>
+                    <input type="text" id="bookmark-tags" placeholder="用逗号分隔多个标签">
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="bookmark-notes" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>重要程度</label>
+                    <select id="bookmark-importance">
+                        <option value="1">1星</option>
+                        <option value="2">2星</option>
+                        <option value="3" selected>3星</option>
+                        <option value="4">4星</option>
+                        <option value="5">5星</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" onclick="closeBookmarkModal()">取消</button>
+                    <button type="submit">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/bookmarkAPI.js"></script>
+    <script src="js/bookmarks.js"></script>
+</body>
+</html>
