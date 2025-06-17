@@ -77,3 +77,4 @@ class BookmarkAPI {
 
 // 导出API实例
 window.bookmarkAPI = new BookmarkAPI();
+var bookmarkAPI = new BookmarkAPI();
