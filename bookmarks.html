@@ -6,718 +6,191 @@
     <title>收藏夹 - YyMing</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="css/styles.css">
-<style>
-        /* 收藏夹页面增强样式 */
+
+    <!-- 书签页专属紧凑样式 -->
+    <style>
+        /* ───────── 容器与头部 ───────── */
         .bookmarks-container {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 2rem 1.5rem;
-            width: 100%;
-            box-sizing: border-box;
+            padding: 1.5rem 1rem;
         }
-
-        .bookmarks-header {
+        header.bookmarks-header {
             background: var(--header-bg);
-            padding: 1.2rem;
+            padding: 1rem 1.25rem;
             border-radius: 12px;
             margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px var(--shadow-color);
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: var(--max-width);
-            margin: 0 auto;
-        }
-
-        .header-title {
-            margin: 0;
-            color: var(--text-color);
-            font-size: 1.6rem;
-            font-weight: 600;
-        }
-
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .nav-link {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            transition: background-color 0.3s;
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        .nav-link.active,
-        .nav-link:hover {
-            background-color: var(--bg-color);
-            opacity: 1;
-        }
-
-        .theme-toggle {
-            background: var(--bg-color);
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             box-shadow: 0 2px 6px var(--shadow-color);
-            transition: all 0.3s ease;
-            font-size: 1rem;
         }
+        .header-content {display:flex;align-items:center;justify-content:space-between}
+        .header-title   {margin:0;font-size:1.6rem;font-weight:600;color:var(--text-color)}
+        .nav-link       {color:var(--text-color);opacity:.75;padding:0.4rem 0.8rem;border-radius:6px;text-decoration:none}
+        .nav-link:hover,.nav-link.active{opacity:1;background:var(--group-bg)}
 
-        .theme-toggle:hover {
-            transform: scale(1.1) rotate(15deg);
+        /* ───────── 控制栏 ───────── */
+        .bookmark-controls{background:var(--group-bg);border-radius:12px;padding:1rem;box-shadow:0 2px 6px var(--shadow-color);margin-bottom:1.5rem}
+        .bookmark-actions{display:flex;flex-wrap:wrap;gap:.75rem}
+        .bookmark-search,.importance-filter{flex:1 1 200px;padding:.55rem .9rem;border-radius:10px;border:2px solid transparent;background:var(--bg-color);font-size:.88rem}
+        .bookmark-search:focus,.importance-filter:focus{border-color:#6366f1}
+        .add-bookmark-btn{background:#6366f1;color:#fff;border:none;border-radius:10px;padding:.6rem 1.2rem;font-size:.9rem;cursor:pointer;transition:transform .2s}
+        .add-bookmark-btn:hover{transform:translateY(-2px)}
+
+        /* ───────── 网格+卡片 ───────── */
+        .bookmarks-grid{
+            display:grid;
+            gap:1rem;
+            /* 更小卡片：桌面 ≥1280px 5列 | ≥960px 4列 | ≥640px 3列 | 其余 2/1列 */
+            grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
         }
-
-        .bookmark-controls {
-            background: var(--group-bg);
-            border-radius: 12px;
-            padding: 1.2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px var(--shadow-color);
+        .bookmark-card{
+            position:relative;
+            background:var(--card-bg);
+            border-radius:10px;
+            padding:.9rem;
+            box-shadow:0 2px 5px var(--shadow-color);
+            transition:transform .18s,box-shadow .18s;
+            cursor:pointer;
+            /* 取消顶部彩条 */
         }
-
-        .bookmark-actions {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 0.8rem;
+        .bookmark-card:hover{
+            transform:translateY(-3px);
+            box-shadow:0 6px 14px var(--shadow-color);
         }
-        
-        .add-bookmark-btn {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .card-actions{
+            position:absolute;top:6px;right:6px;display:flex;gap:4px;opacity:0;transition:opacity .15s;
         }
+        .bookmark-card:hover .card-actions{opacity:1}
+        .action-btn{width:26px;height:26px;border:none;border-radius:6px;background:rgba(0,0,0,.7);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+        .action-btn.edit:hover   {background:#059669}
+        .action-btn.delete:hover {background:#dc2626}
 
-        .add-bookmark-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(79, 70, 229, 0.4);
+        /* 重新排版：图标-标题-标签 同一张卡里占用较少空间 */
+        .card-top{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+        .card-icon-wrapper{flex-shrink:0;width:34px;height:34px;border-radius:8px;background:var(--bg-color);display:flex;align-items:center;justify-content:center}
+        .card-icon{width:20px;height:20px;border-radius:4px}
+        .card-icon.fallback{background:#6366f1;color:#fff;font-weight:600;font-size:.8rem}
+
+        .card-title{margin:0;font-size:.95rem;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .card-title a{color:inherit;text-decoration:none}
+        .card-url{font-size:.72rem;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+        .bookmark-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:.35rem}
+        .tag{font-size:.68rem;background:#6366f1;color:#fff;padding:1px 6px;border-radius:10px}
+
+        .card-meta{display:flex;justify-content:space-between;align-items:center;margin-top:.4rem;font-size:.7rem;opacity:.6}
+        .importance-stars{line-height:1}.star{color:#fbbf24}.star.empty{color:rgba(251,191,36,.35)}
+
+        /* ───────── 弹窗(减小) ───────── */
+        .modal{backdrop-filter:blur(6px);background:rgba(0,0,0,.55)}
+        .modal-content{
+            background:var(--bg-color);
+            width:92%;max-width:420px;
+            border-radius:14px;padding:1.2rem 0 0 0;
+            box-shadow:0 12px 28px rgba(0,0,0,.35);
         }
+        .modal-header{padding:0 1.4rem;display:flex;align-items:center;margin-bottom:.8rem}
+        .modal-title{font-size:1.25rem;font-weight:600}
+        .form-group{padding:0 1.4rem;margin-bottom:.8rem}
+        .form-group input,.form-group textarea,.form-group select{border-radius:8px;padding:.55rem .85rem;font-size:.88rem}
+        .form-actions{padding:0 1.4rem 1.2rem 1.4rem;display:flex;gap:.7rem;justify-content:flex-end}
+        .btn-primary{background:#6366f1;color:#fff;border:none;border-radius:10px;padding:.55rem 1.2rem;font-size:.9rem}
+        .btn-secondary{background:var(--group-bg);border:none;border-radius:10px;padding:.55rem 1.2rem;font-size:.9rem}
 
-        .add-bookmark-btn::before {
-            content: "✨";
-            font-size: 14px;
+        /* 空／加载状态不变(沿用) */
+
+        /* 响应式小调整 */
+        @media(max-width:420px){
+            .bookmark-actions{flex-direction:column;align-items:stretch}
         }
-        
-        .control-group {
-            display: flex;
-            flex: 1;
-            gap: 0.8rem;
-            min-width: 200px;
-        }
-
-        .bookmark-search {
-            flex: 1;
-            padding: 8px 12px;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-size: 13px;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .bookmark-search:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .importance-filter {
-            padding: 8px 12px;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .importance-filter:focus {
-            border-color: #4f46e5;
-        }
-
-        .bookmarks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .bookmark-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1rem;
-            position: relative;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px var(--shadow-color);
-            overflow: hidden;
-        }
-
-        .bookmark-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px var(--shadow-color);
-        }
-        
-        .card-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.8rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .card-icon-wrapper {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background: var(--bg-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-            flex-shrink: 0;
-        }
-
-        .card-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-        }
-
-        .card-icon.fallback {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 12px;
-        }
-
-        .card-main-content {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .card-title {
-            margin: 0 0 0.3rem 0;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-color);
-            line-height: 1.3;
-        }
-
-        .card-title a {
-            color: inherit;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .card-title a:hover {
-            color: #4f46e5;
-        }
-
-        .card-url {
-            font-size: 0.75rem;
-            color: var(--text-color);
-            opacity: 0.6;
-            margin-bottom: 0.3rem;
-            word-break: break-all;
-        }
-
-        .card-description {
-            color: var(--text-color);
-            opacity: 0.8;
-            font-size: 0.8rem;
-            line-height: 1.3;
-            margin: 0.4rem 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .card-actions {
-            position: absolute;
-            top: 0.8rem;
-            right: 0.8rem;
-            display: flex;
-            gap: 0.4rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .bookmark-card:hover .card-actions {
-            opacity: 1;
-        }
-        
-        .action-btn {
-            width: 28px;
-            height: 28px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 12px;
-        }
-
-        .action-btn:hover {
-            background: rgba(0, 0, 0, 0.9);
-            transform: scale(1.1);
-        }
-
-        .action-btn.edit:hover {
-            background: #059669;
-        }
-
-        .action-btn.delete:hover {
-            background: #dc2626;
-        }
-
-        .card-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 0.8rem;
-            padding-top: 0.8rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .importance-stars {
-            display: flex;
-            gap: 1px;
-            font-size: 14px;
-        }
-
-        .star {
-            color: #fbbf24;
-            transition: all 0.3s ease;
-        }
-
-        .star.empty {
-            color: rgba(251, 191, 36, 0.3);
-        }
-        
-        .bookmark-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-top: 0.6rem;
-        }
-        
-        .tag {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .tag:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
-        }
-
-        .date-added {
-            font-size: 0.7rem;
-            color: var(--text-color);
-            opacity: 0.5;
-        }
-
-        /* 模态框增强 */
-        .modal {
-            backdrop-filter: blur(8px);
-            background: rgba(0, 0, 0, 0.6);
-        }
-
-        .modal-content {
-            background: var(--bg-color);
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--group-bg);
-            max-width: 460px;
-            width: 90%;
-        }
-
-        .modal-header {
-            padding: 1.2rem 1.5rem 0.8rem 1.5rem;
-            border-bottom: 1px solid var(--group-bg);
-            margin-bottom: 1rem;
-        }
-
-        .modal-title {
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-
-        .form-group {
-            margin-bottom: 0.8rem;
-        }
-
-        .form-group label {
-            font-weight: 500;
-            font-size: 0.8rem;
-            color: var(--text-color);
-            margin-bottom: 0.4rem;
-            display: block;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            border: 2px solid var(--group-bg);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            width: 100%;
-            box-sizing: border-box;
-            background: var(--group-bg);
-            color: var(--text-color);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-            outline: none;
-        }
-
-        .form-actions {
-            padding: 0.8rem 1.5rem 1.2rem 1.5rem;
-            border-top: 1px solid var(--group-bg);
-            margin: 1rem -1.5rem -1.2rem -1.5rem;
-            display: flex;
-            gap: 0.8rem;
-            justify-content: flex-end;
-        }
-
-        .form-actions button {
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(79, 70, 229, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--group-bg);
-            color: var(--text-color);
-            border: 2px solid var(--group-bg);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--text-color);
-            background: var(--bg-color);
-        }
-
-        /* 空状态优化 */
-        .empty-state {
-            text-align: center;
-            padding: 3rem 2rem;
-            background: var(--group-bg);
-            border-radius: 16px;
-            margin: 1.5rem 0;
-        }
-
-        .empty-state::before {
-            content: "📚";
-            font-size: 3rem;
-            display: block;
-            margin-bottom: 0.8rem;
-            opacity: 0.6;
-        }
-
-        .empty-state h3 {
-            font-size: 1.2rem;
-            margin: 0 0 0.8rem 0;
-            color: var(--text-color);
-            opacity: 0.8;
-        }
-
-        .empty-state p {
-            font-size: 0.9rem;
-            color: var(--text-color);
-            opacity: 0.6;
-            max-width: 350px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
-
-        /* 加载状态优化 */
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2.5rem;
-            color: var(--text-color);
-        }
-
-        .loading::before {
-            content: "";
-            width: 32px;
-            height: 32px;
-            border: 3px solid var(--group-bg);
-            border-top: 3px solid #4f46e5;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 0.8rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .bookmarks-container {
-                padding: 1rem;
-            }
-
-            .bookmarks-header {
-                padding: 1rem;
-                margin-bottom: 1rem;
-            }
-
-            .header-content {
-                flex-direction: column;
-                gap: 0.8rem;
-                text-align: center;
-            }
-
-            .header-title {
-                font-size: 1.3rem;
-            }
-
-            .bookmark-controls {
-                padding: 1rem;
-            }
-
-            .bookmark-actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .control-group {
-                flex-direction: column;
-            }
-
-            .bookmarks-grid {
-                grid-template-columns: 1fr;
-                gap: 0.8rem;
-            }
-
-            .bookmark-card {
-                padding: 0.8rem;
-            }
-
-            .card-header {
-                gap: 0.6rem;
-            }
-
-            .card-icon-wrapper {
-                width: 32px;
-                height: 32px;
-            }
-
-            .card-icon {
-                width: 18px;
-                height: 18px;
-            }
-
-            .modal-content {
-                margin: 1rem;
-                max-width: calc(100% - 2rem);
-            }
-
-            .modal-header {
-                padding: 1rem 1.2rem 0.6rem 1.2rem;
-            }
-
-            .form-actions {
-                padding: 0.6rem 1.2rem 1rem 1.2rem;
-                margin: 0.8rem -1.2rem -1rem -1.2rem;
-                flex-direction: column;
-            }
-
-            .form-actions button {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .bookmarks-container {
-                padding: 0.5rem;
-            }
-
-            .card-actions {
-                position: static;
-                opacity: 1;
-                justify-content: center;
-                margin-top: 0.8rem;
-                padding-top: 0.8rem;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            .bookmark-card {
-                padding: 0.6rem;
-            }
-
-            .modal-content {
-                border-radius: 12px;
-            }
-        }
-</style>
-
+    </style>
 </head>
 <body>
     <div class="bookmarks-container">
-        <!-- 优化的头部 -->
+        <!-- ========== 头部 ========== -->
         <header class="bookmarks-header">
             <div class="header-content">
                 <h1 class="header-title">我的收藏夹</h1>
                 <nav class="header-nav">
-                    <a href="index.html" class="nav-link">🏠 导航站</a>
-                    <a href="bookmarks.html" class="nav-link active">📚 收藏夹</a>
-                    <button id="theme-toggle" class="theme-toggle" title="切换主题">🌙</button>
+                    <a class="nav-link" href="index.html">🏠 导航站</a>
+                    <a class="nav-link active" href="bookmarks.html">📚 收藏夹</a>
+                    <button id="theme-toggle" class="theme-toggle" title="切换主题">🌓</button>
                 </nav>
             </div>
         </header>
 
-        <!-- 优化的控制栏 -->
+        <!-- ========== 控制栏 ========== -->
         <div class="bookmark-controls">
             <div class="bookmark-actions">
-                <button class="add-bookmark-btn" onclick="openAddBookmarkModal()">添加书签</button>
-                <div class="control-group">
-                    <input type="text" class="bookmark-search" id="search-input" 
-                           placeholder="🔍 搜索标题、备注或标签..." onkeyup="searchBookmarks()">
-                    <select id="importance-filter" class="importance-filter" onchange="filterBookmarks()">
-                        <option value="">⭐ 所有等级</option>
-                        <option value="5">⭐⭐⭐⭐⭐ 5星</option>
-                        <option value="4">⭐⭐⭐⭐ 4星以上</option>
-                        <option value="3">⭐⭐⭐ 3星以上</option>
-                        <option value="2">⭐⭐ 2星以上</option>
-                        <option value="1">⭐ 1星以上</option>
-                    </select>
-                </div>
+                <button class="add-bookmark-btn" onclick="openAddBookmarkModal()">＋ 添加书签</button>
+
+                <input id="search-input" class="bookmark-search"
+                       type="text" placeholder="🔍 搜索标题、备注或标签..."
+                       onkeyup="searchBookmarks()">
+
+                <select id="importance-filter" class="importance-filter" onchange="filterBookmarks()">
+                    <option value="">⭐ 全部星级</option>
+                    <option value="5">⭐⭐⭐⭐⭐ 5星</option>
+                    <option value="4">⭐⭐⭐⭐ 4星及以上</option>
+                    <option value="3">⭐⭐⭐ 3星及以上</option>
+                    <option value="2">⭐⭐ 2星及以上</option>
+                    <option value="1">⭐ 1星及以上</option>
+                </select>
             </div>
         </div>
 
-        <!-- 优化的书签网格 -->
-        <div class="bookmarks-grid" id="bookmarks-grid">
-            <!-- 书签卡片将通过JS动态生成 -->
-        </div>
+        <!-- ========== 书签网格 ========== -->
+        <div id="bookmarks-grid" class="bookmarks-grid"></div>
 
-        <!-- 优化的加载状态 -->
-        <div id="loading" class="loading" style="display: none;">
-            <div>正在加载书签...</div>
-        </div>
-
-        <!-- 优化的空状态 -->
-        <div id="empty-state" class="empty-state" style="display: none;">
-            <h3>还没有收藏书签</h3>
-            <p>开始收藏你喜欢的网站吧！点击上方"添加书签"按钮来创建第一个书签。</p>
+        <!-- ========== 加载 / 空状态 ========== -->
+        <div id="loading" class="loading" style="display:none">正在加载...</div>
+        <div id="empty-state" class="empty-state" style="display:none">
+            <h3>暂无书签</h3>
+            <p>点击上方“添加书签”开始创建吧！</p>
         </div>
     </div>
 
-    <!-- 优化的模态框 -->
-    <div id="bookmark-modal" class="modal" style="display: none;">
+    <!-- ========== 模态框 ========== -->
+    <div id="bookmark-modal" class="modal" style="display:none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modal-title" class="modal-title">添加书签</h2>
             </div>
             <form id="bookmark-form">
-                <div style="padding: 0 2rem;">
-                    <div class="form-group">
-                        <label>📌 标题 *</label>
-                        <input type="text" id="bookmark-title" required placeholder="请输入书签标题">
-                    </div>
-                    <div class="form-group">
-                        <label>🔗 网址 *</label>
-                        <input type="url" id="bookmark-url" required placeholder="https://example.com">
-                    </div>
-                    <div class="form-group">
-                        <label>🏷️ 标签</label>
-                        <input type="text" id="bookmark-tags" placeholder="用逗号分隔多个标签，如：工具,学习,娱乐">
-                    </div>
-                    <div class="form-group">
-                        <label>📝 备注</label>
-                        <textarea id="bookmark-notes" rows="3" placeholder="添加一些备注信息（可选）"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>⭐ 重要程度</label>
-                        <select id="bookmark-importance">
-                            <option value="1">⭐ 1星 - 普通</option>
-                            <option value="2">⭐⭐ 2星 - 有用</option>
-                            <option value="3" selected>⭐⭐⭐ 3星 - 重要</option>
-                            <option value="4">⭐⭐⭐⭐ 4星 - 很重要</option>
-                            <option value="5">⭐⭐⭐⭐⭐ 5星 - 必备</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label>标题 *</label>
+                    <input id="bookmark-title" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>URL *</label>
+                    <input id="bookmark-url" type="url" required>
+                </div>
+                <div class="form-group">
+                    <label>标签 (逗号分隔)</label>
+                    <input id="bookmark-tags" type="text" placeholder="工具, 学习">
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="bookmark-notes" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>重要程度</label>
+                    <select id="bookmark-importance">
+                        <option value="1">⭐ 1</option>
+                        <option value="2">⭐⭐ 2</option>
+                        <option value="3" selected>⭐⭐⭐ 3</option>
+                        <option value="4">⭐⭐⭐⭐ 4</option>
+                        <option value="5">⭐⭐⭐⭐⭐ 5</option>
+                    </select>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" onclick="closeBookmarkModal()">取消</button>
-                    <button type="submit" class="btn-primary">保存书签</button>
+                    <button type="submit" class="btn-primary">保存</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- JS 依赖 -->
     <script src="js/theme.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/bookmarkAPI.js"></script>
