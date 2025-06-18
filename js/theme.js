@@ -1,65 +1,71 @@
-// js/theme.js (统一和优化后的版本)
+// js/theme.js (最终、兼容并包的修正版)
 
-// 使用立即调用函数表达式 (IIFE) 来避免污染全局作用域
 (function() {
+    'use strict';
+
     const THEME_KEY = 'user-theme';
-    const LIGHT_THEME_ICON = '🌙'; // 亮色模式下显示的图标 (切换到暗色)
-    const DARK_THEME_ICON = '☀️';  // 暗色模式下显示的图标 (切换到亮色)
+    const LIGHT_THEME_ICON = '🌙';
+    const DARK_THEME_ICON = '☀️';
+    const THEME_TOGGLE_SELECTOR = '.theme-toggle'; // 使用 class 选择器
 
     /**
-     * 应用指定的主题，并更新所有切换按钮的图标和标题。
+     * 应用指定的主题，并更新所有切换按钮的状态。
      * @param {string} theme - 'dark' 或 'light'
      */
     const applyTheme = (theme) => {
         const isDark = theme === 'dark';
-        // 设置 <html> 元素的 data-theme 属性，让 CSS 变量生效
         document.documentElement.setAttribute('data-theme', theme);
         
-        // 找到页面上所有的主题切换按钮并更新它们
-        document.querySelectorAll('.theme-toggle').forEach(button => {
-            button.textContent = isDark ? DARK_THEME_ICON : LIGHT_THEME_ICON;
-            button.setAttribute('title', isDark ? '切换到亮色模式' : '切换到暗色模式');
+        document.querySelectorAll(THEME_TOGGLE_SELECTOR).forEach(button => {
+            if (button) {
+                button.textContent = isDark ? DARK_THEME_ICON : LIGHT_THEME_ICON;
+                button.title = isDark ? '切换到亮色模式' : '切换到暗色模式';
+            }
         });
     };
 
     /**
-     * 切换当前主题，并保存到 localStorage。
+     * 切换当前主题，并保存用户选择。
      */
     const toggleTheme = () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        localStorage.setItem(THEME_KEY, newTheme); // 保存用户选择
+        localStorage.setItem(THEME_KEY, newTheme);
         applyTheme(newTheme);
     };
 
     /**
-     * 当页面加载时，确定并应用初始主题。
-     * 优先级: localStorage > 系统偏好 > 默认亮色
+     * 初始化主题。
+     * 优先级: 用户在 localStorage 的选择 > 操作系统偏好 > 默认亮色。
      */
     const initTheme = () => {
         const savedTheme = localStorage.getItem(THEME_KEY);
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        // 应用初始主题
-        applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
-
-        // 监听系统主题变化，仅在用户未手动设置主题时跟随系统
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-            if (!localStorage.getItem(THEME_KEY)) {
-                applyTheme(e.matches ? 'dark' : 'light');
-            }
-        });
+        const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+        applyTheme(initialTheme);
     };
 
-    // 确保在DOM加载完毕后执行所有操作
+    // --- 核心初始化逻辑 ---
+
+    // 1. 确保在DOM加载后执行
     document.addEventListener('DOMContentLoaded', () => {
-        // 为页面上所有 class="theme-toggle" 的按钮绑定点击事件
-        document.querySelectorAll('.theme-toggle').forEach(button => {
-            button.addEventListener('click', toggleTheme);
+        // 2. 为所有主题切换按钮绑定现代的点击事件
+        document.querySelectorAll(THEME_TOGGLE_SELECTOR).forEach(button => {
+            if (button) {
+                button.addEventListener('click', toggleTheme);
+            }
         });
 
-        // 初始化主题
+        // 3. 初始化主题
         initTheme();
     });
+
+    // 4. 【重要】创建全局 ThemeManager 对象以实现向下兼容
+    // 这可以确保项目中任何其他可能调用 ThemeManager.toggle() 的旧脚本不会出错。
+    if (!window.ThemeManager) {
+        window.ThemeManager = {};
+    }
+    window.ThemeManager.toggle = toggleTheme;
 
 })();
