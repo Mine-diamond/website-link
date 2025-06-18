@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>收藏夹 - YyMing</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <!-- Link the global styles.css FIRST -->
+    <!-- 链接全局样式表，它现在包含了模态框等所有通用样式 -->
     <link rel="stylesheet" href="css/styles.css">
     <!-- 
-      Inline styles for bookmarks.html specific elements AFTER global styles.
-      Generic styles like .modal, .btn, .loading, .empty-state should be moved to styles.css.
-      This block now only contains styles unique to the bookmarks page layout and cards.
+      【重要修复】
+      下面的<style>标签已被大幅删减。
+      所有通用样式（如.modal, .btn, .form-group）都已移除，
+      只保留本页面真正独特的样式。
     -->
     <style>
         .bookmarks-container {
@@ -384,7 +385,7 @@
             </div>
         </header>
 
-        <!-- 控制栏 (Inline event handlers removed) -->
+        <!-- 控制栏 (内联事件已移除，由JS处理) -->
         <div class="bookmark-controls">
             <div class="bookmark-actions">
                 <button class="add-bookmark-btn">添加书签</button>
@@ -406,29 +407,28 @@
         <!-- 书签网格 -->
         <div class="bookmarks-grid" id="bookmarks-grid">
             <!-- 书签卡片将通过JS动态生成 -->
-            <!-- 事件监听器将通过事件委托附加到此容器 -->
         </div>
 
-        <!-- 加载状态 (Generic style, assumed in styles.css) -->
+        <!-- 加载状态 (样式在 styles.css) -->
         <div id="loading" class="loading" style="display: none;">
             <div>正在加载书签...</div>
         </div>
 
-        <!-- 空状态 (Generic style, assumed in styles.css) -->
+        <!-- 空状态 (样式在 styles.css) -->
         <div id="empty-state" class="empty-state" style="display: none;">
             <h3>还没有收藏书签</h3>
             <p>开始收藏你喜欢的网站吧！点击上方"添加书签"按钮来创建第一个书签。</p>
         </div>
     </div>
 
-    <!-- 模态框 (Generic style, assumed in styles.css. Inline event handlers removed) -->
+    <!-- 模态框 (样式在 styles.css) -->
     <div id="bookmark-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modal-title" class="modal-title">添加书签</h2>
             </div>
             <div class="modal-body">
-                <form id="bookmark-form" novalidate> <!-- novalidate prevents default browser validation -->
+                <form id="bookmark-form" novalidate>
                     <div class="form-group">
                         <label>📌 标题 *</label>
                         <input type="text" id="bookmark-title" required placeholder="请输入书签标题">
@@ -464,9 +464,10 @@
         </div>
     </div>
 
+    <!-- 确保所有JS文件都已链接 -->
     <script src="js/theme.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/bookmarkAPI.js"></script>
-    <script src="js/bookmarks.js"></script> <!-- This script now handles all events -->
+    <script src="js/bookmarks.js"></script>
 </body>
 </html>
