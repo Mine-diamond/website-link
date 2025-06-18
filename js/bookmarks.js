@@ -1,7 +1,7 @@
-// js/bookmarks.js - 收藏夹页面逻辑（新设计版）
+// js/bookmarks.js - 收藏夹页面逻辑（修正版）
 
 let allBookmarks = [];
-let currentBookmarksmarks = [];
+let currentBookmarks = []; // 修正：去掉多余的 marks
 
 // 页面加载时初始化
 document.addEventListener('DOMContentLoaded', function() {
@@ -33,7 +33,7 @@ async function loadBookmarks() {
     showLoading();
     try {
         allBookmarks = await bookmarkAPI.getBookmarks();
-        currentBookmarksmarks = [...allBookmarks];
+        currentBookmarks = [...allBookmarks]; // 修正：变量名
         renderBookmarks();
     } catch (error) {
         console.error('加载书签失败:', error);
@@ -43,11 +43,11 @@ async function loadBookmarks() {
 }
 
 // 渲染书签
-function renderBookmarksmarks() {
+function renderBookmarks() { // 修正：函数名
     const grid = document.getElementById('bookmarks-grid');
     const emptyState = document.getElementById('empty-state');
     
-    if (currentBookmarksmarks.length === 0) {
+    if (currentBookmarks.length === 0) { // 修正：变量名
         grid.innerHTML = '';
         emptyState.style.display = 'block';
         return;
@@ -56,14 +56,14 @@ function renderBookmarksmarks() {
     emptyState.style.display = 'none';
     
     // 按重要程度和时间排序
-    currentBookmarksmarks.sort((a, b) => {
+    currentBookmarks.sort((a, b) => { // 修正：变量名
         if (a.importance !== b.importance) {
             return b.importance - a.importance;
         }
         return new Date(b.dateAdded) - new Date(a.dateAdded);
     });
     
-    grid.innerHTML = currentBookmarksmarks.map(bookmark => createBookmarkCard(bookmark)).join('');
+    grid.innerHTML = currentBookmarks.map(bookmark => createBookmarkCard(bookmark)).join(''); // 修正：变量名
     
     // 添加卡片点击事件
     addCardEventListeners();
@@ -200,9 +200,9 @@ function searchBookmarks() {
         const importance = document.getElementById('importance-filter').value;
         
         if (!query && !importance) {
-            currentBookmarksmarks = [...allBookmarks];
+            currentBookmarks = [...allBookmarks]; // 修正：变量名
         } else {
-            currentBookmarksmarks = allBookmarks.filter(bookmark => {
+            currentBookmarks = allBookmarks.filter(bookmark => { // 修正：变量名
                 const matchesQuery = !query || 
                     bookmark.title.toLowerCase().includes(query) ||
                     bookmark.notes.toLowerCase().includes(query) ||
@@ -218,7 +218,7 @@ function searchBookmarks() {
         renderBookmarks();
         
         // 搜索结果提示
-        if (query && currentBookmarksmarks.length === 0) {
+        if (query && currentBookmarks.length === 0) { // 修正：变量名
             showToast(`没有找到包含"${query}"的书签`, 'info');
         }
     }, 300);
