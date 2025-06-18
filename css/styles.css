@@ -1,72 +1,68 @@
+/* css/styles.css (完整修正版) */
 :root {
-    --bg-color: #f0f2f5; /* Slightly softer light background */
-    --text-color: #1f2937; /* Darker text for better contrast */
-    --header-bg: #ffffff; /* White header for light theme */
-    --card-bg: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%); /* Generic card bg - light */
-    --footer-color: #4b5563; /* Footer text color */
-    --shadow-color: rgba(0, 0, 0, 0.05); /* Softer shadow */
-    --group-bg: #ffffff; /* Group background for light theme */
+    --bg-color: #f0f2f5;
+    --text-color: #1f2937;
+    --header-bg: #ffffff;
+    --card-bg: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    --footer-color: #4b5563;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --group-bg: #ffffff;
     --group-title: #374151;
     --transition-time: 0.2s;
     --max-width: 1440px;
     --dropdown-bg: #ffffff;
     --copy-btn-bg: rgba(255, 255, 255, 0.8);
     --copy-btn-hover: #ffffff;
-    --link-hover-color: #2563eb; /* Primary blue for link hovers */
+    --link-hover-color: #2563eb;
 
-    /* Input specific variables */
     --input-bg: #f9fafb;
     --input-border-color: #d1d5db;
     --input-focus-border-color: #2563eb;
     --input-focus-shadow: rgba(37, 99, 235, 0.1);
 
-    /* Button specific variables */
-    --btn-primary-bg: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    --btn-primary-bg: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
     --btn-primary-color: white;
-    --btn-primary-shadow-color: rgba(37, 99, 235, 0.3);
+    --btn-primary-shadow-color: rgba(79, 70, 229, 0.4);
     --btn-secondary-bg: #e5e7eb;
     --btn-secondary-color: #374151;
     --btn-secondary-hover-bg: #d1d5db;
     --btn-secondary-hover-border-color: #9ca3af;
     
-    /* Variables for bookmarks.html specific elements */
     --bookmark-card-bg: linear-gradient(145deg, #ffffff 0%, #eef2f7 100%);
     --bookmark-favicon-fallback-bg: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     --favicon-bg: #eef2f7;
     --favicon-shadow: rgba(0,0,0,0.03);
-    --star-filled-color: #f59e0b; /* Amber 500 */
-    --star-empty-color: #d1d5db;  /* Gray 300 for empty stars */
+    --star-filled-color: #f59e0b;
+    --star-empty-color: #d1d5db;
     --card-action-btn-bg: rgba(0, 0, 0, 0.03);
     --card-action-btn-hover-bg: rgba(0, 0, 0, 0.07);
     --card-action-btn-color: #4b5563;
-    --edit-btn-hover-bg: #dcfce7; /* Green 100 for edit hover */
-    --delete-btn-hover-bg: #fee2e2; /* Red 100 for delete hover */
-    --tag-bg: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%); /* Lighter blue tags */
-    --tag-color: #3b82f6; /* Blue text for tags */
+    --edit-btn-hover-bg: #dcfce7;
+    --delete-btn-hover-bg: #fee2e2;
+    --tag-bg: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+    --tag-color: #3b82f6;
     --loading-spinner-color: #2563eb;
 }
 
 [data-theme="dark"] {
-    --bg-color: #111827; /* Dark Gray 900 */
-    --text-color: #d1d5db; /* Gray 300 */
-    --header-bg: #1f2937; /* Dark Gray 800 */
-    --card-bg: linear-gradient(135deg, #1f2937 0%, #374151 100%); /* Generic card bg - dark */
-    --footer-color: #9ca3af; /* Gray 400 */
-    --shadow-color: rgba(0, 0, 0, 0.3); /* Stronger shadow for dark */
-    --group-bg: #1f2937; /* Dark Gray 800 */
-    --group-title: #9ca3af; /* Gray 400 */
-    --dropdown-bg: #374151; /* Dark Gray 700 */
+    --bg-color: #111827;
+    --text-color: #d1d5db;
+    --header-bg: #1f2937;
+    --card-bg: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    --footer-color: #9ca3af;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --group-bg: #1f2937;
+    --group-title: #9ca3af;
+    --dropdown-bg: #374151;
     --copy-btn-bg: rgba(0, 0, 0, 0.5);
     --copy-btn-hover: rgba(0, 0, 0, 0.7);
-    --link-hover-color: #60a5fa; /* Lighter blue for dark theme links */
+    --link-hover-color: #60a5fa;
 
-    /* Input specific variables - Dark */
     --input-bg: #374151;
     --input-border-color: #4b5563;
     --input-focus-border-color: #60a5fa;
     --input-focus-shadow: rgba(96, 165, 250, 0.2);
 
-    /* Button specific variables - Dark */
     --btn-primary-bg: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     --btn-primary-color: white;
     --btn-primary-shadow-color: rgba(59, 130, 246, 0.4);
@@ -75,20 +71,19 @@
     --btn-secondary-hover-bg: #4b5563;
     --btn-secondary-hover-border-color: #6b7280;
 
-    /* Variables for bookmarks.html specific elements - Dark Theme */
     --bookmark-card-bg: linear-gradient(145deg, #1f2937 0%, #293548 100%);
     --bookmark-favicon-fallback-bg: linear-gradient(135deg, #5252ed 0%, #7648d7 100%);
     --favicon-bg: #374151;
     --favicon-shadow: rgba(0,0,0,0.1);
-    --star-filled-color: #f59e0b; /* Amber 500 - good on dark too */
-    --star-empty-color: #4b5563;  /* Gray 600 for empty stars on dark */
+    --star-filled-color: #f59e0b;
+    --star-empty-color: #4b5563;
     --card-action-btn-bg: rgba(255, 255, 255, 0.05);
     --card-action-btn-hover-bg: rgba(255, 255, 255, 0.1);
     --card-action-btn-color: #9ca3af;
-    --edit-btn-hover-bg: #1f2937; /* Darker green indication */
-    --delete-btn-hover-bg: #1f2937; /* Darker red indication */
-    --tag-bg: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); /* Darker blue tags */
-    --tag-color: #bfdbfe; /* Lighter blue text for tags */
+    --edit-btn-hover-bg: #166534; /* Darker green indication */
+    --delete-btn-hover-bg: #991b1b; /* Darker red indication */
+    --tag-bg: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    --tag-color: #bfdbfe;
     --loading-spinner-color: #60a5fa;
 }
 
@@ -101,11 +96,12 @@ body {
     display: flex;
     flex-direction: column;
     transition: background-color 0.3s, color 0.3s;
-    font-size: 16px; /* Base font size */
-    line-height: 1.6; /* Base line height */
+    font-size: 16px;
+    line-height: 1.6;
 }
 
-.container { /* General container from original styles.css */
+/* Generic container for index.html */
+.container { 
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 2rem 1.5rem;
@@ -114,7 +110,8 @@ body {
     flex: 1;
 }
 
-header { /* General header from original styles.css */
+/* Generic header for index.html */
+header { 
     background-color: var(--header-bg);
     padding: 1.2rem;
     text-align: center;
@@ -135,419 +132,147 @@ header { /* General header from original styles.css */
     margin: 0;
     flex-grow: 1;
     text-align: center;
-    font-size: 1.5rem; /* Adjusted from original */
+    font-size: 1.5rem;
     font-weight: 600;
 }
 
-/* 服务组导航样式 (from original styles.css) */
-.group-navigation {
-    position: relative;
-    z-index: 100;
-}
+/* index.html specific styles */
+.group-navigation { position: relative; z-index: 100; }
+.group-nav-toggle { background: var(--input-bg); border: 1px solid var(--input-border-color); border-radius: 6px; padding: 8px 12px; cursor: pointer; color: var(--text-color); font-size: 0.9rem; transition: all 0.2s ease; white-space: nowrap; }
+.group-nav-toggle:hover { background: var(--group-bg); border-color: var(--text-color); }
+.group-nav-dropdown { position: absolute; top: 100%; left: 0; width: 200px; max-height: 0; overflow: hidden; background: var(--dropdown-bg); border-radius: 6px; box-shadow: 0 4px 12px var(--shadow-color); transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s; z-index: 100; opacity: 0; visibility: hidden; margin-top: 5px; border: 1px solid var(--input-border-color); }
+.group-nav-dropdown.active { max-height: 400px; opacity: 1; visibility: visible; overflow-y: auto; }
+.group-nav-item { padding: 10px 15px; cursor: pointer; color: var(--text-color); border: none; background: none; width: 100%; text-align: left; transition: background-color 0.2s; }
+.group-nav-item:hover { background-color: var(--group-bg); }
+.theme-switch { background: var(--input-bg); border: 1px solid var(--input-border-color); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px var(--shadow-color); transition: all 0.3s ease; z-index: 10; touch-action: manipulation; color: var(--text-color); font-size: 1.1rem; }
+.theme-switch:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 2px 6px var(--shadow-color); }
+.search-container { margin: 1rem 0 2rem; padding: 0 1rem; box-sizing: border-box; }
+.search-input { width: 100%; padding: 0.8rem 1.2rem; border-radius: 24px; border: 1px solid var(--input-border-color); background: var(--input-bg); color: var(--text-color); font-size: 1rem; transition: all 0.3s ease; box-sizing: border-box; max-width: 100%; -webkit-appearance: none; }
+.search-input:focus { outline: none; border-color: var(--input-focus-border-color); box-shadow: 0 0 0 3px var(--input-focus-shadow); }
+.service-group { background: var(--group-bg); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 6px var(--shadow-color); scroll-margin-top: 100px; }
+.service-group__title { font-size: 1.25em; margin: 0 0 1.2rem; position: relative; padding-left: 1rem; color: var(--group-title); line-height: 1.3; font-weight: 600; }
+.service-group__title::before { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 1.2em; background: var(--link-hover-color); border-radius: 2px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+.service-card { background: var(--card-bg); border-radius: 10px; padding: 1rem 1.2rem; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer; border: 1px solid var(--input-border-color); color: var(--text-color); font-size: 0.95em; text-align: center; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; line-height: 1.4; word-break: break-word; }
+.service-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px var(--shadow-color); border-color: var(--link-hover-color); }
+.service-card:active { transform: scale(0.97) translateY(0); }
+.service-card:focus { outline: 2px solid var(--link-hover-color); outline-offset: 2px; }
+.service-card__badge { position: absolute; top: 8px; right: 8px; background: var(--tag-bg); color: var(--tag-color); padding: 3px 8px; border-radius: 12px; font-size: 0.75em; font-weight: 500; }
+.copy-url-btn { position: absolute; top: 8px; left: 8px; background-color: var(--copy-btn-bg); border: 1px solid var(--input-border-color); border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.7; transition: opacity 0.2s, background-color 0.2s, border-color 0.2s; z-index: 2; padding: 0; font-size: 14px; color: var(--text-color); }
+.copy-url-btn:hover { opacity: 1; background-color: var(--copy-btn-hover); border-color: var(--text-color); }
+.copy-url-btn:active { transform: scale(0.9); }
+.copy-success { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: var(--header-bg); color: var(--text-color); padding: 10px 20px; border-radius: 8px; box-shadow: 0 3px 10px var(--shadow-color); z-index: 10000; opacity: 0; transition: opacity 0.3s, transform 0.3s; font-weight: 500; }
+.copy-success.show { opacity: 1; transform: translateX(-50%) translateY(10px); }
 
-.group-nav-toggle {
-    background: var(--input-bg); /* Use input-bg for consistency */
-    border: 1px solid var(--input-border-color); /* Add border */
-    border-radius: 6px;
-    padding: 8px 12px;
-    cursor: pointer;
-    color: var(--text-color);
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-}
-
-.group-nav-toggle:hover {
-    background: var(--group-bg);
-    border-color: var(--text-color);
-}
-
-.group-nav-dropdown {
-    position: absolute;
-    top: 100%;
+/* --- GLOBAL MODAL STYLES (Fix for bookmarks page) --- */
+.modal {
+    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    top: 0;
     left: 0;
-    width: 200px;
-    max-height: 0;
-    overflow: hidden;
-    background: var(--dropdown-bg);
-    border-radius: 6px;
-    box-shadow: 0 4px 12px var(--shadow-color); /* Increased shadow for dropdown */
-    transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s;
-    z-index: 100;
-    opacity: 0;
-    visibility: hidden;
-    margin-top: 5px;
-    border: 1px solid var(--input-border-color); /* Add border to dropdown */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
 }
 
-.group-nav-dropdown.active {
-    max-height: 400px;
-    opacity: 1;
-    visibility: visible;
+.modal-content {
+    background: var(--bg-color);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--group-bg);
+    width: 90%;
+    max-width: 440px;
+    max-height: 90vh;
     overflow-y: auto;
 }
 
-.group-nav-item {
-    padding: 10px 15px;
-    cursor: pointer;
-    color: var(--text-color);
-    border: none;
-    background: none;
-    width: 100%;
-    text-align: left;
-    transition: background-color 0.2s;
+.modal-header {
+    padding: 1.25rem 1.5rem 1rem 1.5rem;
+    border-bottom: 1px solid var(--group-bg);
 }
 
-.group-nav-item:hover {
-    background-color: var(--group-bg);
-}
-
-.theme-switch { /* General theme switch from original styles.css, if different from bookmarks.html */
-    background: var(--input-bg);
-    border: 1px solid var(--input-border-color);
-    border-radius: 50%;
-    width: 40px; /* Standardized size */
-    height: 40px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 3px var(--shadow-color);
-    transition: all 0.3s ease;
-    z-index: 10;
-    touch-action: manipulation;
-    color: var(--text-color); /* Ensure icon color for theme switch */
-    font-size: 1.1rem;
-}
-
-.theme-switch:hover {
-    transform: scale(1.1) rotate(15deg);
-    box-shadow: 0 2px 6px var(--shadow-color);
-}
-
-.search-container { /* From original styles.css */
-    margin: 1rem 0 2rem;
-    padding: 0 1rem;
-    box-sizing: border-box;
-}
-
-.search-input { /* General search input from original styles.css */
-    width: 100%;
-    padding: 0.8rem 1.2rem;
-    border-radius: 24px; /* Pill shape */
-    border: 1px solid var(--input-border-color);
-    background: var(--input-bg);
-    color: var(--text-color);
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-    max-width: 100%;
-    -webkit-appearance: none;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: var(--input-focus-border-color);
-    box-shadow: 0 0 0 3px var(--input-focus-shadow);
-}
-
-.service-group { /* From original styles.css */
-    background: var(--group-bg);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 6px var(--shadow-color); /* Slightly enhanced shadow */
-    scroll-margin-top: 100px;
-}
-
-.service-group__title {
-    font-size: 1.25em; /* Slightly larger */
-    margin: 0 0 1.2rem;
-    position: relative;
-    padding-left: 1rem;
-    color: var(--group-title);
-    line-height: 1.3;
-    font-weight: 600; /* Bolder title */
-}
-
-.service-group__title::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 1.2em;
-    background: var(--link-hover-color); /* Use accent color for bar */
-    border-radius: 2px;
-}
-
-.card-grid { /* From original styles.css */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-}
-
-.service-card { /* Service card from original styles.css */
-    background: var(--card-bg);
-    border-radius: 10px;
-    padding: 1rem 1.2rem; /* Adjusted padding */
-    min-height: 80px;
-    display: flex;
-    flex-direction: column; /* Allow for content stacking if needed */
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    cursor: pointer;
-    border: 1px solid var(--input-border-color); /* Subtle border */
-    color: var(--text-color); /* Ensure text color is themed */
-    font-size: 0.95em;
-    text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    line-height: 1.4;
-    word-break: break-word; /* Ensure long words break */
-}
-
-.service-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px var(--shadow-color); /* Enhanced hover shadow */
-    border-color: var(--link-hover-color); /* Accent border on hover */
-}
-
-.service-card:active {
-    transform: scale(0.97) translateY(0);
-}
-
-.service-card:focus {
-    outline: 2px solid var(--link-hover-color);
-    outline-offset: 2px;
-}
-
-.service-card__badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: var(--tag-bg); /* Use tag background for consistency */
-    color: var(--tag-color); /* Use tag color */
-    padding: 3px 8px; /* Adjusted padding */
-    border-radius: 12px; /* Pill shape badge */
-    font-size: 0.75em;
-    font-weight: 500;
-}
-
-/* 复制按钮样式 (from original styles.css) */
-.copy-url-btn {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background-color: var(--copy-btn-bg);
-    border: 1px solid var(--input-border-color);
-    border-radius: 6px; /* Slightly more rounded */
-    width: 28px; /* Slightly larger */
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s, background-color 0.2s, border-color 0.2s;
-    z-index: 2;
-    padding: 0;
-    font-size: 14px; /* Larger icon */
-    color: var(--text-color); /* Ensure icon color is themed */
-}
-
-.copy-url-btn:hover {
-    opacity: 1;
-    background-color: var(--copy-btn-hover);
-    border-color: var(--text-color);
-}
-
-.copy-url-btn:active {
-    transform: scale(0.9);
-}
-
-/* .service-card:hover .copy-url-btn {
-    opacity: 1;
-} */ /* Keep it consistently visible at 0.7 opacity, increases on hover */
-
-.copy-success { /* From original styles.css */
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--header-bg); /* Use header-bg for toast-like messages */
-    color: var(--text-color);
-    padding: 10px 20px; /* More padding */
-    border-radius: 8px;
-    box-shadow: 0 3px 10px var(--shadow-color); /* Enhanced shadow */
-    z-index: 10000; /* Ensure above modals */
-    opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-    font-weight: 500;
-}
-
-.copy-success.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(10px); /* Add slight downward movement */
-}
-
-footer { /* General footer from original styles.css */
-    background-color: var(--header-bg);
-    padding: 1.5rem 1rem; /* More padding */
-    text-align: center;
-    margin-top: auto; /* Pushes to bottom */
-    box-shadow: 0 -2px 4px var(--shadow-color);
-    font-size: 0.9em;
-    color: var(--footer-color); /* Use themed footer color */
-    border-top: 1px solid var(--input-border-color); /* Subtle top border */
-}
-
-/* Modal styles from original styles.css - IF YOU WANT A GLOBAL MODAL STYLE.
-   bookmarks.html has its own more detailed modal. If you want one style for all,
-   you'd merge them here and remove the specific .modal styles from bookmarks.html's <style> tag.
-   For now, bookmarks.html keeps its own modal styles. */
-/*
-.modal { ... }
-.modal-content { ... }
-*/
-
-/* Loading and Empty states from original styles.css - these are generic */
-.loading {
-    text-align: center;
-    padding: 2rem;
-    color: var(--text-color);
-}
-/* Ensure the spinner for the generic .loading uses themed variables if different from bookmarks page */
-/* .loading::before { ... } */
-
-
-.empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-color);
-    background: var(--group-bg); /* Give empty state a background */
-    border-radius: 12px;
-    margin: 2rem auto;
-    max-width: 600px;
-}
-
-.empty-state h3 {
-    margin: 0 0 1rem 0;
-    opacity: 0.8; /* Slightly more visible */
-    font-size: 1.25rem;
-}
-
-.empty-state p {
+.modal-title {
     margin: 0;
-    opacity: 0.6; /* Slightly more visible */
-    font-size: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
 }
 
+.modal-body { padding: 1.5rem; }
+.form-group { margin-bottom: 1rem; }
+.form-group:last-child { margin-bottom: 0; }
+.form-group label { display: block; font-weight: 500; font-size: 0.875rem; color: var(--text-color); margin-bottom: 0.5rem; }
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    border: 2px solid var(--input-border-color, var(--group-bg));
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    background: var(--input-bg, var(--group-bg));
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    outline: none;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--input-focus-border-color, #4f46e5);
+    box-shadow: 0 0 0 3px var(--input-focus-shadow, rgba(79, 70, 229, 0.1));
+}
+.form-group textarea { resize: vertical; min-height: 70px; }
+.form-actions {
+    padding: 1rem 1.5rem 1.25rem 1.5rem;
+    border-top: 1px solid var(--group-bg);
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+.btn { padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; border: none; outline: none; }
+.btn-primary { background: var(--btn-primary-bg); color: var(--btn-primary-color); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px var(--btn-primary-shadow-color); }
+.btn-secondary { background: var(--btn-secondary-bg); color: var(--btn-secondary-color); border: 2px solid transparent; }
+.btn-secondary:hover { border-color: var(--btn-secondary-hover-border-color); background: var(--btn-secondary-hover-bg); }
 
-/* Responsive adjustments from original styles.css */
+/* --- GLOBAL LOADING & EMPTY STATES --- */
+.empty-state, .loading { color: var(--text-color); }
+.empty-state { text-align: center; padding: 3rem 2rem; background: var(--group-bg); border-radius: 20px; margin: 2rem 0; }
+.empty-state::before { content: "📚"; font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.6; }
+.empty-state h3 { font-size: 1.25rem; margin: 0 0 0.75rem 0; opacity: 0.8; }
+.empty-state p { font-size: 0.9rem; opacity: 0.6; max-width: 400px; margin: 0 auto; line-height: 1.6; }
+.loading { display: flex; flex-direction: column; align-items: center; padding: 2rem; }
+.loading::before { content: ""; width: 32px; height: 32px; border: 3px solid var(--group-bg); border-top: 3px solid var(--loading-spinner-color); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* --- GLOBAL RESPONSIVE STYLES --- */
+footer { background-color: var(--header-bg); padding: 1.5rem 1rem; text-align: center; margin-top: auto; box-shadow: 0 -2px 4px var(--shadow-color); font-size: 0.9em; color: var(--footer-color); border-top: 1px solid var(--input-border-color); }
 @media (max-width: 768px) {
-    body {
-        font-size: 15px; /* Adjust base font for smaller screens */
-    }
-    .container {
-        padding: 1.2rem 1rem;
-    }
+    body { font-size: 15px; }
+    .container { padding: 1.2rem 1rem; }
+    .search-container { padding: 0 0.5rem; margin: 0.5rem 0 1.5rem; }
+    .card-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    @media (max-width: 480px) { .card-grid { grid-template-columns: 1fr; } }
+    .service-group { padding: 1rem; margin-bottom: 1.5rem; border-radius: 10px; }
+    .service-group__title { font-size: 1.1em; margin-bottom: 1rem; padding-left: 0.75rem; }
+    .service-group__title::before { width: 3px; height: 1em; }
+    .service-card { min-height: 70px; font-size: 0.9em; padding: 0.8rem; border-radius: 8px; }
+    .group-nav-toggle { padding: 6px 10px; font-size: 0.8rem; }
+    .header-container { flex-wrap: wrap; justify-content: center; }
+    .header-container h1 { order: -1; width: 100%; margin-bottom: 10px; font-size: 1.25rem; }
+    .group-navigation { margin-right: 10px; }
+    .theme-switch { width: 36px; height: 36px; font-size: 1rem; }
+    footer { padding: 1rem; font-size: 0.85em; }
 
-    .search-container {
-        padding: 0 0.5rem;
-        margin: 0.5rem 0 1.5rem;
-    }
-
-    .card-grid { /* For general .card-grid */
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust general card grid */
-        gap: 1rem;
-    }
-    @media (max-width: 480px) {
-        .card-grid {
-             grid-template-columns: 1fr;
-        }
-    }
-
-
-    .service-group {
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        border-radius: 10px;
-    }
-
-    .service-group__title {
-        font-size: 1.1em;
-        margin-bottom: 1rem;
-        padding-left: 0.75rem;
-    }
-
-    .service-group__title::before {
-        width: 3px;
-        height: 1em;
-    }
-
-    .service-card {
-        min-height: 70px;
-        font-size: 0.9em;
-        padding: 0.8rem;
-        border-radius: 8px;
-    }
-
-    .group-nav-toggle {
-        padding: 6px 10px;
-        font-size: 0.8rem;
-    }
-
-    .header-container {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .header-container h1 {
-        order: -1; /* Title first on mobile */
-        width: 100%;
-        margin-bottom: 10px;
-        font-size: 1.25rem;
-    }
-    
-    .group-navigation { /* Adjust positioning for mobile */
-        margin-right: 10px; 
-    }
-    .theme-switch {
-        width: 36px;
-        height: 36px;
-        font-size: 1rem;
-    }
-
-    footer {
-        padding: 1rem;
-        font-size: 0.85em;
-    }
-
-    /* Modal adjustments from original if using a global modal style */
-    /* .modal-content {
-        padding: 1.5rem;
-        margin: 1rem;
-    }
-    .form-actions {
-        flex-direction: column;
-    }
-    .form-actions button {
-        width: 100%;
-    } */
+    /* Responsive modal from bookmarks.html */
+    .modal-content { margin: 1rem; max-width: calc(100% - 2rem); }
+    .form-actions { flex-direction: column; }
+    .btn { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 480px) {
-    .header-container h1 {
-        font-size: 1.15em;
-    }
-
-    .search-input { /* General search input */
-        padding: 0.7rem 1rem;
-        font-size: 0.95em;
-    }
-    .group-navigation, .theme-switch {
-      margin-top: 10px; /* Add some space if header wraps */
-    }
+    .header-container h1 { font-size: 1.15em; }
+    .search-input { padding: 0.7rem 1rem; font-size: 0.95em; }
+    .group-navigation, .theme-switch { margin-top: 10px; }
 }
