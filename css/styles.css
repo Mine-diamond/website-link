@@ -1,35 +1,99 @@
 :root {
-    --bg-color: #f0f0f0;
-    --text-color: #333;
-    --header-bg: #d3d3d3;
-    --card-bg: linear-gradient(135deg, #cce7f6 0%, #a8d8ff 100%);
-    --footer-color: #666;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --group-bg: rgba(255, 255, 255, 0.3);
-    --group-title: #4a5568;
+    --bg-color: #f0f2f5; /* Slightly softer light background */
+    --text-color: #1f2937; /* Darker text for better contrast */
+    --header-bg: #ffffff; /* White header for light theme */
+    --card-bg: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%); /* Generic card bg - light */
+    --footer-color: #4b5563; /* Footer text color */
+    --shadow-color: rgba(0, 0, 0, 0.05); /* Softer shadow */
+    --group-bg: #ffffff; /* Group background for light theme */
+    --group-title: #374151;
     --transition-time: 0.2s;
     --max-width: 1440px;
-    --dropdown-bg: white;
-    --copy-btn-bg: rgba(255, 255, 255, 0.7);
-    --copy-btn-hover: rgba(255, 255, 255, 0.9);
+    --dropdown-bg: #ffffff;
+    --copy-btn-bg: rgba(255, 255, 255, 0.8);
+    --copy-btn-hover: #ffffff;
+    --link-hover-color: #2563eb; /* Primary blue for link hovers */
+
+    /* Input specific variables */
+    --input-bg: #f9fafb;
+    --input-border-color: #d1d5db;
+    --input-focus-border-color: #2563eb;
+    --input-focus-shadow: rgba(37, 99, 235, 0.1);
+
+    /* Button specific variables */
+    --btn-primary-bg: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    --btn-primary-color: white;
+    --btn-primary-shadow-color: rgba(37, 99, 235, 0.3);
+    --btn-secondary-bg: #e5e7eb;
+    --btn-secondary-color: #374151;
+    --btn-secondary-hover-bg: #d1d5db;
+    --btn-secondary-hover-border-color: #9ca3af;
+    
+    /* Variables for bookmarks.html specific elements */
+    --bookmark-card-bg: linear-gradient(145deg, #ffffff 0%, #eef2f7 100%);
+    --bookmark-favicon-fallback-bg: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --favicon-bg: #eef2f7;
+    --favicon-shadow: rgba(0,0,0,0.03);
+    --star-filled-color: #f59e0b; /* Amber 500 */
+    --star-empty-color: #d1d5db;  /* Gray 300 for empty stars */
+    --card-action-btn-bg: rgba(0, 0, 0, 0.03);
+    --card-action-btn-hover-bg: rgba(0, 0, 0, 0.07);
+    --card-action-btn-color: #4b5563;
+    --edit-btn-hover-bg: #dcfce7; /* Green 100 for edit hover */
+    --delete-btn-hover-bg: #fee2e2; /* Red 100 for delete hover */
+    --tag-bg: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%); /* Lighter blue tags */
+    --tag-color: #3b82f6; /* Blue text for tags */
+    --loading-spinner-color: #2563eb;
 }
 
 [data-theme="dark"] {
-    --bg-color: #1a1a1a;
-    --text-color: #e0e0e0;
-    --header-bg: #2d2d2d;
-    --card-bg: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
-    --footer-color: #888;
-    --shadow-color: rgba(255, 255, 255, 0.1);
-    --group-bg: rgba(0, 0, 0, 0.2);
-    --group-title: #cbd5e0;
-    --dropdown-bg: #333;
+    --bg-color: #111827; /* Dark Gray 900 */
+    --text-color: #d1d5db; /* Gray 300 */
+    --header-bg: #1f2937; /* Dark Gray 800 */
+    --card-bg: linear-gradient(135deg, #1f2937 0%, #374151 100%); /* Generic card bg - dark */
+    --footer-color: #9ca3af; /* Gray 400 */
+    --shadow-color: rgba(0, 0, 0, 0.3); /* Stronger shadow for dark */
+    --group-bg: #1f2937; /* Dark Gray 800 */
+    --group-title: #9ca3af; /* Gray 400 */
+    --dropdown-bg: #374151; /* Dark Gray 700 */
     --copy-btn-bg: rgba(0, 0, 0, 0.5);
     --copy-btn-hover: rgba(0, 0, 0, 0.7);
+    --link-hover-color: #60a5fa; /* Lighter blue for dark theme links */
+
+    /* Input specific variables - Dark */
+    --input-bg: #374151;
+    --input-border-color: #4b5563;
+    --input-focus-border-color: #60a5fa;
+    --input-focus-shadow: rgba(96, 165, 250, 0.2);
+
+    /* Button specific variables - Dark */
+    --btn-primary-bg: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --btn-primary-color: white;
+    --btn-primary-shadow-color: rgba(59, 130, 246, 0.4);
+    --btn-secondary-bg: #374151;
+    --btn-secondary-color: #d1d5db;
+    --btn-secondary-hover-bg: #4b5563;
+    --btn-secondary-hover-border-color: #6b7280;
+
+    /* Variables for bookmarks.html specific elements - Dark Theme */
+    --bookmark-card-bg: linear-gradient(145deg, #1f2937 0%, #293548 100%);
+    --bookmark-favicon-fallback-bg: linear-gradient(135deg, #5252ed 0%, #7648d7 100%);
+    --favicon-bg: #374151;
+    --favicon-shadow: rgba(0,0,0,0.1);
+    --star-filled-color: #f59e0b; /* Amber 500 - good on dark too */
+    --star-empty-color: #4b5563;  /* Gray 600 for empty stars on dark */
+    --card-action-btn-bg: rgba(255, 255, 255, 0.05);
+    --card-action-btn-hover-bg: rgba(255, 255, 255, 0.1);
+    --card-action-btn-color: #9ca3af;
+    --edit-btn-hover-bg: #1f2937; /* Darker green indication */
+    --delete-btn-hover-bg: #1f2937; /* Darker red indication */
+    --tag-bg: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); /* Darker blue tags */
+    --tag-color: #bfdbfe; /* Lighter blue text for tags */
+    --loading-spinner-color: #60a5fa;
 }
 
 body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
@@ -37,9 +101,11 @@ body {
     display: flex;
     flex-direction: column;
     transition: background-color 0.3s, color 0.3s;
+    font-size: 16px; /* Base font size */
+    line-height: 1.6; /* Base line height */
 }
 
-.container {
+.container { /* General container from original styles.css */
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 2rem 1.5rem;
@@ -48,7 +114,7 @@ body {
     flex: 1;
 }
 
-header {
+header { /* General header from original styles.css */
     background-color: var(--header-bg);
     padding: 1.2rem;
     text-align: center;
@@ -69,17 +135,19 @@ header {
     margin: 0;
     flex-grow: 1;
     text-align: center;
+    font-size: 1.5rem; /* Adjusted from original */
+    font-weight: 600;
 }
 
-/* 服务组导航样式 */
+/* 服务组导航样式 (from original styles.css) */
 .group-navigation {
     position: relative;
     z-index: 100;
 }
 
 .group-nav-toggle {
-    background: var(--bg-color);
-    border: none;
+    background: var(--input-bg); /* Use input-bg for consistency */
+    border: 1px solid var(--input-border-color); /* Add border */
     border-radius: 6px;
     padding: 8px 12px;
     cursor: pointer;
@@ -90,8 +158,8 @@ header {
 }
 
 .group-nav-toggle:hover {
-    background: var(--text-color);
-    color: var(--bg-color);
+    background: var(--group-bg);
+    border-color: var(--text-color);
 }
 
 .group-nav-dropdown {
@@ -103,12 +171,13 @@ header {
     overflow: hidden;
     background: var(--dropdown-bg);
     border-radius: 6px;
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 12px var(--shadow-color); /* Increased shadow for dropdown */
     transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s;
     z-index: 100;
     opacity: 0;
     visibility: hidden;
     margin-top: 5px;
+    border: 1px solid var(--input-border-color); /* Add border to dropdown */
 }
 
 .group-nav-dropdown.active {
@@ -120,7 +189,6 @@ header {
 
 .group-nav-item {
     padding: 10px 15px;
-    text-align: left;
     cursor: pointer;
     color: var(--text-color);
     border: none;
@@ -134,39 +202,41 @@ header {
     background-color: var(--group-bg);
 }
 
-.theme-switch {
-    background: var(--header-bg);
-    border: none;
+.theme-switch { /* General theme switch from original styles.css, if different from bookmarks.html */
+    background: var(--input-bg);
+    border: 1px solid var(--input-border-color);
     border-radius: 50%;
-    width: 44px;
-    height: 44px;
+    width: 40px; /* Standardized size */
+    height: 40px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 6px var(--shadow-color);
+    box-shadow: 0 1px 3px var(--shadow-color);
     transition: all 0.3s ease;
     z-index: 10;
     touch-action: manipulation;
+    color: var(--text-color); /* Ensure icon color for theme switch */
+    font-size: 1.1rem;
 }
 
 .theme-switch:hover {
     transform: scale(1.1) rotate(15deg);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 2px 6px var(--shadow-color);
 }
 
-.search-container {
+.search-container { /* From original styles.css */
     margin: 1rem 0 2rem;
     padding: 0 1rem;
     box-sizing: border-box;
 }
 
-.search-input {
+.search-input { /* General search input from original styles.css */
     width: 100%;
     padding: 0.8rem 1.2rem;
-    border-radius: 24px;
-    border: 2px solid var(--group-bg);
-    background: var(--group-bg);
+    border-radius: 24px; /* Pill shape */
+    border: 1px solid var(--input-border-color);
+    background: var(--input-bg);
     color: var(--text-color);
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -177,26 +247,27 @@ header {
 
 .search-input:focus {
     outline: none;
-    border-color: var(--text-color);
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    border-color: var(--input-focus-border-color);
+    box-shadow: 0 0 0 3px var(--input-focus-shadow);
 }
 
-.service-group {
+.service-group { /* From original styles.css */
     background: var(--group-bg);
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 2rem;
-    box-shadow: 0 2px 4px var(--shadow-color);
-    scroll-margin-top: 100px; /* 用于滚动定位 */
+    box-shadow: 0 2px 6px var(--shadow-color); /* Slightly enhanced shadow */
+    scroll-margin-top: 100px;
 }
 
 .service-group__title {
-    font-size: 1.1em;
+    font-size: 1.25em; /* Slightly larger */
     margin: 0 0 1.2rem;
     position: relative;
     padding-left: 1rem;
     color: var(--group-title);
     line-height: 1.3;
+    font-weight: 600; /* Bolder title */
 }
 
 .service-group__title::before {
@@ -207,39 +278,40 @@ header {
     transform: translateY(-50%);
     width: 4px;
     height: 1.2em;
-    background: var(--text-color);
+    background: var(--link-hover-color); /* Use accent color for bar */
     border-radius: 2px;
 }
 
-.card-grid {
+.card-grid { /* From original styles.css */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.5rem;
 }
 
-.service-card {
+.service-card { /* Service card from original styles.css */
     background: var(--card-bg);
     border-radius: 10px;
-    padding: 1rem;
+    padding: 1rem 1.2rem; /* Adjusted padding */
     min-height: 80px;
     display: flex;
+    flex-direction: column; /* Allow for content stacking if needed */
     align-items: center;
     justify-content: center;
     position: relative;
     cursor: pointer;
-    border: none;
-    color: inherit;
+    border: 1px solid var(--input-border-color); /* Subtle border */
+    color: var(--text-color); /* Ensure text color is themed */
     font-size: 0.95em;
     text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
     line-height: 1.4;
-    white-space: normal;
-    word-break: break-word;
+    word-break: break-word; /* Ensure long words break */
 }
 
 .service-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 12px var(--shadow-color); /* Enhanced hover shadow */
+    border-color: var(--link-hover-color); /* Accent border on hover */
 }
 
 .service-card:active {
@@ -247,7 +319,7 @@ header {
 }
 
 .service-card:focus {
-    outline: 2px solid var(--text-color);
+    outline: 2px solid var(--link-hover-color);
     outline-offset: 2px;
 }
 
@@ -255,75 +327,129 @@ header {
     position: absolute;
     top: 8px;
     right: 8px;
-    background: rgba(0, 0, 0, 0.15);
-    padding: 2px 6px;
-    border-radius: 8px;
+    background: var(--tag-bg); /* Use tag background for consistency */
+    color: var(--tag-color); /* Use tag color */
+    padding: 3px 8px; /* Adjusted padding */
+    border-radius: 12px; /* Pill shape badge */
     font-size: 0.75em;
+    font-weight: 500;
 }
 
-/* 复制按钮样式 */
+/* 复制按钮样式 (from original styles.css) */
 .copy-url-btn {
     position: absolute;
     top: 8px;
     left: 8px;
     background-color: var(--copy-btn-bg);
-    border: none;
-    border-radius: 4px;
-    width: 24px;
-    height: 24px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 6px; /* Slightly more rounded */
+    width: 28px; /* Slightly larger */
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     opacity: 0.7;
-    transition: opacity 0.2s, background-color 0.2s;
+    transition: opacity 0.2s, background-color 0.2s, border-color 0.2s;
     z-index: 2;
     padding: 0;
-    font-size: 12px;
+    font-size: 14px; /* Larger icon */
+    color: var(--text-color); /* Ensure icon color is themed */
 }
 
 .copy-url-btn:hover {
     opacity: 1;
     background-color: var(--copy-btn-hover);
+    border-color: var(--text-color);
 }
 
 .copy-url-btn:active {
     transform: scale(0.9);
 }
 
-.service-card:hover .copy-url-btn {
+/* .service-card:hover .copy-url-btn {
     opacity: 1;
-}
+} */ /* Keep it consistently visible at 0.7 opacity, increases on hover */
 
-.copy-success {
+.copy-success { /* From original styles.css */
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--header-bg);
+    background-color: var(--header-bg); /* Use header-bg for toast-like messages */
     color: var(--text-color);
-    padding: 8px 16px;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px var(--shadow-color);
-    z-index: 1000;
+    padding: 10px 20px; /* More padding */
+    border-radius: 8px;
+    box-shadow: 0 3px 10px var(--shadow-color); /* Enhanced shadow */
+    z-index: 10000; /* Ensure above modals */
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, transform 0.3s;
+    font-weight: 500;
 }
 
 .copy-success.show {
     opacity: 1;
+    transform: translateX(-50%) translateY(10px); /* Add slight downward movement */
 }
 
-footer {
+footer { /* General footer from original styles.css */
     background-color: var(--header-bg);
-    padding: 1rem;
+    padding: 1.5rem 1rem; /* More padding */
     text-align: center;
-    margin-top: auto;
+    margin-top: auto; /* Pushes to bottom */
     box-shadow: 0 -2px 4px var(--shadow-color);
     font-size: 0.9em;
+    color: var(--footer-color); /* Use themed footer color */
+    border-top: 1px solid var(--input-border-color); /* Subtle top border */
 }
 
+/* Modal styles from original styles.css - IF YOU WANT A GLOBAL MODAL STYLE.
+   bookmarks.html has its own more detailed modal. If you want one style for all,
+   you'd merge them here and remove the specific .modal styles from bookmarks.html's <style> tag.
+   For now, bookmarks.html keeps its own modal styles. */
+/*
+.modal { ... }
+.modal-content { ... }
+*/
+
+/* Loading and Empty states from original styles.css - these are generic */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-color);
+}
+/* Ensure the spinner for the generic .loading uses themed variables if different from bookmarks page */
+/* .loading::before { ... } */
+
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-color);
+    background: var(--group-bg); /* Give empty state a background */
+    border-radius: 12px;
+    margin: 2rem auto;
+    max-width: 600px;
+}
+
+.empty-state h3 {
+    margin: 0 0 1rem 0;
+    opacity: 0.8; /* Slightly more visible */
+    font-size: 1.25rem;
+}
+
+.empty-state p {
+    margin: 0;
+    opacity: 0.6; /* Slightly more visible */
+    font-size: 1rem;
+}
+
+
+/* Responsive adjustments from original styles.css */
 @media (max-width: 768px) {
+    body {
+        font-size: 15px; /* Adjust base font for smaller screens */
+    }
     .container {
         padding: 1.2rem 1rem;
     }
@@ -333,10 +459,16 @@ footer {
         margin: 0.5rem 0 1.5rem;
     }
 
-    .card-grid {
-        grid-template-columns: 1fr;
+    .card-grid { /* For general .card-grid */
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust general card grid */
         gap: 1rem;
     }
+    @media (max-width: 480px) {
+        .card-grid {
+             grid-template-columns: 1fr;
+        }
+    }
+
 
     .service-group {
         padding: 1rem;
@@ -345,7 +477,7 @@ footer {
     }
 
     .service-group__title {
-        font-size: 1em;
+        font-size: 1.1em;
         margin-bottom: 1rem;
         padding-left: 0.75rem;
     }
@@ -373,159 +505,49 @@ footer {
     }
     
     .header-container h1 {
-        order: -1;
+        order: -1; /* Title first on mobile */
         width: 100%;
         margin-bottom: 10px;
+        font-size: 1.25rem;
     }
     
-    .group-navigation {
-        margin-right: 15px;
+    .group-navigation { /* Adjust positioning for mobile */
+        margin-right: 10px; 
+    }
+    .theme-switch {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
     }
 
     footer {
-        padding: 0.8rem;
+        padding: 1rem;
         font-size: 0.85em;
     }
+
+    /* Modal adjustments from original if using a global modal style */
+    /* .modal-content {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    .form-actions {
+        flex-direction: column;
+    }
+    .form-actions button {
+        width: 100%;
+    } */
 }
 
 @media (max-width: 480px) {
     .header-container h1 {
-        font-size: 1.3em;
+        font-size: 1.15em;
     }
 
-    .search-input {
+    .search-input { /* General search input */
         padding: 0.7rem 1rem;
         font-size: 0.95em;
     }
-}
-
-/* 模态框样式 */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background: var(--bg-color);
-    padding: 2rem;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.modal-content h2 {
-    margin: 0 0 1.5rem 0;
-    color: var(--text-color);
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--group-bg);
-    border-radius: 6px;
-    background: var(--group-bg);
-    color: var(--text-color);
-    font-size: 1rem;
-    box-sizing: border-box;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: var(--text-color);
-}
-
-.form-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 1.5rem;
-}
-
-.form-actions button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.2s;
-}
-
-.form-actions button[type="submit"] {
-    background: var(--text-color);
-    color: var(--bg-color);
-}
-
-.form-actions button[type="button"] {
-    background: var(--group-bg);
-    color: var(--text-color);
-}
-
-.form-actions button:hover {
-    opacity: 0.8;
-    transform: translateY(-1px);
-}
-
-/* 加载和空状态样式 */
-.loading {
-    text-align: center;
-    padding: 2rem;
-    color: var(--text-color);
-}
-
-.empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-color);
-}
-
-.empty-state h3 {
-    margin: 0 0 1rem 0;
-    opacity: 0.7;
-}
-
-.empty-state p {
-    margin: 0;
-    opacity: 0.5;
-}
-
-/* 响应式调整 */
-@media (max-width: 768px) {
-    .modal-content {
-        padding: 1.5rem;
-        margin: 1rem;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .form-actions button {
-        width: 100%;
+    .group-navigation, .theme-switch {
+      margin-top: 10px; /* Add some space if header wraps */
     }
 }
