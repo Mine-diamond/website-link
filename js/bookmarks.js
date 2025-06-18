@@ -1,4 +1,4 @@
-// js/bookmarks.js - 收藏夹页面逻辑（增强版）
+// js/bookmarks.js - 收藏夹页面逻辑（新设计版）
 
 let allBookmarks = [];
 let currentBookmarksmarks = [];
@@ -43,7 +43,7 @@ async function loadBookmarks() {
 }
 
 // 渲染书签
-function renderBookmarks() {
+function renderBookmarksmarks() {
     const grid = document.getElementById('bookmarks-grid');
     const emptyState = document.getElementById('empty-state');
     
@@ -58,9 +58,9 @@ function renderBookmarks() {
     // 按重要程度和时间排序
     currentBookmarksmarks.sort((a, b) => {
         if (a.importance !== b.importance) {
-            return b.importance - a.importance; // 重要程度高的在前
+            return b.importance - a.importance;
         }
-        return new Date(b.dateAdded) - new Date(a.dateAdded); // 新的在前
+        return new Date(b.dateAdded) - new Date(a.dateAdded);
     });
     
     grid.innerHTML = currentBookmarksmarks.map(bookmark => createBookmarkCard(bookmark)).join('');
@@ -69,46 +69,45 @@ function renderBookmarks() {
     addCardEventListeners();
 }
 
-// 创建书签卡片HTML（增强版）
+// 创建书签卡片HTML（新设计）
 function createBookmarkCard(bookmark) {
     const stars = createStarsHTML(bookmark.importance);
-    const tags = bookmark.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('');
+    const tags = bookmark.tags.slice(0, 3).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('');
     const domain = extractDomain(bookmark.url);
     const iconHtml = createIconHTML(bookmark);
+    const secondaryInfo = bookmark.notes || domain;
+    const dateText = formatDate(bookmark.dateAdded);
     
     return `
         <div class="bookmark-card" data-id="${bookmark.id}">
             <div class="card-actions">
-                <button class="action-btn edit" onclick="editBookmark('${bookmark.id}')" title="编辑书签">
+                <button class="action-btn edit" onclick="editBookmark('${bookmark.id}')" title="编辑">
                     ✏️
                 </button>
-                <button class="action-btn delete" onclick="deleteBookmark('${bookmark.id}')" title="删除书签">
+                <button class="action-btn delete" onclick="deleteBookmark('${bookmark.id}')" title="删除">
                     🗑️
                 </button>
             </div>
             
             <div class="card-header">
-                <div class="card-icon-wrapper">
+                <div class="card-favicon ${bookmark.favicon ? '' : 'fallback'}">
                     ${iconHtml}
                 </div>
-                <div class="card-main-content">
-                    <h3 class="card-title">
-                        <a href="${bookmark.url}" target="_blank" rel="noopener noreferrer">
-                            ${escapeHtml(bookmark.title)}
-                        </a>
-                    </h3>
-                    <div class="card-url">${domain}</div>
-                </div>
+                <h3 class="card-title">
+                    <a href="${bookmark.url}" target="_blank" rel="noopener noreferrer">
+                        ${escapeHtml(bookmark.title)}
+                    </a>
+                </h3>
             </div>
             
-            ${bookmark.notes ? `<p class="card-description">${escapeHtml(bookmark.notes)}</p>` : ''}
+            <div class="card-secondary">${escapeHtml(secondaryInfo)}</div>
             
-            ${tags ? `<div class="bookmark-tags">${tags}</div>` : ''}
-            
-            <div class="card-meta">
+            <div class="card-bottom">
+                <div class="bookmark-tags">${tags}</div>
                 <div class="importance-stars">${stars}</div>
-                <div class="date-added">添加于 ${formatDate(bookmark.dateAdded)}</div>
             </div>
+            
+            <div class="card-date">${dateText}</div>
         </div>
     `;
 }
@@ -116,17 +115,16 @@ function createBookmarkCard(bookmark) {
 // 创建图标HTML
 function createIconHTML(bookmark) {
     if (bookmark.favicon) {
-        return `<img src="${bookmark.favicon}" alt="网站图标" class="card-icon" 
-                     onerror="this.outerHTML = createFallbackIcon('${escapeHtml(bookmark.title)}')">`;
+        return `<img src="${bookmark.favicon}" alt="图标" onerror="this.outerHTML = createFallbackIconContent('${escapeHtml(bookmark.title)}')">`;
     } else {
-        return createFallbackIcon(bookmark.title);
+        return createFallbackIconContent(bookmark.title);
     }
 }
 
-// 创建备用图标
-function createFallbackIcon(title) {
+// 创建备用图标内容
+function createFallbackIconContent(title) {
     const firstChar = title.charAt(0).toUpperCase();
-    return `<div class="card-icon fallback">${firstChar}</div>`;
+    return firstChar;
 }
 
 // 创建星级HTML
@@ -134,9 +132,9 @@ function createStarsHTML(importance) {
     let starsHTML = '';
     for (let i = 1; i <= 5; i++) {
         if (i <= importance) {
-            starsHTML += '<span class="star">⭐</span>';
+            starsHTML += '<span class="star">★</span>';
         } else {
-            starsHTML += '<span class="star empty">⭐</span>';
+            starsHTML += '<span class="star empty">★</span>';
         }
     }
     return starsHTML;
@@ -168,7 +166,9 @@ function formatDate(dateString) {
     if (diffDays === 1) return '今天';
     if (diffDays === 2) return '昨天';
     if (diffDays <= 7) return `${diffDays}天前`;
-    return date.toLocaleDateString('zh-CN');
+    if (diffDays <= 30) return `${Math.ceil(diffDays / 7)}周前`;
+    if (diffDays <= 365) return `${Math.ceil(diffDays / 30)}个月前`;
+    return `${Math.ceil(diffDays / 365)}年前`;
 }
 
 // 添加卡片事件监听器
@@ -282,7 +282,7 @@ async function deleteBookmark(id) {
     try {
         await bookmarkAPI.deleteBookmark(id);
         await loadBookmarks();
-        showToast('书签已删除', 'success');
+        showToast('📚 书签已删除', 'success');
     } catch (error) {
         console.error('删除书签失败:', error);
         showToast('删除失败: ' + error.message, 'error');
@@ -383,14 +383,15 @@ function showToast(message, type = 'info') {
     toast.style.cssText = `
         background: ${colors[type]};
         color: white;
-        padding: 12px 20px;
-        border-radius: 12px;
+        padding: 10px 16px;
+        border-radius: 10px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         font-weight: 500;
-        max-width: 400px;
+        font-size: 14px;
+        max-width: 320px;
         pointer-events: auto;
         transform: translateX(100%);
         transition: transform 0.3s ease;
@@ -423,4 +424,4 @@ function showConfirmDialog(title, message) {
 }
 
 // 全局函数暴露（供HTML中的onclick使用）
-window.createFallbackIcon = createFallbackIcon;
+window.createFallbackIconContent = createFallbackIconContent;
