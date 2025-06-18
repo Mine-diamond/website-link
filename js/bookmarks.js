@@ -1,7 +1,7 @@
-// js/bookmarks.js - 收藏夹页面逻辑（修正版）
+// js/bookmarks.js - 收藏夹页面逻辑（完全修正版）
 
 let allBookmarks = [];
-let currentBookmarks = []; // 修正：去掉多余的 marks
+let currentBookmarks = [];
 
 // 页面加载时初始化
 document.addEventListener('DOMContentLoaded', function() {
@@ -33,7 +33,7 @@ async function loadBookmarks() {
     showLoading();
     try {
         allBookmarks = await bookmarkAPI.getBookmarks();
-        currentBookmarks = [...allBookmarks]; // 修正：变量名
+        currentBookmarks = [...allBookmarks];
         renderBookmarks();
     } catch (error) {
         console.error('加载书签失败:', error);
@@ -43,11 +43,11 @@ async function loadBookmarks() {
 }
 
 // 渲染书签
-function renderBookmarks() { // 修正：函数名
+function renderBookmarks() {
     const grid = document.getElementById('bookmarks-grid');
     const emptyState = document.getElementById('empty-state');
     
-    if (currentBookmarks.length === 0) { // 修正：变量名
+    if (currentBookmarks.length === 0) {
         grid.innerHTML = '';
         emptyState.style.display = 'block';
         return;
@@ -56,14 +56,14 @@ function renderBookmarks() { // 修正：函数名
     emptyState.style.display = 'none';
     
     // 按重要程度和时间排序
-    currentBookmarks.sort((a, b) => { // 修正：变量名
+    currentBookmarks.sort((a, b) => {
         if (a.importance !== b.importance) {
             return b.importance - a.importance;
         }
         return new Date(b.dateAdded) - new Date(a.dateAdded);
     });
     
-    grid.innerHTML = currentBookmarks.map(bookmark => createBookmarkCard(bookmark)).join(''); // 修正：变量名
+    grid.innerHTML = currentBookmarks.map(bookmark => createBookmarkCard(bookmark)).join('');
     
     // 添加卡片点击事件
     addCardEventListeners();
@@ -115,7 +115,7 @@ function createBookmarkCard(bookmark) {
 // 创建图标HTML
 function createIconHTML(bookmark) {
     if (bookmark.favicon) {
-        return `<img src="${bookmark.favicon}" alt="图标" onerror="this.outerHTML = createFallbackIconContent('${escapeHtml(bookmark.title)}')">`;
+        return `<img src="${bookmark.favicon}" alt="图标" onerror="this.outerHTML='${createFallbackIconContent(bookmark.title)}'">`;
     } else {
         return createFallbackIconContent(bookmark.title);
     }
@@ -200,9 +200,9 @@ function searchBookmarks() {
         const importance = document.getElementById('importance-filter').value;
         
         if (!query && !importance) {
-            currentBookmarks = [...allBookmarks]; // 修正：变量名
+            currentBookmarks = [...allBookmarks];
         } else {
-            currentBookmarks = allBookmarks.filter(bookmark => { // 修正：变量名
+            currentBookmarks = allBookmarks.filter(bookmark => {
                 const matchesQuery = !query || 
                     bookmark.title.toLowerCase().includes(query) ||
                     bookmark.notes.toLowerCase().includes(query) ||
@@ -218,7 +218,7 @@ function searchBookmarks() {
         renderBookmarks();
         
         // 搜索结果提示
-        if (query && currentBookmarks.length === 0) { // 修正：变量名
+        if (query && currentBookmarks.length === 0) {
             showToast(`没有找到包含"${query}"的书签`, 'info');
         }
     }, 300);
