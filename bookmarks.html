@@ -1,472 +1,332 @@
-<!DOCTYPE html>
-<html lang="zh-CN"> <!-- theme.js likely targets this or <body> for data-theme -->
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>收藏夹 - YyMing</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <!-- Link the global styles.css FIRST -->
-    <link rel="stylesheet" href="css/styles.css">
-    <!-- 
-      Inline styles for bookmarks.html specific elements AFTER global styles.
-      Generic styles like .modal, .btn, .loading, .empty-state should be moved to styles.css.
-      This block now only contains styles unique to the bookmarks page layout and cards.
-    -->
-    <style>
-        .bookmarks-container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            width: 100%;
-            box-sizing: border-box;
-        }
+// js/bookmarks.js - 收藏夹页面逻辑（最终修正版）
 
-        .bookmarks-header {
-            background: var(--header-bg);
-            padding: 1.5rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px var(--shadow-color);
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- 状态管理 ---
+    let allBookmarks = [];
+    let currentBookmarks = [];
+    let searchTimeout;
+    
+    // --- DOM 元素引用 ---
+    const grid = document.getElementById('bookmarks-grid');
+    const emptyState = document.getElementById('empty-state');
+    const loadingIndicator = document.getElementById('loading');
+    const searchInput = document.getElementById('search-input');
+    const importanceFilter = document.getElementById('importance-filter');
+    const addBookmarkBtn = document.querySelector('.add-bookmark-btn');
+    const modal = document.getElementById('bookmark-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const bookmarkForm = document.getElementById('bookmark-form');
+    const cancelButton = modal.querySelector('.btn-secondary');
 
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: var(--max-width);
-            margin: 0 auto;
-        }
+    // 关键UI元素检查，确保页面结构正确
+    if (!grid || !emptyState || !loadingIndicator || !modal || !bookmarkForm || !addBookmarkBtn || !cancelButton) {
+        console.error("关键UI元素缺失，脚本无法正常运行。请检查HTML ID和class是否正确。");
+        return;
+    }
 
-        .header-title {
-            margin: 0;
-            color: var(--text-color);
-            font-size: 2rem;
-            font-weight: 600;
-        }
+    // --- Helper Functions ---
 
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+    function escapeHtml(text) {
+        if (text === null || typeof text === 'undefined') return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
-        .nav-link {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: background-color 0.3s, color 0.3s, opacity 0.3s;
-            opacity: 0.7;
+    function extractDomain(url) {
+        try {
+            return new URL(url).hostname;
+        } catch (e) {
+            return url || '';
         }
+    }
+    
+    function formatDate(dateString) {
+        try {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays <= 1) return '今天';
+            if (diffDays === 2) return '昨天';
+            if (diffDays <= 7) return `${diffDays}天前`;
+            if (diffDays <= 30) return `${Math.ceil(diffDays / 7)}周前`;
+            if (diffDays <= 365) return `${Math.ceil(diffDays / 30)}个月前`;
+            return `${Math.ceil(diffDays / 365)}年前`;
+        } catch (e) {
+            return '未知日期';
+        }
+    }
 
-        .nav-link.active,
-        .nav-link:hover {
-            background-color: var(--group-bg);
-            color: var(--text-color);
-            opacity: 1;
+    function createFallbackIconContent(title) {
+        return (title || ' ').charAt(0).toUpperCase();
+    }
+    
+    function createStarsHTML(importance) {
+        let starsHTML = '';
+        const imp = parseInt(importance) || 0;
+        for (let i = 1; i <= 5; i++) {
+            starsHTML += `<span class="star ${i <= imp ? '' : 'empty'}">★</span>`;
         }
+        return starsHTML;
+    }
+
+    // --- UI Utility Functions ---
+
+    function showLoading() { loadingIndicator.style.display = 'flex'; }
+    function hideLoading() { loadingIndicator.style.display = 'none'; }
+    
+    function initToastSystem() {
+        if (document.getElementById('toast-container')) return;
+        const container = document.createElement('div');
+        container.id = 'toast-container';
+        container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none;';
+        document.body.appendChild(container);
+    }
+
+    function showToast(message, type = 'info') {
+        initToastSystem();
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+        const colors = { success: '#10b981', error: '#ef4444', warning: '#f59e0b', info: '#3b82f6' };
         
-        .theme-toggle {
-            background: var(--bg-color);
-            border: none;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px var(--shadow-color);
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-            color: var(--text-color);
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        .bookmark-controls {
-            background: var(--group-bg);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px var(--shadow-color);
-        }
-
-        .bookmark-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        toast.style.cssText = `background: ${colors[type]}; color: white; padding: 10px 16px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; max-width: 320px; pointer-events: auto; transform: translateX(120%); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;`;
         
-        .add-bookmark-btn {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .add-bookmark-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
-        }
-
-        .add-bookmark-btn::before {
-            content: "✨";
-            font-size: 14px;
-        }
+        toast.innerHTML = `${icons[type]} ${escapeHtml(message)}`;
+        container.appendChild(toast);
         
-        .control-group {
-            display: flex;
-            flex: 1;
-            gap: 1rem;
-            min-width: 200px;
-        }
-
-        .bookmark-search,
-        .importance-filter {
-            padding: 10px 14px;
-            border: 2px solid transparent;
-            border-radius: 10px;
-            background: var(--input-bg, var(--bg-color));
-            color: var(--text-color);
-            font-size: 14px;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-        .importance-filter {
-             min-width: 140px;
-             cursor: pointer;
-        }
-
-        .bookmark-search:focus,
-        .importance-filter:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .bookmarks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 2rem;
-        }
-
-        .bookmark-card {
-            background: var(--bookmark-card-bg, var(--card-bg));
-            border-radius: 12px;
-            padding: 1rem;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px var(--shadow-color);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 140px;
-        }
-
-        .bookmark-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px var(--shadow-color);
-        }
+        setTimeout(() => {
+            toast.style.transform = 'translateX(0)';
+            toast.style.opacity = '1';
+        }, 10);
         
-        .card-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-        }
+        setTimeout(() => {
+            toast.style.transform = 'translateX(120%)';
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+    
+    function showConfirmDialog(title, message) {
+        return new Promise((resolve) => resolve(confirm(`${title}\n\n${message}`)));
+    }
+    
+    function openModal() { modal.style.display = 'flex'; }
+    function closeModal() { modal.style.display = 'none'; }
 
-        .card-favicon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--favicon-bg, var(--bg-color));
-            box-shadow: 0 1px 4px var(--favicon-shadow, rgba(0, 0, 0, 0.05));
-            color: var(--text-color);
-            font-weight: 600;
-            font-size: 12px;
-        }
+    // --- Bookmark Rendering ---
 
-        .card-favicon img {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-        }
-        
-        .card-favicon.fallback {
-            background: var(--bookmark-favicon-fallback-bg, linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%));
-            color: white;
-        }
+    function createBookmarkCard(bookmark) {
+        const card = document.createElement('div');
+        card.className = 'bookmark-card';
+        card.dataset.id = bookmark.id;
 
-        .card-title {
-            margin: 0;
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-color);
-            line-height: 1.3;
-            flex: 1;
-            min-width: 0;
-        }
+        const fallbackText = createFallbackIconContent(bookmark.title);
+        const iconHtml = bookmark.favicon 
+            ? `<img src="${bookmark.url}/favicon.ico" alt="图标">` // Use direct favicon link
+            : `<span>${escapeHtml(fallbackText)}</span>`;
 
-        .card-title a {
-            color: inherit;
-            text-decoration: none;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: color 0.3s ease;
-        }
-
-        .card-title a:hover {
-            color: var(--link-hover-color, #4f46e5);
-        }
-
-        .card-secondary {
-            font-size: 13px;
-            color: var(--text-color);
-            opacity: 0.7;
-            margin-bottom: 0.75rem;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card-bottom {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            min-height: 20px;
-            margin-top: auto;
-        }
-        
-        .bookmark-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            flex: 1;
-            min-width: 0;
-            overflow: hidden;
-        }
-        
-        .tag {
-            background: var(--tag-bg, linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%));
-            color: var(--tag-color, white);
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .importance-stars {
-            display: flex;
-            gap: 1px;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
-
-        .star {
-            color: var(--star-filled-color, #fbbf24);
-        }
-
-        .star.empty {
-            color: var(--star-empty-color, rgba(251, 191, 36, 0.3));
-        }
-
-        .card-date {
-            font-size: 10px;
-            color: var(--text-color);
-            opacity: 0.5;
-            margin-top: 0.25rem;
-            text-align: right;
-            width: 100%;
-        }
-
-        .card-actions {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            display: flex;
-            gap: 4px;
-            opacity: 1;
-        }
-        
-        .action-btn {
-            width: 24px;
-            height: 24px;
-            background: var(--card-action-btn-bg);
-            backdrop-filter: blur(5px);
-            color: var(--card-action-btn-color);
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 12px;
-        }
-
-        .action-btn:hover {
-            background: var(--card-action-btn-hover-bg);
-            transform: scale(1.1);
-        }
-
-        .action-btn.edit:hover { background: var(--edit-btn-hover-bg, #059669); }
-        .action-btn.delete:hover { background: var(--delete-btn-hover-bg, #dc2626); }
-
-        /* Responsive adjustments for bookmarks page */
-        @media (max-width: 1024px) {
-            .bookmarks-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-        }
-        @media (max-width: 767px) {
-            .bookmarks-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; }
-        }
-        @media (max-width: 479px) {
-            .bookmarks-grid { grid-template-columns: 1fr; }
-        }
-        
-        @media (max-width: 768px) {
-            .bookmarks-container { padding: 1rem; }
-            .bookmarks-header { padding: 1rem; margin-bottom: 1.5rem; }
-            .header-content { flex-direction: column; gap: 1rem; text-align: center; }
-            .header-title { font-size: 1.5rem; }
-            .bookmark-controls { padding: 1rem; }
-            .bookmark-actions { flex-direction: column; align-items: stretch; }
-            .control-group { flex-direction: column; }
-            .add-bookmark-btn { justify-content: center; }
-        }
-        @media (max-width: 480px) {
-            .bookmark-card { padding: 0.875rem; min-height: 120px; }
-            .card-header { gap: 0.5rem; }
-            .card-favicon { width: 28px; height: 28px; }
-            .card-favicon img { width: 18px; height: 18px; }
-            .card-title { font-size: 14px; }
-            .card-secondary { font-size: 12px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="bookmarks-container">
-        <!-- 头部 -->
-        <header class="bookmarks-header">
-            <div class="header-content">
-                <h1 class="header-title">我的收藏夹</h1>
-                <nav class="header-nav">
-                    <a href="index.html" class="nav-link">🏠 导航站</a>
-                    <a href="bookmarks.html" class="nav-link active">📚 收藏夹</a>
-                    <button id="theme-toggle" class="theme-toggle" title="切换主题">🌙</button>
-                </nav>
+        card.innerHTML = `
+            <div class="card-actions">
+                <button class="action-btn edit" title="编辑" data-action="edit">✏️</button>
+                <button class="action-btn delete" title="删除" data-action="delete">🗑️</button>
             </div>
-        </header>
-
-        <!-- 控制栏 (Inline event handlers removed) -->
-        <div class="bookmark-controls">
-            <div class="bookmark-actions">
-                <button class="add-bookmark-btn">添加书签</button>
-                <div class="control-group">
-                    <input type="text" class="bookmark-search" id="search-input" 
-                           placeholder="🔍 搜索标题、备注或标签...">
-                    <select id="importance-filter" class="importance-filter">
-                        <option value="">⭐ 所有等级</option>
-                        <option value="5">⭐⭐⭐⭐⭐ 5星</option>
-                        <option value="4">⭐⭐⭐⭐ 4星以上</option>
-                        <option value="3">⭐⭐⭐ 3星以上</option>
-                        <option value="2">⭐⭐ 2星以上</option>
-                        <option value="1">⭐ 1星以上</option>
-                    </select>
-                </div>
+            <div class="card-header">
+                <div class="card-favicon ${!bookmark.favicon ? 'fallback' : ''}">${iconHtml}</div>
+                <h3 class="card-title">
+                    <a href="${bookmark.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(bookmark.title)}</a>
+                </h3>
             </div>
-        </div>
-
-        <!-- 书签网格 -->
-        <div class="bookmarks-grid" id="bookmarks-grid">
-            <!-- 书签卡片将通过JS动态生成 -->
-            <!-- 事件监听器将通过事件委托附加到此容器 -->
-        </div>
-
-        <!-- 加载状态 (Generic style, assumed in styles.css) -->
-        <div id="loading" class="loading" style="display: none;">
-            <div>正在加载书签...</div>
-        </div>
-
-        <!-- 空状态 (Generic style, assumed in styles.css) -->
-        <div id="empty-state" class="empty-state" style="display: none;">
-            <h3>还没有收藏书签</h3>
-            <p>开始收藏你喜欢的网站吧！点击上方"添加书签"按钮来创建第一个书签。</p>
-        </div>
-    </div>
-
-    <!-- 模态框 (Generic style, assumed in styles.css. Inline event handlers removed) -->
-    <div id="bookmark-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-title" class="modal-title">添加书签</h2>
+            <div class="card-secondary">${escapeHtml(bookmark.notes || extractDomain(bookmark.url))}</div>
+            <div class="card-bottom">
+                <div class="bookmark-tags">${(bookmark.tags || []).slice(0, 3).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
+                <div class="importance-stars">${createStarsHTML(bookmark.importance)}</div>
             </div>
-            <div class="modal-body">
-                <form id="bookmark-form" novalidate> <!-- novalidate prevents default browser validation -->
-                    <div class="form-group">
-                        <label>📌 标题 *</label>
-                        <input type="text" id="bookmark-title" required placeholder="请输入书签标题">
-                    </div>
-                    <div class="form-group">
-                        <label>🔗 网址 *</label>
-                        <input type="url" id="bookmark-url" required placeholder="https://example.com">
-                    </div>
-                    <div class="form-group">
-                        <label>🏷️ 标签</label>
-                        <input type="text" id="bookmark-tags" placeholder="用逗号分隔，如：工具,学习,娱乐">
-                    </div>
-                    <div class="form-group">
-                        <label>📝 备注</label>
-                        <textarea id="bookmark-notes" placeholder="添加备注信息（可选）"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>⭐ 重要程度</label>
-                        <select id="bookmark-importance">
-                            <option value="1">⭐ 1星 - 普通</option>
-                            <option value="2">⭐⭐ 2星 - 有用</option>
-                            <option value="3" selected>⭐⭐⭐ 3星 - 重要</option>
-                            <option value="4">⭐⭐⭐⭐ 4星 - 很重要</option>
-                            <option value="5">⭐⭐⭐⭐⭐ 5星 - 必备</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="form-actions">
-                <button type="button" class="btn btn-secondary">取消</button>
-                <button type="submit" form="bookmark-form" class="btn btn-primary">保存书签</button>
-            </div>
-        </div>
-    </div>
+            <div class="card-date">${formatDate(bookmark.dateAdded)}</div>
+        `;
+        
+        const img = card.querySelector('img');
+        if (img) {
+            img.onerror = () => {
+                const faviconContainer = img.closest('.card-favicon');
+                if (faviconContainer) {
+                    faviconContainer.classList.add('fallback');
+                    faviconContainer.innerHTML = `<span>${escapeHtml(fallbackText)}</span>`;
+                }
+            };
+        }
+        
+        return card;
+    }
 
-    <script src="js/theme.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/bookmarkAPI.js"></script>
-    <script src="js/bookmarks.js"></script> <!-- This script now handles all events -->
-</body>
-</html>
+    function renderBookmarks() {
+        grid.innerHTML = '';
+        if (currentBookmarks.length === 0) {
+            emptyState.style.display = 'block';
+        } else {
+            emptyState.style.display = 'none';
+            currentBookmarks.sort((a, b) => (b.importance - a.importance) || (new Date(b.dateAdded) - new Date(a.dateAdded)));
+            currentBookmarks.forEach(bookmark => grid.appendChild(createBookmarkCard(bookmark)));
+        }
+    }
+    
+    // --- Core Application Logic ---
+
+    async function loadAndRenderBookmarks() {
+        showLoading();
+        try {
+            if (typeof bookmarkAPI === 'undefined' || typeof bookmarkAPI.getBookmarks !== 'function') {
+                throw new Error('bookmarkAPI or getBookmarks function is not available.');
+            }
+            allBookmarks = await bookmarkAPI.getBookmarks();
+            currentBookmarks = [...allBookmarks];
+            renderBookmarks();
+        } catch (error) {
+            console.error('加载书签失败:', error);
+            showToast('加载书签失败: ' + error.message, 'error');
+        } finally {
+            hideLoading();
+        }
+    }
+
+    function applyFilters() {
+        const query = searchInput.value.toLowerCase().trim();
+        const importance = importanceFilter.value;
+        
+        currentBookmarks = allBookmarks.filter(bookmark => {
+            const matchesQuery = !query ||
+                (bookmark.title || '').toLowerCase().includes(query) ||
+                (bookmark.notes || '').toLowerCase().includes(query) ||
+                (bookmark.tags || []).some(tag => tag.toLowerCase().includes(query)) ||
+                (bookmark.url || '').toLowerCase().includes(query);
+            
+            const matchesImportance = !importance || bookmark.importance >= parseInt(importance);
+            return matchesQuery && matchesImportance;
+        });
+        
+        renderBookmarks();
+    }
+
+    function handleSearchInput() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(applyFilters, 300);
+    }
+
+    function openAddBookmarkModal() {
+        modalTitle.textContent = '✨ 添加新书签';
+        bookmarkForm.reset();
+        bookmarkForm.removeAttribute('data-edit-id');
+        openModal();
+        document.getElementById('bookmark-title').focus();
+    }
+    
+    function openEditBookmarkModal(id) {
+        const bookmark = allBookmarks.find(b => b.id === id);
+        if (!bookmark) return;
+
+        modalTitle.textContent = '✏️ 编辑书签';
+        // 【BUG修复】使用 `|| ''` 确保 null/undefined 值不会变成字符串 "null"
+        document.getElementById('bookmark-title').value = bookmark.title || '';
+        document.getElementById('bookmark-url').value = bookmark.url || '';
+        document.getElementById('bookmark-tags').value = (bookmark.tags || []).join(', ');
+        document.getElementById('bookmark-notes').value = bookmark.notes || '';
+        document.getElementById('bookmark-importance').value = bookmark.importance || 3;
+        
+        bookmarkForm.setAttribute('data-edit-id', id);
+        openModal();
+        document.getElementById('bookmark-title').focus();
+    }
+    
+    async function handleDeleteBookmark(id) {
+        const bookmark = allBookmarks.find(b => b.id === id);
+        if (!bookmark) return;
+        
+        const confirmed = await showConfirmDialog('确认删除', `确定要删除书签 "${bookmark.title}" 吗？此操作无法撤销。`);
+        
+        if (confirmed) {
+            try {
+                await bookmarkAPI.deleteBookmark(id);
+                showToast('📚 书签已删除', 'success');
+                await loadAndRenderBookmarks();
+            } catch (error) {
+                console.error('删除书签失败:', error);
+                showToast('删除失败: ' + error.message, 'error');
+            }
+        }
+    }
+
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById('bookmark-title').value.trim();
+        const url = document.getElementById('bookmark-url').value.trim();
+        
+        if (!title || !url) return showToast('请填写标题和网址', 'warning');
+        try { new URL(url); } catch (err) { return showToast('请输入有效的网址格式', 'warning'); }
+        
+        const formData = {
+            title,
+            url,
+            tags: document.getElementById('bookmark-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+            notes: document.getElementById('bookmark-notes').value.trim(),
+            importance: parseInt(document.getElementById('bookmark-importance').value, 10)
+        };
+        
+        const editId = bookmarkForm.getAttribute('data-edit-id');
+        
+        try {
+            if (editId) {
+                await bookmarkAPI.updateBookmark({ ...formData, id: editId });
+                showToast('📝 书签已更新', 'success');
+            } else {
+                await bookmarkAPI.addBookmark(formData);
+                showToast('✨ 书签已添加', 'success');
+            }
+            closeModal();
+            await loadAndRenderBookmarks();
+        } catch (error) {
+            console.error('保存书签失败:', error);
+            showToast('保存失败: ' + error.message, 'error');
+        }
+    }
+
+    // --- Event Listeners Setup ---
+
+    searchInput.addEventListener('keyup', handleSearchInput);
+    importanceFilter.addEventListener('change', applyFilters);
+    addBookmarkBtn.addEventListener('click', openAddBookmarkModal);
+    bookmarkForm.addEventListener('submit', handleFormSubmit);
+    cancelButton.addEventListener('click', closeModal);
+
+    grid.addEventListener('click', (e) => {
+        const target = e.target;
+        const actionButton = target.closest('[data-action]');
+        
+        if (actionButton) {
+            e.preventDefault();
+            e.stopPropagation();
+            const card = actionButton.closest('.bookmark-card');
+            if (!card) return;
+            const bookmarkId = card.dataset.id;
+            const action = actionButton.dataset.action;
+
+            if (action === 'edit') openEditBookmarkModal(bookmarkId);
+            else if (action === 'delete') handleDeleteBookmark(bookmarkId);
+        }
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display !== 'none') closeModal();
+    });
+
+    // --- Initial Load ---
+    initToastSystem();
+    loadAndRenderBookmarks();
+});
