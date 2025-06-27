@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const fallbackText = createFallbackIconContent(bookmark.title);
         const iconHtml = bookmark.favicon 
-            ? `<img src="${bookmark.url}/favicon.ico" alt="图标">` // Use direct favicon link
+            ? `<img src="${escapeHtml(bookmark.favicon)}" alt="图标">` // 使用 API 提供的可靠 favicon 链接
             : `<span>${escapeHtml(fallbackText)}</span>`;
 
         card.innerHTML = `

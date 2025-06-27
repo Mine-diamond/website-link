@@ -75,17 +75,13 @@ const NavigationManager = {
         });
         
         // 点击导航项滚动到对应分组
-        dropdown.addEventListener('click', (e) => {
-            if (e.target.classList.contains('group-nav-item')) {
-                const title = e.target.textContent;
+                dropdown.addEventListener('click', (e) => {
+            const navItem = e.target.closest('.group-nav-item');
+            if (navItem) {
+                const targetId = navItem.dataset.target;
+                const targetGroup = document.getElementById(targetId);
                 
-                console.log('点击的导航项:', title);
-                
-                // 通过标题查找目标元素
-                const groups = document.querySelectorAll('.service-group');
-                const targetGroup = [...groups].find(group => 
-                    group.querySelector('.service-group__title').textContent === title
-                );
+                console.log('点击导航项，目标ID:', targetId);
                 
                 if (targetGroup) {
                     // 滚动到目标元素
@@ -94,8 +90,9 @@ const NavigationManager = {
                         block: 'start'
                     });
                     
-                    // 高亮目标元素
-                    targetGroup.style.boxShadow = '0 0 0 3px var(--text-color)';
+                    // 高亮目标元素 (可选，但体验更好)
+                    targetGroup.style.transition = 'box-shadow 0.3s ease-in-out';
+                    targetGroup.style.boxShadow = '0 0 0 3px var(--link-hover-color)';
                     setTimeout(() => {
                         targetGroup.style.boxShadow = '';
                     }, 2000);
@@ -103,7 +100,7 @@ const NavigationManager = {
                     // 关闭下拉菜单
                     dropdown.classList.remove('active');
                 } else {
-                    console.error(`找不到标题为 "${title}" 的服务组`);
+                    console.error(`找不到ID为 "${targetId}" 的服务组`);
                 }
             }
         });
