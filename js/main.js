@@ -1,5 +1,4 @@
 function initApp() {
-    ThemeManager.init();
     // 先渲染卡片，再初始化导航
     CardManager.init();
     SearchManager.init();
