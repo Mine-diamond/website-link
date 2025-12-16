@@ -1,5 +1,3 @@
-// js/theme.js (最终、兼容并包的修正版)
-
 (function() {
     'use strict';
 
