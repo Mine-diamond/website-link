@@ -75,8 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- UI Utility Functions ---
 
-    function showLoading() { loadingIndicator.style.display = 'flex'; }
-    function hideLoading() { loadingIndicator.style.display = 'none'; }
+    function showLoading() {
+        loadingIndicator.classList.remove('hidden');
+        loadingIndicator.style.display = '';
+    }
+    function hideLoading() {
+        loadingIndicator.classList.add('hidden');
+        loadingIndicator.style.display = '';
+    }
     
     function initToastSystem() {
         if (document.getElementById('toast-container')) return;
@@ -114,8 +120,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return new Promise((resolve) => resolve(confirm(`${title}\n\n${message}`)));
     }
     
-    function openModal() { modal.style.display = 'flex'; }
-    function closeModal() { modal.style.display = 'none'; }
+    function openModal() {
+        modal.classList.remove('hidden');
+        // 清除可能的内联display样式，让CSS类生效
+        modal.style.display = '';
+    }
+    function closeModal() {
+        modal.classList.add('hidden');
+        // 清除可能的内联display样式
+        modal.style.display = '';
+    }
 
     // --- Bookmark Rendering ---
 
@@ -165,9 +179,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderBookmarks() {
         grid.innerHTML = '';
         if (currentBookmarks.length === 0) {
-            emptyState.style.display = 'block';
+            emptyState.classList.remove('hidden');
+            emptyState.style.display = '';
         } else {
-            emptyState.style.display = 'none';
+            emptyState.classList.add('hidden');
+            emptyState.style.display = '';
             currentBookmarks.sort((a, b) => (b.importance - a.importance) || (new Date(b.dateAdded) - new Date(a.dateAdded)));
             currentBookmarks.forEach(bookmark => grid.appendChild(createBookmarkCard(bookmark)));
         }
@@ -323,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.style.display !== 'none') closeModal();
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
     });
 
     // --- Initial Load ---
