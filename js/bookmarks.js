@@ -371,10 +371,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Initial Load ---
     initToastSystem();
     const initPromise = loadAndRenderBookmarks();
-    // 如果是通过 /search?q=xxx 访问，加载完成后自动触发搜索
-    if (window.__INITIAL_SEARCH__) {
+    // 如果是通过 ?q=xxx 或 /search?q=xxx 访问，加载完成后自动触发搜索
+    const urlQuery = new URLSearchParams(window.location.search).get('q');
+    if (urlQuery) {
         initPromise.then(() => {
-            searchInput.value = window.__INITIAL_SEARCH__;
+            searchInput.value = urlQuery;
             applyFilters();
         });
     }

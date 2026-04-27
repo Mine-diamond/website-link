@@ -1,0 +1,2 @@
+# /search -> index.html (200=rewrite, 保持 URL 不变)
+/search /index.html 200
