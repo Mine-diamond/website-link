@@ -209,7 +209,7 @@ header {
 }
 .btn { padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; border: none; outline: none; }
 .btn-primary { background: var(--btn-primary-bg); color: var(--btn-primary-color); }
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px var(--btn-primary-shadow-color); }
+.btn-primary:hover { box-shadow: 0 4px 16px var(--btn-primary-shadow-color), 0 0 0 2px rgba(79, 70, 229, 0.15); }
 .btn-secondary { background: var(--btn-secondary-bg); color: var(--btn-secondary-color); border: 2px solid transparent; }
 .btn-secondary:hover { border-color: var(--btn-secondary-hover-border-color); background: var(--btn-secondary-hover-bg); }
 
@@ -365,8 +365,7 @@ footer { background-color: var(--header-bg); padding: 1.5rem 1rem; text-align: c
 }
 
 .add-bookmark-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.5), 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 .add-bookmark-btn::before {
@@ -426,8 +425,7 @@ footer { background-color: var(--header-bg); padding: 1.5rem 1rem; text-align: c
 }
 
 .bookmark-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px var(--shadow-color);
+    box-shadow: 0 4px 20px var(--shadow-color), 0 0 0 1.5px var(--input-focus-border-color);
 }
 
 .card-header {
