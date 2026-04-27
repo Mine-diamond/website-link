@@ -98,7 +98,7 @@ async function search(req, env, cors) {
   const imp = parseInt(u.searchParams.get('importance') || '0');
 
   let list = await readKV(env);
-  if (q)  list = list.filter(i => i.title.toLowerCase().includes(q) || i.notes.toLowerCase().includes(q));
+  if (q)  list = list.filter(i => i.title.toLowerCase().includes(q) || i.notes.toLowerCase().includes(q) || i.url.toLowerCase().includes(q) || (i.tags || []).some(tag => tag.toLowerCase().includes(q)));
   if (tags.length) list = list.filter(i => tags.every(t => i.tags.includes(t)));
   if (imp) list = list.filter(i => i.importance >= imp);
   return jsonResp(list, cors);

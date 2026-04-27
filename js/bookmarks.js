@@ -208,22 +208,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function applyFilters() {
-        const query = searchInput.value.toLowerCase().trim();
+    async function applyFilters() {
+        const query = searchInput.value.trim();
         const importance = importanceFilter.value;
-        
-        currentBookmarks = allBookmarks.filter(bookmark => {
-            const matchesQuery = !query ||
-                (bookmark.title || '').toLowerCase().includes(query) ||
-                (bookmark.notes || '').toLowerCase().includes(query) ||
-                (bookmark.tags || []).some(tag => tag.toLowerCase().includes(query)) ||
-                (bookmark.url || '').toLowerCase().includes(query);
-            
-            const matchesImportance = !importance || bookmark.importance >= parseInt(importance);
-            return matchesQuery && matchesImportance;
-        });
-        
-        renderBookmarks();
+
+        // 无搜索条件时，直接用本地全量数据，避免不必要的网络请求
+        if (!query && !importance) {
+            currentBookmarks = [...allBookmarks];
+            renderBookmarks();
+            return;
+        }
+
+        // 有搜索条件时，调用后端 search API
+        try {
+            showLoading();
+            const results = await bookmarkAPI.searchBookmarks(query, [], importance || null);
+            currentBookmarks = results;
+            renderBookmarks();
+        } catch (error) {
+            console.error('搜索失败:', error);
+            showToast('搜索失败: ' + error.message, 'error');
+        } finally {
+            hideLoading();
+        }
     }
 
     function handleSearchInput() {
