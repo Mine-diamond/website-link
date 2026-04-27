@@ -370,5 +370,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Initial Load ---
     initToastSystem();
-    loadAndRenderBookmarks();
+    const initPromise = loadAndRenderBookmarks();
+    // 如果是通过 /search?q=xxx 访问，加载完成后自动触发搜索
+    if (window.__INITIAL_SEARCH__) {
+        initPromise.then(() => {
+            searchInput.value = window.__INITIAL_SEARCH__;
+            applyFilters();
+        });
+    }
 });
