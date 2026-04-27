@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const card = document.createElement('div');
         card.className = 'bookmark-card';
         card.dataset.id = bookmark.id;
+        card.dataset.url = bookmark.url;
 
         const fallbackText = createFallbackIconContent(bookmark.title);
         const iconHtml = bookmark.favicon 
@@ -160,9 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="card-header">
                 <div class="card-favicon ${!bookmark.favicon ? 'fallback' : ''}">${iconHtml}</div>
-                <h3 class="card-title">
-                    <a href="${bookmark.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(bookmark.title)}</a>
-                </h3>
+                <h3 class="card-title">${escapeHtml(bookmark.title)}</h3>
             </div>
             <div class="card-secondary">${escapeHtml(bookmark.notes || extractDomain(bookmark.url))}</div>
             <div class="card-bottom">
@@ -344,9 +343,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cancelButton.addEventListener('click', closeModal);
 
     grid.addEventListener('click', (e) => {
-        const target = e.target;
-        const actionButton = target.closest('[data-action]');
-        
+        const actionButton = e.target.closest('[data-action]');
         if (actionButton) {
             e.preventDefault();
             e.stopPropagation();
@@ -354,9 +351,24 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!card) return;
             const bookmarkId = card.dataset.id;
             const action = actionButton.dataset.action;
-
             if (action === 'edit') openEditBookmarkModal(bookmarkId);
             else if (action === 'delete') handleDeleteBookmark(bookmarkId);
+            return;
+        }
+
+        // 左键卡片其他区域 → 跳转
+        const card = e.target.closest('.bookmark-card');
+        if (card && card.dataset.url) {
+            window.open(card.dataset.url, '_blank', 'noopener,noreferrer');
+        }
+    });
+
+    // 右键卡片 → 编辑
+    grid.addEventListener('contextmenu', (e) => {
+        const card = e.target.closest('.bookmark-card');
+        if (card && card.dataset.id) {
+            e.preventDefault();
+            openEditBookmarkModal(card.dataset.id);
         }
     });
 
