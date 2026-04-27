@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Mine收藏夹",
+  "name": "Mica Bookmark",
   "version": "1.0",
-  "description": "一键收藏当前网页到 Mine收藏夹",
+  "description": "一键收藏当前网页到 Mica Bookmark",
   "permissions": [
     "activeTab",
     "storage"
