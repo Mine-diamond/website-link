@@ -542,6 +542,30 @@ footer { background-color: var(--header-bg); padding: 1.5rem 1rem; text-align: c
     color: var(--star-empty-color, rgba(251, 191, 36, 0.3));
 }
 
+/* --- STAR PICKER (modal clickable stars) --- */
+.star-picker {
+    display: flex;
+    gap: 6px;
+    padding: 4px 0;
+}
+.star-picker .star-btn {
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    padding: 2px 4px;
+    color: var(--star-empty-color, #d1d5db);
+    transition: color 0.15s, transform 0.15s;
+    line-height: 1;
+}
+.star-picker .star-btn.active {
+    color: var(--star-filled-color, #f59e0b);
+}
+.star-picker .star-btn:hover {
+    color: var(--star-filled-color, #f59e0b);
+    transform: scale(1.2);
+}
+
 .card-date {
     font-size: 10px;
     color: var(--text-color);

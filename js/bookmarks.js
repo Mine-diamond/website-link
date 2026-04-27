@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let allBookmarks = [];
     let currentBookmarks = [];
     let searchTimeout;
-    
+    let modalImportance = 3;
+
     // --- DOM 元素引用 ---
     const grid = document.getElementById('bookmarks-grid');
     const emptyState = document.getElementById('empty-state');
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalTitle = document.getElementById('modal-title');
     const bookmarkForm = document.getElementById('bookmark-form');
     const cancelButton = modal.querySelector('.btn-secondary');
+    const starPicker = document.getElementById('modal-star-picker');
 
     // 关键UI元素检查，确保页面结构正确
     if (!grid || !emptyState || !loadingIndicator || !modal || !bookmarkForm || !addBookmarkBtn || !cancelButton) {
@@ -71,6 +73,14 @@ document.addEventListener('DOMContentLoaded', function() {
             starsHTML += `<span class="star ${i <= imp ? '' : 'empty'}">★</span>`;
         }
         return starsHTML;
+    }
+
+    function updateModalStars(value) {
+        modalImportance = value;
+        if (!starPicker) return;
+        starPicker.querySelectorAll('.star-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i < value);
+        });
     }
 
     // --- UI Utility Functions ---
@@ -242,6 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
         modalTitle.textContent = '✨ 添加新书签';
         bookmarkForm.reset();
         bookmarkForm.removeAttribute('data-edit-id');
+        updateModalStars(3);
         openModal();
         document.getElementById('bookmark-title').focus();
     }
@@ -256,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('bookmark-url').value = bookmark.url || '';
         document.getElementById('bookmark-tags').value = (bookmark.tags || []).join(', ');
         document.getElementById('bookmark-notes').value = bookmark.notes || '';
-        document.getElementById('bookmark-importance').value = bookmark.importance || 3;
+        updateModalStars(bookmark.importance || 3);
         
         bookmarkForm.setAttribute('data-edit-id', id);
         openModal();
@@ -295,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
             url,
             tags: document.getElementById('bookmark-tags').value.split(',').map(t => t.trim()).filter(Boolean),
             notes: document.getElementById('bookmark-notes').value.trim(),
-            importance: parseInt(document.getElementById('bookmark-importance').value, 10)
+            importance: modalImportance
         };
         
         const editId = bookmarkForm.getAttribute('data-edit-id');
@@ -321,6 +332,14 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('keyup', handleSearchInput);
     importanceFilter.addEventListener('change', applyFilters);
     addBookmarkBtn.addEventListener('click', openAddBookmarkModal);
+
+    if (starPicker) {
+        starPicker.addEventListener('click', (e) => {
+            const btn = e.target.closest('.star-btn');
+            if (!btn) return;
+            updateModalStars(parseInt(btn.dataset.value));
+        });
+    }
     bookmarkForm.addEventListener('submit', handleFormSubmit);
     cancelButton.addEventListener('click', closeModal);
 

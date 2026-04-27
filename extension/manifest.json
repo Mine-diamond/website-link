@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Mine收藏夹",
+  "version": "1.0",
+  "description": "一键收藏当前网页到 Mine收藏夹",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*/api/bookmarks*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "收藏到 Mine"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

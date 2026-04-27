@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收藏到 Mine</title>
+    <style>
+        :root {
+            --bg: #f0f2f5;
+            --text: #1f2937;
+            --input-bg: #f9fafb;
+            --input-border: #d1d5db;
+            --input-focus: #2563eb;
+            --accent: #4f46e5;
+            --accent-glow: rgba(79, 70, 229, 0.4);
+            --muted: #6b7280;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --success: #10b981;
+            --error: #ef4444;
+            --star-empty: #d1d5db;
+            --star-filled: #f59e0b;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #1f2937;
+                --text: #e5e7eb;
+                --input-bg: #374151;
+                --input-border: #4b5563;
+                --input-focus: #60a5fa;
+                --accent: #3b82f6;
+                --accent-glow: rgba(59, 130, 246, 0.4);
+                --muted: #9ca3af;
+                --card-bg: #1f2937;
+                --shadow: rgba(0, 0, 0, 0.3);
+                --success: #34d399;
+                --error: #f87171;
+                --star-empty: #4b5563;
+                --star-filled: #f59e0b;
+            }
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            width: 380px;
+            min-height: 320px;
+        }
+        .container { padding: 16px; }
+        h1 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .form-group { margin-bottom: 10px; }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1.5px solid var(--input-border);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+        .form-group input[readonly] {
+            opacity: 0.75;
+            cursor: default;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 50px;
+            font-family: inherit;
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+        .form-row .form-group { flex: 1; }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+            padding: 6px 0;
+        }
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--star-empty);
+            transition: color 0.15s, transform 0.15s;
+            padding: 0 2px;
+        }
+        .star-btn.active { color: var(--star-filled); }
+        .star-btn:hover { transform: scale(1.2); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+            margin-top: 4px;
+        }
+        .btn-submit:hover {
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+        }
+        .status.success { display: block; background: rgba(16, 185, 129, 0.12); color: var(--success); }
+        .status.error { display: block; background: rgba(239, 68, 68, 0.12); color: var(--error); }
+        .status.loading { display: block; color: var(--muted); text-align: center; }
+
+        .settings-toggle {
+            margin-top: 12px;
+            text-align: center;
+        }
+        .settings-toggle button {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 11px;
+            cursor: pointer;
+            text-decoration: underline;
+            opacity: 0.6;
+        }
+        .settings-toggle button:hover { opacity: 1; }
+        .settings-panel {
+            margin-top: 8px;
+            padding: 10px;
+            background: var(--input-bg);
+            border-radius: 8px;
+            display: none;
+        }
+        .settings-panel.open { display: block; }
+        .settings-panel label { font-size: 11px; color: var(--muted); }
+        .settings-panel input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 12px;
+            margin-top: 4px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 收藏到 Mine</h1>
+
+        <div class="form-group">
+            <label>标题</label>
+            <input type="text" id="title" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>网址</label>
+            <input type="text" id="url" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>标签（逗号分隔）</label>
+            <input type="text" id="tags" placeholder="如: 前端, 工具">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>重要程度</label>
+                <div class="stars" id="stars">
+                    <button class="star-btn" data-value="1">★</button>
+                    <button class="star-btn" data-value="2">★</button>
+                    <button class="star-btn" data-value="3">★</button>
+                    <button class="star-btn" data-value="4">★</button>
+                    <button class="star-btn" data-value="5">★</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>备注</label>
+            <textarea id="notes" placeholder="可选"></textarea>
+        </div>
+
+        <button class="btn-submit" id="submitBtn">收藏</button>
+
+        <div class="status" id="status"></div>
+
+        <div class="settings-toggle">
+            <button id="settingsToggle">⚙️ 设置 API 地址</button>
+        </div>
+        <div class="settings-panel" id="settingsPanel">
+            <label>API 地址</label>
+            <input type="text" id="apiUrl" placeholder="https://your-site.pages.dev">
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
