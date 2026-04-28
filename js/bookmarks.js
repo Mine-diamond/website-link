@@ -321,6 +321,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        // 右键 → 添加到书签
+        card.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            openAddModalWithSuggestion(suggestion);
+        });
+
         return card;
     }
 
