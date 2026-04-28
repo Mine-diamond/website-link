@@ -140,7 +140,7 @@ ${bookmarksJson}
     { "id": "书签的id", "reason": "匹配理由（一句话）" }
   ],
   "suggestions": [
-    { "title": "网站标题", "url": "https://...", "description": "简要描述", "reason": "推荐理由" }
+    { "title": "网站标题", "url": "https://...", "description": "简要描述", "reason": "推荐理由（特点）" }
   ]
 }
 

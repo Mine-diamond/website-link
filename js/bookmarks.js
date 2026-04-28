@@ -339,7 +339,9 @@ document.addEventListener('DOMContentLoaded', function() {
     async function handleAiSearch() {
         const query = searchInput.value.trim();
         if (!query) {
-            showToast('请输入搜索内容', 'warning');
+            aiResults.classList.add('hidden');
+            currentBookmarks = [...allBookmarks];
+            renderBookmarks();
             return;
         }
 
