@@ -23,9 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const starPicker = document.getElementById('modal-star-picker');
     const aiToggle = document.getElementById('ai-toggle');
     const aiResults = document.getElementById('ai-results');
-    const aiMatchedGrid = document.getElementById('ai-matched-grid');
     const aiSuggestedGrid = document.getElementById('ai-suggested-grid');
-    const aiMatchedSection = document.getElementById('ai-matched-section');
     const aiSuggestedSection = document.getElementById('ai-suggested-section');
 
     // 关键UI元素检查，确保页面结构正确
@@ -260,52 +258,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- AI Search ---
 
-    function showAiLoading() {
-        aiResults.classList.remove('hidden');
-        aiMatchedGrid.innerHTML = '<div class="loading" style="display:flex"><div>AI 正在思考...</div></div>';
-        aiSuggestedGrid.innerHTML = '';
-        aiMatchedSection.style.display = 'block';
-        aiSuggestedSection.style.display = 'block';
-    }
-
-    function hideAiLoading() {
-        // 加载状态由渲染结果替换
-    }
-
     function renderAiResults(data) {
-        aiResults.classList.remove('hidden');
-
-        // 渲染已匹配的书签
-        if (data.matched && data.matched.length > 0) {
-            aiMatchedSection.style.display = 'block';
-            aiMatchedGrid.innerHTML = '';
-            data.matched.forEach(m => {
-                const bookmark = allBookmarks.find(b => b.id === m.id);
-                if (!bookmark) return;
-                const card = createBookmarkCard(bookmark);
-                // 添加 AI 标签
-                const titleEl = card.querySelector('.card-title');
-                if (titleEl) titleEl.innerHTML += '<span class="ai-badge">AI</span>';
-                // 添加匹配理由
-                const reasonDiv = document.createElement('div');
-                reasonDiv.className = 'card-reason';
-                reasonDiv.textContent = m.reason || '';
-                card.insertBefore(reasonDiv, card.querySelector('.card-date'));
-                aiMatchedGrid.appendChild(card);
-            });
+        // 匹配已有书签 → 直接替换网格内容
+        const matchedBookmarks = (data.matched || [])
+            .map(m => allBookmarks.find(b => b.id === m.id))
+            .filter(Boolean);
+        if (matchedBookmarks.length > 0) {
+            currentBookmarks = matchedBookmarks;
         } else {
-            aiMatchedSection.style.display = 'none';
+            currentBookmarks = [];
         }
+        renderBookmarks();
 
-        // 渲染推荐网站
+        // 推荐网站 → 显示在 AI 结果区域
         if (data.suggestions && data.suggestions.length > 0) {
+            aiResults.classList.remove('hidden');
             aiSuggestedSection.style.display = 'block';
             aiSuggestedGrid.innerHTML = '';
             data.suggestions.forEach(s => {
                 aiSuggestedGrid.appendChild(createSuggestionCard(s));
             });
         } else {
-            aiSuggestedSection.style.display = 'none';
+            aiResults.classList.add('hidden');
         }
     }
 
@@ -369,22 +343,27 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // 关闭之前的 AI 结果
+        // 关闭之前的 AI 结果，网格显示加载状态
         aiResults.classList.add('hidden');
-        showAiLoading();
+        emptyState.classList.add('hidden');
+        showLoading();
 
         try {
             const data = await bookmarkAPI.aiQuery(query);
+            hideLoading();
             if (data.error) {
-                aiMatchedGrid.innerHTML = `<div class="ai-error">${escapeHtml(data.error)}</div>`;
-                aiSuggestedSection.style.display = 'none';
+                currentBookmarks = [];
+                renderBookmarks();
+                showToast('AI 搜索失败: ' + data.error, 'error');
                 return;
             }
             renderAiResults(data);
         } catch (error) {
             console.error('AI 搜索失败:', error);
-            aiMatchedGrid.innerHTML = `<div class="ai-error">AI 搜索失败: ${escapeHtml(error.message)}</div>`;
-            aiSuggestedSection.style.display = 'none';
+            hideLoading();
+            currentBookmarks = [];
+            renderBookmarks();
+            showToast('AI 搜索失败: ' + error.message, 'error');
         }
     }
 
