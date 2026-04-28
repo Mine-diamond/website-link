@@ -25,7 +25,7 @@
             <div class="bookmark-actions">
                 <button class="add-bookmark-btn">添加书签</button>
                 <div class="control-group">
-                    <input type="text" class="bookmark-search" id="search-input" 
+                    <input type="text" class="bookmark-search" id="search-input"
                            placeholder="🔍 搜索标题、备注或标签...">
                     <select id="importance-filter" class="importance-filter">
                         <option value="">⭐ 所有等级</option>
@@ -35,6 +35,7 @@
                         <option value="2">⭐⭐ 2星以上</option>
                         <option value="1">⭐ 1星以上</option>
                     </select>
+                    <button class="ai-toggle" id="ai-toggle" title="AI 智能搜索">🤖</button>
                 </div>
             </div>
         </div>
@@ -42,6 +43,18 @@
         <!-- 书签网格 -->
         <div class="bookmarks-grid" id="bookmarks-grid">
             <!-- 书签卡片将通过JS动态生成 -->
+        </div>
+
+        <!-- AI 搜索结果区域 -->
+        <div id="ai-results" class="ai-results hidden">
+            <div class="ai-section" id="ai-matched-section">
+                <div class="ai-section-header">🔍 AI 匹配已有书签</div>
+                <div class="ai-matched-grid" id="ai-matched-grid"></div>
+            </div>
+            <div class="ai-section" id="ai-suggested-section">
+                <div class="ai-section-header">💡 AI 推荐网站</div>
+                <div class="ai-suggested-grid" id="ai-suggested-grid"></div>
+            </div>
         </div>
 
         <!-- 加载状态 (样式在 styles.css) -->

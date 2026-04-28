@@ -28,6 +28,9 @@ export async function onRequest(context) {
       case '/bookmarks/search':
         if (request.method === 'GET')  return search(request, env, CORS);
         break;
+      case '/bookmarks/ai-query':
+        if (request.method === 'POST') return aiQuery(request, env, CORS);
+        break;
     }
     return new Response('Not Found', { status: 404, headers: CORS });
   } catch (e) {
@@ -102,4 +105,92 @@ async function search(req, env, cors) {
   if (tags.length) list = list.filter(i => tags.every(t => i.tags.includes(t)));
   if (imp) list = list.filter(i => i.importance >= imp);
   return jsonResp(list, cors);
+}
+
+// AI 查询 ────────────────────────────
+async function aiQuery(req, env, cors) {
+  const { query } = await req.json();
+  if (!query) return jsonResp({ error: 'query required' }, cors);
+
+  const all = await readKV(env);
+  const bookmarksJson = JSON.stringify(all, null, 2);
+
+  // 读取环境变量中的 AI 配置
+  const baseUrl = (env.AI_API_BASE_URL || 'https://api.deepseek.com').replace(/\/+$/, '');
+  const apiKey = env.AI_API_KEY;
+  const model = env.AI_MODEL || 'deepseek-chat';
+
+  if (!apiKey) {
+    return jsonResp({ error: 'AI_API_KEY not configured' }, cors);
+  }
+
+  const systemPrompt = `你是一个书签管理助手。用户有以下书签（JSON格式）：
+
+${bookmarksJson}
+
+用户搜索："${query}"
+
+请完成两个任务：
+1. 从用户已有的书签中找出最相关的（标题、标签、备注中匹配），按相关性从高到低排序。如果找不到相关的返回空数组。
+2. 如果用户可能对其他有用的网站感兴趣，推荐 1-3 个新网站。只推荐你确定存在且高质量的网站，不要编造URL。如果找不到值得推荐的，返回空数组。
+
+请严格按以下 JSON 格式回复（不要包含 markdown 代码块标记，只返回纯 JSON）：
+{
+  "matched": [
+    { "id": "书签的id", "reason": "匹配理由（一句话）" }
+  ],
+  "suggestions": [
+    { "title": "网站标题", "url": "https://...", "description": "简要描述", "reason": "推荐理由" }
+  ]
+}
+
+注意：matched 中的 id 必须与上面数据中的 id 完全一致。如果用户搜索的是已有书签中明确存在的，matched 应该优先匹配。`;
+
+  try {
+    const aiResp = await fetch(`${baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: query }
+        ],
+        temperature: 0.3,
+        max_tokens: 4096
+      })
+    });
+
+    if (!aiResp.ok) {
+      const errText = await aiResp.text();
+      return jsonResp({ error: `AI API error: ${aiResp.status} ${errText}` }, cors);
+    }
+
+    const aiData = await aiResp.json();
+    const content = aiData.choices?.[0]?.message?.content || '';
+
+    // 尝试解析 AI 返回的 JSON
+    let result;
+    try {
+      result = JSON.parse(content);
+    } catch {
+      // 如果 AI 返回了 markdown 代码块，尝试从中提取 JSON
+      const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (jsonMatch) {
+        result = JSON.parse(jsonMatch[1]);
+      } else {
+        throw new Error('Failed to parse AI response as JSON');
+      }
+    }
+
+    return jsonResp({
+      matched: result.matched || [],
+      suggestions: result.suggestions || []
+    }, cors);
+  } catch (e) {
+    return jsonResp({ error: `AI query failed: ${e.message}` }, cors);
+  }
 }

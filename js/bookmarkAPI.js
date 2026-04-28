@@ -73,6 +73,14 @@ class BookmarkAPI {
         
         return await this.request(endpoint);
     }
+
+    // AI 智能搜索
+    async aiQuery(query) {
+        return await this.request('/bookmarks/ai-query', {
+            method: 'POST',
+            body: JSON.stringify({ query }),
+        });
+    }
 }
 
 // 导出API实例

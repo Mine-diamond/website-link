@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentBookmarks = [];
     let searchTimeout;
     let modalImportance = 3;
+    let isAiMode = false;
 
     // --- DOM 元素引用 ---
     const grid = document.getElementById('bookmarks-grid');
@@ -20,6 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookmarkForm = document.getElementById('bookmark-form');
     const cancelButton = modal.querySelector('.btn-secondary');
     const starPicker = document.getElementById('modal-star-picker');
+    const aiToggle = document.getElementById('ai-toggle');
+    const aiResults = document.getElementById('ai-results');
+    const aiMatchedGrid = document.getElementById('ai-matched-grid');
+    const aiSuggestedGrid = document.getElementById('ai-suggested-grid');
+    const aiMatchedSection = document.getElementById('ai-matched-section');
+    const aiSuggestedSection = document.getElementById('ai-suggested-section');
 
     // 关键UI元素检查，确保页面结构正确
     if (!grid || !emptyState || !loadingIndicator || !modal || !bookmarkForm || !addBookmarkBtn || !cancelButton) {
@@ -242,9 +249,143 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function handleSearchInput() {
+    function handleSearchInput(e) {
+        if (isAiMode) {
+            if (e.key === 'Enter') handleAiSearch();
+            return;
+        }
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(applyFilters, 300);
+    }
+
+    // --- AI Search ---
+
+    function showAiLoading() {
+        aiResults.classList.remove('hidden');
+        aiMatchedGrid.innerHTML = '<div class="loading" style="display:flex"><div>AI 正在思考...</div></div>';
+        aiSuggestedGrid.innerHTML = '';
+        aiMatchedSection.style.display = 'block';
+        aiSuggestedSection.style.display = 'block';
+    }
+
+    function hideAiLoading() {
+        // 加载状态由渲染结果替换
+    }
+
+    function renderAiResults(data) {
+        aiResults.classList.remove('hidden');
+
+        // 渲染已匹配的书签
+        if (data.matched && data.matched.length > 0) {
+            aiMatchedSection.style.display = 'block';
+            aiMatchedGrid.innerHTML = '';
+            data.matched.forEach(m => {
+                const bookmark = allBookmarks.find(b => b.id === m.id);
+                if (!bookmark) return;
+                const card = createBookmarkCard(bookmark);
+                // 添加 AI 标签
+                const titleEl = card.querySelector('.card-title');
+                if (titleEl) titleEl.innerHTML += '<span class="ai-badge">AI</span>';
+                // 添加匹配理由
+                const reasonDiv = document.createElement('div');
+                reasonDiv.className = 'card-reason';
+                reasonDiv.textContent = m.reason || '';
+                card.insertBefore(reasonDiv, card.querySelector('.card-date'));
+                aiMatchedGrid.appendChild(card);
+            });
+        } else {
+            aiMatchedSection.style.display = 'none';
+        }
+
+        // 渲染推荐网站
+        if (data.suggestions && data.suggestions.length > 0) {
+            aiSuggestedSection.style.display = 'block';
+            aiSuggestedGrid.innerHTML = '';
+            data.suggestions.forEach(s => {
+                aiSuggestedGrid.appendChild(createSuggestionCard(s));
+            });
+        } else {
+            aiSuggestedSection.style.display = 'none';
+        }
+    }
+
+    function createSuggestionCard(suggestion) {
+        const card = document.createElement('div');
+        card.className = 'suggestion-card';
+
+        const addBtn = document.createElement('button');
+        addBtn.className = 'suggestion-add';
+        addBtn.textContent = '+';
+        addBtn.title = '添加此网站';
+        addBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openAddModalWithSuggestion(suggestion);
+        });
+
+        const title = document.createElement('div');
+        title.className = 'suggestion-title';
+        title.textContent = suggestion.title || '';
+
+        const desc = document.createElement('div');
+        desc.className = 'suggestion-desc';
+        desc.textContent = suggestion.description || '';
+
+        const reason = document.createElement('div');
+        reason.className = 'suggestion-reason';
+        reason.textContent = '💡 ' + (suggestion.reason || '');
+
+        card.appendChild(addBtn);
+        card.appendChild(title);
+        card.appendChild(desc);
+        card.appendChild(reason);
+
+        // 左键点击跳转
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.suggestion-add')) return;
+            if (suggestion.url) {
+                window.open(suggestion.url, '_blank', 'noopener,noreferrer');
+            }
+        });
+
+        return card;
+    }
+
+    function openAddModalWithSuggestion(suggestion) {
+        modalTitle.textContent = '✨ 添加推荐网站';
+        bookmarkForm.reset();
+        bookmarkForm.removeAttribute('data-edit-id');
+        document.getElementById('bookmark-title').value = suggestion.title || '';
+        document.getElementById('bookmark-url').value = suggestion.url || '';
+        document.getElementById('bookmark-notes').value = suggestion.description || '';
+        updateModalStars(3);
+        openModal();
+        document.getElementById('bookmark-title').focus();
+    }
+
+    async function handleAiSearch() {
+        const query = searchInput.value.trim();
+        if (!query) {
+            showToast('请输入搜索内容', 'warning');
+            return;
+        }
+
+        // 关闭之前的 AI 结果
+        aiResults.classList.add('hidden');
+        showAiLoading();
+
+        try {
+            const data = await bookmarkAPI.aiQuery(query);
+            if (data.error) {
+                aiMatchedGrid.innerHTML = `<div class="ai-error">${escapeHtml(data.error)}</div>`;
+                aiSuggestedSection.style.display = 'none';
+                return;
+            }
+            renderAiResults(data);
+        } catch (error) {
+            console.error('AI 搜索失败:', error);
+            aiMatchedGrid.innerHTML = `<div class="ai-error">AI 搜索失败: ${escapeHtml(error.message)}</div>`;
+            aiSuggestedSection.style.display = 'none';
+        }
     }
 
     function openAddBookmarkModal() {
@@ -331,6 +472,24 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('keyup', handleSearchInput);
     importanceFilter.addEventListener('change', applyFilters);
     addBookmarkBtn.addEventListener('click', openAddBookmarkModal);
+
+    // AI 模式切换
+    if (aiToggle) {
+        aiToggle.addEventListener('click', () => {
+            isAiMode = !isAiMode;
+            aiToggle.classList.toggle('active', isAiMode);
+            searchInput.placeholder = isAiMode
+                ? '🤖 用自然语言描述，按 Enter 搜索...'
+                : '🔍 搜索标题、备注或标签...';
+            searchInput.value = '';
+            // 切换时关闭 AI 结果，回到正常视图
+            aiResults.classList.add('hidden');
+            if (!isAiMode) {
+                currentBookmarks = [...allBookmarks];
+                renderBookmarks();
+            }
+        });
+    }
 
     if (starPicker) {
         starPicker.addEventListener('click', (e) => {
