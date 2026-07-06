@@ -22,7 +22,8 @@ website-link owns:
 - Importance
 - Favicon
 - Date added
-- Future `updatedAt`, `version`, and deletion metadata
+- Updated date
+- Future `version` and deletion metadata
 
 ## Launch Desk-Owned Fields
 
@@ -113,8 +114,6 @@ Breaking changes to these endpoints should be coordinated with Launch Desk.
 Recommended improvements:
 
 - Simple bearer token authentication.
-- `updatedAt` field.
-- UUID bookmark IDs.
 - Clear HTTP error status codes.
 - Strict request validation.
 - Incremental sync endpoint.

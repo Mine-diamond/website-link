@@ -91,11 +91,11 @@ Launch Desk currently supports:
 
 ## Current Limitations
 
-- No API authentication is enforced yet.
+- Optional API authentication is enforced when `BOOKMARK_API_TOKEN` is configured.
 - API CORS currently allows all origins.
-- API error responses are not consistently represented with HTTP error status codes.
-- IDs are generated with `Date.now().toString()` instead of stable UUIDs.
-- Bookmarks do not have `updatedAt`, `version`, or tombstone fields.
+- API error responses use explicit HTTP status codes with `{ "error": "..." }` bodies.
+- New IDs are generated with `crypto.randomUUID()`; existing timestamp IDs remain valid.
+- Bookmarks have `updatedAt`, but do not yet have `version` or tombstone fields.
 - Sync is full-fetch only.
 - Storage is a single JSON array in one KV key.
 - There is no automated test suite.

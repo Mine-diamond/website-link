@@ -28,24 +28,24 @@ The runtime depends on browser APIs and Cloudflare Pages Functions.
 
 API authentication:
 
-- No authentication is currently enforced.
+- Optional bearer-token authentication is enforced when `BOOKMARK_API_TOKEN` is configured.
 - CORS allows all origins.
-- Add token authentication before relying on the API for private data.
+- Personal deployments should configure `BOOKMARK_API_TOKEN` before storing private data.
 
 API status codes:
 
-- Some application errors return HTTP 200 with `{ error }`.
-- Use proper `400`, `401`, `404`, and `409` responses in future improvements.
+- Application errors now use explicit HTTP status codes and `{ error }` bodies.
+- Future version-aware sync can add `409` conflict responses.
 
 Data validation:
 
-- The backend should validate URL, tags, notes, and importance.
-- The update endpoint should enforce an explicit field allowlist before writing records.
+- The backend validates URL, tags, notes, and importance.
+- The update endpoint enforces an explicit field allowlist before writing records.
 
 Data model:
 
-- IDs should use `crypto.randomUUID()`.
-- Add `updatedAt`.
+- New IDs use `crypto.randomUUID()`.
+- `updatedAt` is written on create and update.
 - Consider `version` and `deletedAt` before incremental sync.
 
 Storage:
@@ -61,14 +61,10 @@ AI query:
 ## Recommended Improvement Order
 
 1. Keep this documentation baseline current.
-2. Add backend input validation.
-3. Add correct HTTP error status codes.
-4. Add optional bearer-token authentication.
-5. Add `updatedAt` and UUID IDs.
-6. Update Launch Desk compatibility if the data model changes.
-7. Continue the Launch Desk aligned visual redesign.
-8. Add incremental sync only after sync metadata exists.
-9. Consider a D1 migration only if KV becomes a real limitation.
+2. Update Launch Desk compatibility if the data model changes.
+3. Continue the Launch Desk aligned visual redesign.
+4. Add incremental sync only after `version` and deletion metadata exist.
+5. Consider a D1 migration only if KV becomes a real limitation.
 
 ## Style Maintenance Notes
 

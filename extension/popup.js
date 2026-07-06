@@ -10,15 +10,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (tab?.title) document.getElementById('title').value = tab.title;
   if (tab?.url) document.getElementById('url').value = tab.url;
 
-  // 2. 加载 API URL 配置
-  const { apiUrl } = await chrome.storage.sync.get('apiUrl');
+  // 2. 加载 API 配置
+  const { apiUrl, apiToken } = await chrome.storage.sync.get(['apiUrl', 'apiToken']);
   document.getElementById('apiUrl').value = apiUrl || DEFAULT_API_URL;
+  document.getElementById('apiToken').value = apiToken || '';
 
   // 3. 设置默认星级 (3星)
   updateStars(selectedImportance);
 
   // 4. 事件绑定
   document.getElementById('apiUrl').addEventListener('change', saveApiUrl);
+  document.getElementById('apiToken').addEventListener('change', saveApiToken);
 
   document.getElementById('stars').addEventListener('click', (e) => {
     const btn = e.target.closest('.star-btn');
@@ -47,6 +49,11 @@ function saveApiUrl() {
   chrome.storage.sync.set({ apiUrl: val || DEFAULT_API_URL });
 }
 
+function saveApiToken() {
+  const val = document.getElementById('apiToken').value.trim();
+  chrome.storage.sync.set({ apiToken: val });
+}
+
 // ===== 提交 =====
 async function handleSubmit() {
   const title = document.getElementById('title').value.trim();
@@ -61,7 +68,13 @@ async function handleSubmit() {
   }
 
   const apiUrl = document.getElementById('apiUrl').value.trim() || DEFAULT_API_URL;
+  const apiToken = document.getElementById('apiToken').value.trim();
   const endpoint = `${apiUrl.replace(/\/+$/, '')}/api/bookmarks`;
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (apiToken) {
+    headers.Authorization = `Bearer ${apiToken}`;
+  }
 
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
@@ -71,7 +84,7 @@ async function handleSubmit() {
   try {
     const res = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({ title, url, tags, notes, importance })
     });
     const data = await res.json();

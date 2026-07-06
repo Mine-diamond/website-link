@@ -61,6 +61,7 @@ website-link
 - Cloudflare KV for bookmark storage.
 - Browser extension Manifest V3.
 - Optional OpenAI-compatible chat completion API for AI search.
+- Optional bearer-token API authentication with `BOOKMARK_API_TOKEN`.
 
 There is currently no build step, package manager setup, test runner, or framework.
 
@@ -94,6 +95,14 @@ AI_API_BASE_URL
 AI_MODEL
 ```
 
+Optional API authentication variable:
+
+```text
+BOOKMARK_API_TOKEN
+```
+
+When this variable is configured, API requests must send `Authorization: Bearer <token>`.
+
 See `docs/05-deployment.md` for details.
 
 ## API Summary
@@ -126,9 +135,6 @@ See `docs/07-launch-desk-integration.md` for details.
 
 Recommended next improvements:
 
-1. Add simple token authentication to the API.
-2. Return clear HTTP status codes for API errors.
-3. Add stricter backend validation for bookmark input.
-4. Add `updatedAt`, UUID IDs, and sync-friendly metadata.
-5. Continue refining the Launch Desk Fluent/Mica visual language.
-6. Consider incremental sync once the data model supports it.
+1. Continue refining the Launch Desk Fluent/Mica visual language.
+2. Consider incremental sync once version and deletion metadata exist.
+3. Consider D1 only if KV single-array storage becomes a real limitation.

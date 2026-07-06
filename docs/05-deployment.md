@@ -68,7 +68,7 @@ AI_MODEL=deepseek-chat
 
 If `AI_API_KEY` is not configured, `POST /api/bookmarks/ai-query` returns an error object.
 
-## Recommended Future Environment Variable
+## Optional API Authentication
 
 For simple bearer-token authentication, add:
 
@@ -76,13 +76,13 @@ For simple bearer-token authentication, add:
 BOOKMARK_API_TOKEN
 ```
 
-Then the API can check:
+When configured, the API checks:
 
 ```http
 Authorization: Bearer <token>
 ```
 
-Launch Desk already has a setting for this token, but website-link does not enforce it yet.
+Launch Desk and the browser extension both have settings for this token. If this variable is not configured, the API remains open for compatibility.
 
 ## Redirects
 

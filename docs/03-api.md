@@ -16,15 +16,17 @@ The frontend uses a relative API base:
 
 ## Authentication
 
-No authentication is currently enforced.
+Authentication is optional and controlled by the Cloudflare Pages environment variable `BOOKMARK_API_TOKEN`.
 
-Launch Desk already supports sending an optional bearer token in preparation for future API authentication:
+If `BOOKMARK_API_TOKEN` is not configured, the API remains open for compatibility with existing personal deployments.
+
+If `BOOKMARK_API_TOKEN` is configured, every non-`OPTIONS` request must send:
 
 ```http
 Authorization: Bearer <token>
 ```
 
-A future backend enhancement should validate this header against an environment variable such as `BOOKMARK_API_TOKEN`.
+Launch Desk and the browser extension both support sending this token.
 
 ## CORS
 
@@ -33,10 +35,30 @@ The API currently sends:
 ```http
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS
-Access-Control-Allow-Headers: Content-Type
+Access-Control-Allow-Headers: Content-Type, Authorization
 ```
 
-If bearer authentication is added, `Authorization` should also be included in `Access-Control-Allow-Headers`.
+`OPTIONS` requests are always allowed for preflight.
+
+## Error Responses
+
+Errors return JSON:
+
+```json
+{
+  "error": "message"
+}
+```
+
+Common status codes:
+
+- `400`: invalid JSON, missing fields, invalid URL, or invalid importance.
+- `401`: bearer token is required.
+- `403`: bearer token is invalid.
+- `404`: route or bookmark ID was not found.
+- `405`: method is not allowed for the route.
+- `502`: AI provider request failed.
+- `503`: AI is not configured.
 
 ## GET /api/bookmarks
 
@@ -98,9 +120,11 @@ Response:
 Current behavior:
 
 - `title` and `url` are required.
-- `id` is generated with `Date.now().toString()`.
+- `id` is generated with `crypto.randomUUID()` for new bookmarks. Existing timestamp IDs remain valid.
 - `favicon` is generated from the URL hostname unless provided.
 - `importance` defaults to `1` if not provided.
+- `dateAdded` and `updatedAt` are both set when the bookmark is created.
+- Invalid input returns `400`.
 
 ## POST /api/bookmarks/update
 
@@ -130,16 +154,18 @@ Response:
   "notes": "Updated note",
   "favicon": "https://www.google.com/s2/favicons?domain=example.com&sz=32",
   "importance": 4,
-  "dateAdded": "2026-01-01T00:00:00.000Z"
+  "dateAdded": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-02T00:00:00.000Z"
 }
 ```
 
 Current behavior:
 
 - `id` is required.
-- The backend merges the request body into the existing bookmark.
-- No strict field allowlist is currently enforced.
-- No `updatedAt` is currently written.
+- The backend updates only allowed bookmark fields.
+- `updatedAt` is written on every successful update.
+- Updating `url` regenerates `favicon` unless the request explicitly provides `favicon`.
+- Missing IDs return `400`; unknown IDs return `404`.
 
 ## POST /api/bookmarks/delete
 
@@ -163,7 +189,7 @@ Response:
 
 Current behavior:
 
-- The response is success even if the ID did not exist.
+- Missing IDs return `400`; unknown IDs return `404`.
 - Deletion is hard deletion from the KV array.
 - There is no tombstone or `deletedAt` field.
 
@@ -259,23 +285,10 @@ Current behavior:
 
 - Defaults to `https://api.deepseek.com`.
 - Defaults to model `deepseek-chat`.
-- Sends all bookmarks in the prompt.
+- Sends compact bookmark fields in the prompt.
 - Attempts to parse raw JSON first, then JSON inside a Markdown code block.
+- AI provider errors return `502`; missing AI configuration returns `503`.
 
 ## Error Behavior
 
-Current error handling is basic.
-
-Known issues:
-
-- Some validation failures return `{ "error": "..." }` with HTTP 200.
-- Not found responses may use `{ "error": "not found" }` with HTTP 200.
-- Uncaught server errors return HTTP 500.
-
-Recommended future behavior:
-
-- `400` for invalid input.
-- `401` for missing or invalid token after authentication is added.
-- `404` for missing bookmark IDs.
-- `409` for sync conflicts after versioning is added.
-- `500` only for unexpected server failures.
+Current error handling uses explicit HTTP status codes. Future version-aware sync can add `409` for conflicts after `version` metadata exists.
