@@ -8,12 +8,12 @@ Current characteristics:
 
 - Light and dark themes.
 - Mica-like radial background accents.
-- Glass panels with translucent surfaces, subtle borders, and backdrop blur.
+- Flat Fluent surfaces with translucent panels, subtle borders, and restrained shadows.
 - A large workspace header with title, subtitle, and theme control.
 - A command-bar style search, filter, add, and AI toolbar.
-- Responsive bookmark cards with translucent surfaces, favicon or first-letter fallback icons, tag pills, star importance, and low-noise action buttons.
-- Glass modal form for add/edit.
-- Glass toast notifications created from JavaScript.
+- Responsive flat bookmark cards with favicon or first-letter fallback icons, tag pills, star importance, and low-noise action buttons.
+- Glass modal form for add/edit, reserved for floating UI layers.
+- Glass toast notifications created from JavaScript, reserved for floating UI layers.
 - AI suggestion cards below the bookmark grid using the same panel/card language.
 
 The current style is intended to align with Launch Desk's Fluent/Mica visual direction while remaining a responsive website.
@@ -78,7 +78,7 @@ Legacy variables such as `--bg-color`, `--text-color`, `--input-bg`, and `--book
 The active redesign direction is:
 
 ```text
-Windows 11 Fluent + Mica Glass Bookmark Workspace
+Windows 11 Fluent + Mica Bookmark Workspace
 ```
 
 The redesigned website-link should visually align with Launch Desk while still behaving like a responsive website.
@@ -87,9 +87,9 @@ The redesigned website-link should visually align with Launch Desk while still b
 
 - Fluent
 - Mica
-- Acrylic-like translucency
+- Acrylic-like translucency for floating layers
 - Rounded corners
-- Soft shadows
+- Restrained shadows
 - Calm spacing
 - Icon-first cards
 - Subtle borders

@@ -5,8 +5,8 @@
     --color-bg-elevated: rgba(255, 255, 255, 0.72);
     --color-panel: rgba(255, 255, 255, 0.64);
     --color-panel-strong: rgba(255, 255, 255, 0.82);
-    --color-card: rgba(255, 255, 255, 0.52);
-    --color-card-hover: rgba(255, 255, 255, 0.78);
+    --color-card: rgba(255, 255, 255, 0.48);
+    --color-card-hover: rgba(255, 255, 255, 0.76);
     --color-input: rgba(255, 255, 255, 0.68);
     --color-text: #1f1f1f;
     --color-text-muted: #666666;
@@ -25,10 +25,10 @@
     --color-success: #107c10;
     --color-success-wash: rgba(16, 124, 16, 0.12);
 
-    --radius-window: 28px;
-    --radius-panel: 22px;
-    --radius-card: 18px;
-    --radius-control: 12px;
+    --radius-window: 20px;
+    --radius-panel: 16px;
+    --radius-card: 12px;
+    --radius-control: 10px;
     --radius-small: 8px;
     --radius-pill: 999px;
 
@@ -38,9 +38,9 @@
     --space-lg: 1.5rem;
     --space-xl: 2.25rem;
 
-    --shadow-soft: 0 12px 36px rgba(0, 0, 0, 0.08);
-    --shadow-panel: 0 20px 60px rgba(0, 0, 0, 0.12);
-    --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.08);
+    --shadow-panel: 0 24px 80px rgba(0, 0, 0, 0.22);
+    --shadow-card: none;
     --focus-ring: 0 0 0 3px var(--color-accent-glow);
     --glass-blur: blur(24px) saturate(150%);
     --max-width: 1440px;
@@ -108,9 +108,9 @@
     --color-success: #6ccb5f;
     --color-success-wash: rgba(108, 203, 95, 0.12);
 
-    --shadow-soft: 0 14px 42px rgba(0, 0, 0, 0.28);
-    --shadow-panel: 0 24px 68px rgba(0, 0, 0, 0.36);
-    --shadow-card: 0 14px 36px rgba(0, 0, 0, 0.24);
+    --shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.2);
+    --shadow-panel: 0 24px 80px rgba(0, 0, 0, 0.42);
+    --shadow-card: none;
 
     --btn-secondary-bg: rgba(255, 255, 255, 0.08);
     --btn-secondary-hover-bg: rgba(255, 255, 255, 0.12);
@@ -280,10 +280,12 @@ button {
     border: 1px solid var(--color-border);
     color: var(--color-text);
     background: var(--color-card);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
     cursor: pointer;
-    transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    transition:
+        background 120ms ease-out,
+        border-color 120ms ease-out,
+        box-shadow 120ms ease-out,
+        opacity 120ms ease-out;
 }
 
 .theme-toggle {
@@ -299,8 +301,7 @@ button {
 .action-btn:hover,
 .suggestion-add:hover {
     background: var(--color-card-hover);
-    border-color: var(--color-border-strong);
-    transform: translateY(-1px);
+    border-color: var(--color-border);
 }
 
 .bookmark-controls {
@@ -321,10 +322,10 @@ button {
 
 .add-bookmark-btn,
 .btn-primary {
-    border: 1px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--color-accent) 92%, white 8%), var(--color-accent));
+    border: 1px solid color-mix(in srgb, var(--color-accent) 72%, transparent);
+    background: var(--color-accent);
     color: #ffffff;
-    box-shadow: 0 10px 24px var(--color-accent-glow);
+    box-shadow: none;
 }
 
 .add-bookmark-btn {
@@ -339,7 +340,11 @@ button {
     font-size: 0.92rem;
     font-weight: 650;
     white-space: nowrap;
-    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+    transition:
+        background 120ms ease-out,
+        border-color 120ms ease-out,
+        box-shadow 120ms ease-out,
+        opacity 120ms ease-out;
 }
 
 .add-bookmark-btn::before {
@@ -357,8 +362,8 @@ button {
 
 .add-bookmark-btn:hover,
 .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 14px 30px var(--color-accent-glow);
+    background: var(--color-accent-hover);
+    box-shadow: none;
 }
 
 .control-group {
@@ -441,9 +446,9 @@ button {
 .suggestion-card {
     position: relative;
     overflow: hidden;
-    min-height: 168px;
-    padding: 1rem;
-    border: 1px solid var(--color-border);
+    min-height: 150px;
+    padding: var(--space-md);
+    border: 1px solid transparent;
     border-radius: var(--radius-card);
     background: var(--color-card);
     box-shadow: none;
@@ -451,19 +456,16 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    transition:
+        background 120ms ease-out,
+        border-color 120ms ease-out,
+        box-shadow 120ms ease-out,
+        opacity 120ms ease-out;
 }
 
 .bookmark-card::before,
 .suggestion-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.22), transparent 42%);
-    opacity: 0.7;
+    content: none;
 }
 
 .bookmark-card > *,
@@ -474,45 +476,44 @@ button {
 
 .bookmark-card:hover,
 .suggestion-card:hover {
-    transform: translateY(-3px);
     background: var(--color-card-hover);
-    border-color: color-mix(in srgb, var(--color-accent) 42%, var(--color-border));
-    box-shadow: var(--shadow-card);
+    border-color: var(--color-border);
+    box-shadow: none;
 }
 
 .card-header {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: var(--space-sm);
     padding-right: 3.1rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--space-sm);
 }
 
 .card-favicon {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 11px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--favicon-bg);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.24) inset;
+    background: linear-gradient(135deg, var(--color-accent), #7cdaff);
+    box-shadow: none;
     color: var(--color-accent-text);
     font-size: 0.82rem;
     font-weight: 700;
 }
 
 .card-favicon img {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     border-radius: 5px;
 }
 
 .card-favicon.fallback {
-    background: var(--color-accent-wash);
-    color: var(--color-accent-text);
+    background: linear-gradient(135deg, var(--color-accent), #7cdaff);
+    color: white;
 }
 
 .card-title {
@@ -530,11 +531,11 @@ button {
 }
 
 .card-secondary {
-    min-height: 1.25rem;
-    margin-bottom: 0.85rem;
+    min-height: 34px;
+    margin-bottom: var(--space-sm);
     color: var(--color-text-muted);
     font-size: 0.84rem;
-    line-height: 1.35;
+    line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -546,7 +547,7 @@ button {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 0.75rem;
+    gap: var(--space-sm);
     min-height: 24px;
     margin-top: auto;
     margin-bottom: 0.5rem;
@@ -562,8 +563,8 @@ button {
 
 .tag {
     max-width: 100%;
-    padding: 0.2rem 0.5rem;
-    border: 1px solid color-mix(in srgb, var(--color-accent) 18%, transparent);
+    padding: 4px 7px;
+    border: 0;
     border-radius: var(--radius-pill);
     background: var(--color-accent-wash);
     color: var(--color-accent-text);
@@ -602,8 +603,8 @@ button {
 .card-actions {
     position: absolute;
     z-index: 2;
-    top: 0.75rem;
-    right: 0.75rem;
+    top: var(--space-sm);
+    right: var(--space-sm);
     display: flex;
     gap: 0.35rem;
     opacity: 0.78;
@@ -615,9 +616,9 @@ button {
 }
 
 .action-btn {
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-small);
     font-size: 0.78rem;
 }
 
@@ -717,7 +718,11 @@ button {
     font-size: 0.9rem;
     font-weight: 650;
     cursor: pointer;
-    transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    transition:
+        background 120ms ease-out,
+        border-color 120ms ease-out,
+        box-shadow 120ms ease-out,
+        opacity 120ms ease-out;
 }
 
 .btn-secondary {
@@ -728,7 +733,7 @@ button {
 
 .btn-secondary:hover {
     background: var(--btn-secondary-hover-bg);
-    border-color: var(--color-border-strong);
+    border-color: var(--color-border);
 }
 
 .star-picker {
@@ -747,14 +752,16 @@ button {
     cursor: pointer;
     font-size: 1.4rem;
     line-height: 1;
-    transition: transform 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+    transition:
+        color 120ms ease-out,
+        background 120ms ease-out,
+        border-color 120ms ease-out;
 }
 
 .star-picker .star-btn.active,
 .star-picker .star-btn:hover {
     color: var(--star-filled-color);
     background: var(--color-warning-wash);
-    transform: translateY(-1px);
 }
 
 .empty-state,
@@ -845,18 +852,18 @@ button {
 }
 
 .suggestion-card {
-    min-height: 160px;
+    min-height: 150px;
     border-style: solid;
 }
 
 .suggestion-add {
     position: absolute;
     z-index: 2;
-    top: 0.75rem;
-    right: 0.75rem;
-    width: 32px;
-    height: 32px;
-    border-radius: 11px;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-small);
     background: var(--color-accent);
     color: #ffffff;
     font-size: 1rem;
