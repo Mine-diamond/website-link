@@ -107,6 +107,12 @@ The extension submits directly to:
 <configured-api-url>/api/bookmarks
 ```
 
+The default configured API URL is:
+
+```text
+https://bookmark.minediamond.tech
+```
+
 ## Routing
 
 The `_redirects` file contains:

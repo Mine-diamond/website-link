@@ -16,7 +16,7 @@ Current characteristics:
 - Lightly blurred toast notifications created from JavaScript, reserved for floating UI layers.
 - AI suggestion cards below the bookmark grid using the same panel/card language.
 - Remix Icon is used for the main web app icons through the CDN stylesheet.
-- The browser extension keeps inline SVG icons to avoid extension CSP and offline-loading issues.
+- The browser extension keeps inline SVG icons for extension CSP compatibility and offline loading.
 - The browser extension popup uses the same flat Fluent token direction as the main web app.
 
 The current style is intended to align with Launch Desk's Fluent/Mica visual direction while remaining a responsive website.

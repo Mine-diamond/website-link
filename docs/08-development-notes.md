@@ -40,7 +40,7 @@ API status codes:
 Data validation:
 
 - The backend should validate URL, tags, notes, and importance.
-- The update endpoint should avoid allowing arbitrary fields to overwrite the record.
+- The update endpoint should enforce an explicit field allowlist before writing records.
 
 Data model:
 
@@ -70,9 +70,9 @@ AI query:
 8. Add incremental sync only after sync metadata exists.
 9. Consider a D1 migration only if KV becomes a real limitation.
 
-## Style Redesign Notes
+## Style Maintenance Notes
 
-The planned redesign should align with Launch Desk's Fluent/Mica visual language, but it should not copy the desktop shell exactly.
+The current UI is aligned with Launch Desk's Fluent/Mica visual language while remaining a responsive website.
 
 The web app should remain:
 
@@ -81,7 +81,7 @@ The web app should remain:
 - Usable on mobile.
 - Simple enough for static hosting.
 
-The redesign should begin with tokens, then migrate components incrementally.
+Future UI changes should preserve the flat surface model, compact header, subtle borders, restrained shadows, and lightly blurred floating layers for modal and toast UI.
 
 ## Documentation Maintenance
 

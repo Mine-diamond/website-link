@@ -64,12 +64,12 @@ The Cloudflare Pages Functions API is served under:
 - Extension: Manifest V3 files under `extension/`.
 - Routing: `_redirects` rewrites `/search` to `index.html`.
 
-## Future Direction
+## Visual Direction
 
-The next major visual direction should align website-link with Launch Desk:
+website-link follows a Launch Desk aligned visual direction:
 
 ```text
-Windows 11 Fluent + Mica Glass Bookmark Workspace
+Windows 11 Fluent + Mica Bookmark Workspace
 ```
 
-The redesign should be handled after this documentation baseline is established.
+The current implementation uses flat Fluent surfaces, subtle borders, restrained shadows, a compact header, and lightly blurred floating layers for modal and toast UI.
