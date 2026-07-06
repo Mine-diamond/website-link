@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function icon(name) {
-        return `<svg class="icon" aria-hidden="true"><use href="#icon-${name}"></use></svg>`;
+        return `<i class="ri-${name} icon" aria-hidden="true"></i>`;
     }
 
     function setModalTitle(iconName, text) {
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let starsHTML = '';
         const imp = parseInt(importance) || 0;
         for (let i = 1; i <= 5; i++) {
-            starsHTML += `<span class="star ${i <= imp ? '' : 'empty'}">${icon('star')}</span>`;
+            starsHTML += `<span class="star ${i <= imp ? '' : 'empty'}">${icon('star-fill')}</span>`;
         }
         return starsHTML;
     }
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initToastSystem();
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
-        const icons = { success: 'check', error: 'warning', warning: 'warning', info: 'info' };
+        const icons = { success: 'checkbox-circle-line', error: 'error-warning-line', warning: 'alert-line', info: 'information-line' };
         const accents = {
             success: 'var(--color-success, #107c10)',
             error: 'var(--color-danger, #c42b1c)',
@@ -174,8 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         card.innerHTML = `
             <div class="card-actions">
-                <button class="action-btn edit" title="编辑" aria-label="编辑" data-action="edit">${icon('edit')}</button>
-                <button class="action-btn delete" title="删除" aria-label="删除" data-action="delete">${icon('trash')}</button>
+                <button class="action-btn edit" title="编辑" aria-label="编辑" data-action="edit">${icon('edit-line')}</button>
+                <button class="action-btn delete" title="删除" aria-label="删除" data-action="delete">${icon('delete-bin-line')}</button>
             </div>
             <div class="card-header">
                 <div class="card-favicon ${!bookmark.favicon ? 'fallback' : ''}">${iconHtml}</div>
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const addBtn = document.createElement('button');
         addBtn.className = 'suggestion-add';
-        addBtn.innerHTML = icon('plus');
+        addBtn.innerHTML = icon('add-line');
         addBtn.title = '添加此网站';
         addBtn.setAttribute('aria-label', '添加此网站');
         addBtn.addEventListener('click', (e) => {
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const reason = document.createElement('div');
         reason.className = 'suggestion-reason';
-        reason.innerHTML = `${icon('spark')} <span>${escapeHtml(suggestion.reason || '')}</span>`;
+        reason.innerHTML = `${icon('sparkling-2-line')} <span>${escapeHtml(suggestion.reason || '')}</span>`;
 
         card.appendChild(addBtn);
         card.appendChild(title);
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function openAddModalWithSuggestion(suggestion) {
-        setModalTitle('spark', '添加推荐网站');
+        setModalTitle('sparkling-2-line', '添加推荐网站');
         bookmarkForm.reset();
         bookmarkForm.removeAttribute('data-edit-id');
         document.getElementById('bookmark-title').value = suggestion.title || '';
@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function openAddBookmarkModal() {
-        setModalTitle('plus', '添加新书签');
+        setModalTitle('add-line', '添加新书签');
         bookmarkForm.reset();
         bookmarkForm.removeAttribute('data-edit-id');
         updateModalStars(3);
@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const bookmark = allBookmarks.find(b => b.id === id);
         if (!bookmark) return;
 
-        setModalTitle('edit', '编辑书签');
+        setModalTitle('edit-line', '编辑书签');
         // 【BUG修复】使用 `|| ''` 确保 null/undefined 值不会变成字符串 "null"
         document.getElementById('bookmark-title').value = bookmark.title || '';
         document.getElementById('bookmark-url').value = bookmark.url || '';

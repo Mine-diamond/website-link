@@ -4,7 +4,7 @@
     const THEME_KEY = 'user-theme';
     const THEME_TOGGLE_SELECTOR = '.theme-toggle'; // 使用 class 选择器
 
-    const icon = (name) => `<svg class="icon" aria-hidden="true"><use href="#icon-${name}"></use></svg>`;
+    const icon = (name) => `<i class="ri-${name} icon" aria-hidden="true"></i>`;
 
     /**
      * 应用指定的主题，并更新所有切换按钮的状态。
@@ -16,7 +16,7 @@
         
         document.querySelectorAll(THEME_TOGGLE_SELECTOR).forEach(button => {
             if (button) {
-                button.innerHTML = isDark ? icon('sun') : icon('moon');
+                button.innerHTML = isDark ? icon('sun-line') : icon('moon-line');
                 button.title = isDark ? '切换到亮色模式' : '切换到暗色模式';
                 button.setAttribute('aria-label', button.title);
             }

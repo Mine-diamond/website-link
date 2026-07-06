@@ -164,20 +164,13 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
-.icon-sprite {
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-}
-
 .icon {
-    width: 1em;
-    height: 1em;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: 0 0 auto;
-    fill: currentColor;
-    vertical-align: -0.14em;
+    line-height: 1;
+    font-size: 1em;
 }
 
 .container {
