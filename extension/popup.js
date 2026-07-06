@@ -76,11 +76,11 @@ async function handleSubmit() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-    showStatus('✅ 已收藏！', 'success');
-    btn.textContent = '✅ 完成';
+    showStatus('已收藏！', 'success');
+    btn.textContent = '完成';
     setTimeout(() => window.close(), 1200);
   } catch (err) {
-    showStatus('❌ 收藏失败: ' + err.message, 'error');
+    showStatus('收藏失败: ' + err.message, 'error');
     btn.disabled = false;
     btn.textContent = '收藏';
   }

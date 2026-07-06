@@ -9,6 +9,60 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <svg class="icon-sprite" aria-hidden="true" focusable="false">
+        <symbol id="icon-ai" viewBox="0 0 24 24">
+            <path d="M9 3h6v2H9V3Zm2 2h2v2h-2V5Zm-4 5a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4v-4Zm4-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2Zm-8 3h3v2H3v-2Zm15 0h3v2h-3v-2ZM10 11h2v2h-2v-2Zm4 0h2v2h-2v-2Zm-4 9h4v2h-4v-2Z"/>
+        </symbol>
+        <symbol id="icon-bookmark" viewBox="0 0 24 24">
+            <path d="M6 4.75A2.75 2.75 0 0 1 8.75 2h6.5A2.75 2.75 0 0 1 18 4.75v16.1l-6-3.75-6 3.75V4.75Zm2.75-.75A.75.75 0 0 0 8 4.75v12.5l4-2.5 4 2.5V4.75a.75.75 0 0 0-.75-.75h-6.5Z"/>
+        </symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24">
+            <path d="m9.55 16.2-4.25-4.25 1.4-1.4 2.85 2.85 7.75-7.75 1.4 1.4-9.15 9.15Z"/>
+        </symbol>
+        <symbol id="icon-edit" viewBox="0 0 24 24">
+            <path d="M5 17.25V20h2.75L17.95 9.8 15.2 7.05 5 17.25Zm14.55-9.05a1 1 0 0 0 0-1.4l-2.35-2.35a1 1 0 0 0-1.4 0l-1.4 1.4 3.75 3.75 1.4-1.4Z"/>
+        </symbol>
+        <symbol id="icon-info" viewBox="0 0 24 24">
+            <path d="M11 10h2v7h-2v-7Zm0-3h2v2h-2V7Zm1-5a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/>
+        </symbol>
+        <symbol id="icon-link" viewBox="0 0 24 24">
+            <path d="M9.5 14.5a1 1 0 0 1 0-1.41l5.66-5.66a3 3 0 0 1 4.24 4.24l-2.12 2.12-1.41-1.41 2.12-2.12a1 1 0 0 0-1.41-1.41l-5.66 5.66a1 1 0 0 1-1.42 0Zm5 1a1 1 0 0 1 0 1.41l-2.83 2.83a3 3 0 0 1-4.24-4.24l2.12-2.12 1.41 1.41-2.12 2.12a1 1 0 1 0 1.41 1.41l2.83-2.83a1 1 0 0 1 1.42 0ZM7.76 7.76l8.48 8.48-1.41 1.41-8.48-8.48 1.41-1.41Z"/>
+        </symbol>
+        <symbol id="icon-moon" viewBox="0 0 24 24">
+            <path d="M20.3 15.4A8.5 8.5 0 0 1 8.6 3.7 8.75 8.75 0 1 0 20.3 15.4ZM12 20.25A8.25 8.25 0 0 1 9.5 4.14a10.5 10.5 0 0 0 10.36 10.36A8.25 8.25 0 0 1 12 20.25Z"/>
+        </symbol>
+        <symbol id="icon-note" viewBox="0 0 24 24">
+            <path d="M5 3h10.6L20 7.4V21H5V3Zm2 2v14h11V9h-4V5H7Zm9 .8V7h1.2L16 5.8ZM9 11h6v2H9v-2Zm0 4h6v2H9v-2Z"/>
+        </symbol>
+        <symbol id="icon-pin" viewBox="0 0 24 24">
+            <path d="m14.8 3 6.2 6.2-1.4 1.4-1.2-1.2-4.6 4.6v3.2l-1 1-3.5-3.5-4.9 4.9L3 18.2l4.9-4.9-3.5-3.5 1-1h3.2l4.6-4.6L12 4.4 13.4 3h1.4Zm-.2 3.4-4.8 4.8H8.2l5.6 5.6v-1.6l4.8-4.8-4-4Z"/>
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24">
+            <path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/>
+        </symbol>
+        <symbol id="icon-search" viewBox="0 0 24 24">
+            <path d="M10.5 4a6.5 6.5 0 0 1 5.17 10.44l4.45 4.44-1.41 1.41-4.45-4.44A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/>
+        </symbol>
+        <symbol id="icon-spark" viewBox="0 0 24 24">
+            <path d="m12 2 1.55 5.2L19 9l-5.45 1.8L12 16l-1.55-5.2L5 9l5.45-1.8L12 2Zm6.5 11 1 3.25L23 17.5l-3.5 1.25-1 3.25-1-3.25L14 17.5l3.5-1.25 1-3.25ZM5.5 13l.8 2.7L9 16.5l-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8.8-2.7Z"/>
+        </symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24">
+            <path d="m12 2.6 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.41l-5.8 3.05L7.31 14l-4.7-4.58 6.49-.94L12 2.6Z"/>
+        </symbol>
+        <symbol id="icon-sun" viewBox="0 0 24 24">
+            <path d="M11 2h2v3h-2V2Zm0 17h2v3h-2v-3ZM4.22 5.64l1.42-1.42 2.12 2.12-1.42 1.42-2.12-2.12Zm12.02 12.02 1.42-1.42 2.12 2.12-1.42 1.42-2.12-2.12ZM2 11h3v2H2v-2Zm17 0h3v2h-3v-2ZM4.22 18.36l2.12-2.12 1.42 1.42-2.12 2.12-1.42-1.42ZM16.24 6.34l2.12-2.12 1.42 1.42-2.12 2.12-1.42-1.42ZM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z"/>
+        </symbol>
+        <symbol id="icon-tag" viewBox="0 0 24 24">
+            <path d="M4 4h8.6L20 11.4 11.4 20 4 12.6V4Zm2 2v5.8l5.4 5.4 5.8-5.8L11.8 6H6Zm3 2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
+        </symbol>
+        <symbol id="icon-trash" viewBox="0 0 24 24">
+            <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-3 6h12l-1 12H7L6 9Zm3 2 .6 8h4.8l.6-8H9Z"/>
+        </symbol>
+        <symbol id="icon-warning" viewBox="0 0 24 24">
+            <path d="M12 3 1.8 21h20.4L12 3Zm0 4.05L18.78 19H5.22L12 7.05ZM11 10h2v5h-2v-5Zm0 6h2v2h-2v-2Z"/>
+        </symbol>
+    </svg>
+
     <div class="bookmarks-container">
         <!-- 头部 -->
         <header class="bookmarks-header">
@@ -19,7 +73,9 @@
                     <p class="header-subtitle">收藏、整理和发现你的网页位置，保持一个安静有序的个人书签工作区。</p>
                 </div>
                 <nav class="header-nav">
-                    <button id="theme-toggle" class="theme-toggle" title="切换主题">🌙</button>
+                    <button id="theme-toggle" class="theme-toggle" title="切换主题" aria-label="切换主题">
+                        <svg class="icon" aria-hidden="true"><use href="#icon-moon"></use></svg>
+                    </button>
                 </nav>
             </div>
         </header>
@@ -27,19 +83,24 @@
         <!-- 控制栏 (内联事件已移除，由JS处理) -->
         <div class="bookmark-controls">
             <div class="bookmark-actions">
-                <button class="add-bookmark-btn">添加书签</button>
+                <button class="add-bookmark-btn"><svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg> 添加书签</button>
                 <div class="control-group">
-                    <input type="text" class="bookmark-search" id="search-input"
-                           placeholder="🔍 搜索标题、备注或标签...">
+                    <div class="search-field">
+                        <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+                        <input type="text" class="bookmark-search" id="search-input"
+                               placeholder="搜索标题、备注或标签...">
+                    </div>
                     <select id="importance-filter" class="importance-filter">
-                        <option value="">⭐ 所有等级</option>
-                        <option value="5">⭐⭐⭐⭐⭐ 5星</option>
-                        <option value="4">⭐⭐⭐⭐ 4星以上</option>
-                        <option value="3">⭐⭐⭐ 3星以上</option>
-                        <option value="2">⭐⭐ 2星以上</option>
-                        <option value="1">⭐ 1星以上</option>
+                        <option value="">所有等级</option>
+                        <option value="5">5星</option>
+                        <option value="4">4星以上</option>
+                        <option value="3">3星以上</option>
+                        <option value="2">2星以上</option>
+                        <option value="1">1星以上</option>
                     </select>
-                    <button class="ai-toggle" id="ai-toggle" title="AI 智能搜索">🤖</button>
+                    <button class="ai-toggle" id="ai-toggle" title="AI 智能搜索" aria-label="AI 智能搜索">
+                        <svg class="icon" aria-hidden="true"><use href="#icon-ai"></use></svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -52,7 +113,9 @@
         <!-- AI 推荐网站区域 -->
         <div id="ai-results" class="ai-results hidden">
             <div class="ai-section" id="ai-suggested-section">
-                <div class="ai-section-header">💡 AI 推荐网站</div>
+                <div class="ai-section-header">
+                    <span><svg class="icon" aria-hidden="true"><use href="#icon-spark"></use></svg> AI 推荐网站</span>
+                </div>
                 <div class="ai-suggested-grid" id="ai-suggested-grid"></div>
             </div>
         </div>
@@ -77,29 +140,29 @@
             <div class="modal-body">
                 <form id="bookmark-form" novalidate>
                     <div class="form-group">
-                        <label>📌 标题 *</label>
+                        <label><svg class="icon" aria-hidden="true"><use href="#icon-pin"></use></svg> 标题 *</label>
                         <input type="text" id="bookmark-title" required placeholder="请输入书签标题">
                     </div>
                     <div class="form-group">
-                        <label>🔗 网址 *</label>
+                        <label><svg class="icon" aria-hidden="true"><use href="#icon-link"></use></svg> 网址 *</label>
                         <input type="url" id="bookmark-url" required placeholder="https://example.com">
                     </div>
                     <div class="form-group">
-                        <label>🏷️ 标签</label>
+                        <label><svg class="icon" aria-hidden="true"><use href="#icon-tag"></use></svg> 标签</label>
                         <input type="text" id="bookmark-tags" placeholder="用逗号分隔，如：工具,学习,娱乐">
                     </div>
                     <div class="form-group">
-                        <label>📝 备注</label>
+                        <label><svg class="icon" aria-hidden="true"><use href="#icon-note"></use></svg> 备注</label>
                         <textarea id="bookmark-notes" placeholder="添加备注信息（可选）"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>⭐ 重要程度</label>
+                        <label><svg class="icon" aria-hidden="true"><use href="#icon-star"></use></svg> 重要程度</label>
                         <div class="star-picker" id="modal-star-picker">
-                            <button class="star-btn" data-value="1" type="button">★</button>
-                            <button class="star-btn" data-value="2" type="button">★</button>
-                            <button class="star-btn" data-value="3" type="button">★</button>
-                            <button class="star-btn" data-value="4" type="button">★</button>
-                            <button class="star-btn" data-value="5" type="button">★</button>
+                            <button class="star-btn" data-value="1" type="button" aria-label="1星"><svg class="icon" aria-hidden="true"><use href="#icon-star"></use></svg></button>
+                            <button class="star-btn" data-value="2" type="button" aria-label="2星"><svg class="icon" aria-hidden="true"><use href="#icon-star"></use></svg></button>
+                            <button class="star-btn" data-value="3" type="button" aria-label="3星"><svg class="icon" aria-hidden="true"><use href="#icon-star"></use></svg></button>
+                            <button class="star-btn" data-value="4" type="button" aria-label="4星"><svg class="icon" aria-hidden="true"><use href="#icon-star"></use></svg></button>
+                            <button class="star-btn" data-value="5" type="button" aria-label="5星"><svg class="icon" aria-hidden="true"><use href="#icon-star"></use></svg></button>
                         </div>
                     </div>
                 </form>

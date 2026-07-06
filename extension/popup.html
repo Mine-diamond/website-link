@@ -21,6 +21,14 @@
             --star-empty: #d1d5db;
             --star-filled: #f59e0b;
         }
+        .icon {
+            width: 1em;
+            height: 1em;
+            display: inline-block;
+            flex: 0 0 auto;
+            fill: currentColor;
+            vertical-align: -0.14em;
+        }
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg: #1f2937;
@@ -57,6 +65,7 @@
             align-items: center;
             gap: 6px;
         }
+        h1 .icon { color: var(--accent); }
         .form-group { margin-bottom: 10px; }
         .form-group label {
             display: block;
@@ -113,6 +122,10 @@
             transition: color 0.15s, transform 0.15s;
             padding: 0 2px;
         }
+        .star-btn .icon {
+            width: 1em;
+            height: 1em;
+        }
         .star-btn.active { color: var(--star-filled); }
         .star-btn:hover { transform: scale(1.2); }
 
@@ -160,6 +173,9 @@
             cursor: pointer;
             text-decoration: underline;
             opacity: 0.6;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .settings-toggle button:hover { opacity: 1; }
         .settings-panel {
@@ -186,7 +202,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>📚 收藏到 Mine</h1>
+        <h1><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 4.75A2.75 2.75 0 0 1 8.75 2h6.5A2.75 2.75 0 0 1 18 4.75v16.1l-6-3.75-6 3.75V4.75Zm2.75-.75A.75.75 0 0 0 8 4.75v12.5l4-2.5 4 2.5V4.75a.75.75 0 0 0-.75-.75h-6.5Z"/></svg> 收藏到 Mine</h1>
 
         <div class="form-group">
             <label>标题</label>
@@ -207,11 +223,11 @@
             <div class="form-group">
                 <label>重要程度</label>
                 <div class="stars" id="stars">
-                    <button class="star-btn" data-value="1">★</button>
-                    <button class="star-btn" data-value="2">★</button>
-                    <button class="star-btn" data-value="3">★</button>
-                    <button class="star-btn" data-value="4">★</button>
-                    <button class="star-btn" data-value="5">★</button>
+                    <button class="star-btn" data-value="1" aria-label="1星"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m12 2.6 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.41l-5.8 3.05L7.31 14l-4.7-4.58 6.49-.94L12 2.6Z"/></svg></button>
+                    <button class="star-btn" data-value="2" aria-label="2星"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m12 2.6 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.41l-5.8 3.05L7.31 14l-4.7-4.58 6.49-.94L12 2.6Z"/></svg></button>
+                    <button class="star-btn" data-value="3" aria-label="3星"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m12 2.6 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.41l-5.8 3.05L7.31 14l-4.7-4.58 6.49-.94L12 2.6Z"/></svg></button>
+                    <button class="star-btn" data-value="4" aria-label="4星"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m12 2.6 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.41l-5.8 3.05L7.31 14l-4.7-4.58 6.49-.94L12 2.6Z"/></svg></button>
+                    <button class="star-btn" data-value="5" aria-label="5星"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m12 2.6 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.41l-5.8 3.05L7.31 14l-4.7-4.58 6.49-.94L12 2.6Z"/></svg></button>
                 </div>
             </div>
         </div>
@@ -226,7 +242,7 @@
         <div class="status" id="status"></div>
 
         <div class="settings-toggle">
-            <button id="settingsToggle">⚙️ 设置 API 地址</button>
+            <button id="settingsToggle"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.65.07-.98s-.02-.66-.07-.98l2.11-1.65-2-3.46-2.49 1a7.34 7.34 0 0 0-1.69-.98L15 3h-4l-.36 2.93c-.6.24-1.17.57-1.69.98l-2.49-1-2 3.46 2.11 1.65c-.04.32-.07.65-.07.98s.02.66.07.98l-2.11 1.65 2 3.46 2.49-1c.52.41 1.09.74 1.69.98L11 21h4l.36-2.93c.6-.24 1.17-.57 1.69-.98l2.49 1 2-3.46-2.11-1.65ZM13 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"/></svg> 设置 API 地址</button>
         </div>
         <div class="settings-panel" id="settingsPanel">
             <label>API 地址</label>

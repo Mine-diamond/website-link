@@ -41,6 +41,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return div.innerHTML;
     }
 
+    function icon(name) {
+        return `<svg class="icon" aria-hidden="true"><use href="#icon-${name}"></use></svg>`;
+    }
+
+    function setModalTitle(iconName, text) {
+        modalTitle.innerHTML = `${icon(iconName)} ${escapeHtml(text)}`;
+    }
+
     function extractDomain(url) {
         try {
             return new URL(url).hostname;
@@ -75,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let starsHTML = '';
         const imp = parseInt(importance) || 0;
         for (let i = 1; i <= 5; i++) {
-            starsHTML += `<span class="star ${i <= imp ? '' : 'empty'}">★</span>`;
+            starsHTML += `<span class="star ${i <= imp ? '' : 'empty'}">${icon('star')}</span>`;
         }
         return starsHTML;
     }
@@ -111,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initToastSystem();
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
-        const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+        const icons = { success: 'check', error: 'warning', warning: 'warning', info: 'info' };
         const accents = {
             success: 'var(--color-success, #107c10)',
             error: 'var(--color-danger, #c42b1c)',
@@ -121,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         toast.style.cssText = `background: var(--color-panel-strong, rgba(255, 255, 255, 0.86)); color: var(--color-text, #1f1f1f); border: 1px solid var(--color-border, rgba(0, 0, 0, 0.08)); border-left: 4px solid ${accents[type] || accents.info}; backdrop-filter: blur(24px) saturate(150%); -webkit-backdrop-filter: blur(24px) saturate(150%); padding: 12px 14px; border-radius: 14px; box-shadow: var(--shadow-panel, 0 20px 60px rgba(0, 0, 0, 0.12)); display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; max-width: 340px; pointer-events: auto; transform: translateX(120%); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;`;
         
-        toast.innerHTML = `${icons[type]} ${escapeHtml(message)}`;
+        toast.innerHTML = `${icon(icons[type] || icons.info)} <span>${escapeHtml(message)}</span>`;
         container.appendChild(toast);
         
         setTimeout(() => {
@@ -166,8 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         card.innerHTML = `
             <div class="card-actions">
-                <button class="action-btn edit" title="编辑" data-action="edit">✏️</button>
-                <button class="action-btn delete" title="删除" data-action="delete">🗑️</button>
+                <button class="action-btn edit" title="编辑" aria-label="编辑" data-action="edit">${icon('edit')}</button>
+                <button class="action-btn delete" title="删除" aria-label="删除" data-action="delete">${icon('trash')}</button>
             </div>
             <div class="card-header">
                 <div class="card-favicon ${!bookmark.favicon ? 'fallback' : ''}">${iconHtml}</div>
@@ -294,8 +302,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const addBtn = document.createElement('button');
         addBtn.className = 'suggestion-add';
-        addBtn.textContent = '+';
+        addBtn.innerHTML = icon('plus');
         addBtn.title = '添加此网站';
+        addBtn.setAttribute('aria-label', '添加此网站');
         addBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             openAddModalWithSuggestion(suggestion);
@@ -311,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const reason = document.createElement('div');
         reason.className = 'suggestion-reason';
-        reason.textContent = '💡 ' + (suggestion.reason || '');
+        reason.innerHTML = `${icon('spark')} <span>${escapeHtml(suggestion.reason || '')}</span>`;
 
         card.appendChild(addBtn);
         card.appendChild(title);
@@ -336,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function openAddModalWithSuggestion(suggestion) {
-        modalTitle.textContent = '✨ 添加推荐网站';
+        setModalTitle('spark', '添加推荐网站');
         bookmarkForm.reset();
         bookmarkForm.removeAttribute('data-edit-id');
         document.getElementById('bookmark-title').value = suggestion.title || '';
@@ -381,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function openAddBookmarkModal() {
-        modalTitle.textContent = '✨ 添加新书签';
+        setModalTitle('plus', '添加新书签');
         bookmarkForm.reset();
         bookmarkForm.removeAttribute('data-edit-id');
         updateModalStars(3);
@@ -393,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const bookmark = allBookmarks.find(b => b.id === id);
         if (!bookmark) return;
 
-        modalTitle.textContent = '✏️ 编辑书签';
+        setModalTitle('edit', '编辑书签');
         // 【BUG修复】使用 `|| ''` 确保 null/undefined 值不会变成字符串 "null"
         document.getElementById('bookmark-title').value = bookmark.title || '';
         document.getElementById('bookmark-url').value = bookmark.url || '';
@@ -415,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (confirmed) {
             try {
                 await bookmarkAPI.deleteBookmark(id);
-                showToast('📚 书签已删除', 'success');
+                showToast('书签已删除', 'success');
                 await loadAndRenderBookmarks();
             } catch (error) {
                 console.error('删除书签失败:', error);
@@ -446,10 +455,10 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             if (editId) {
                 await bookmarkAPI.updateBookmark({ ...formData, id: editId });
-                showToast('📝 书签已更新', 'success');
+                showToast('书签已更新', 'success');
             } else {
                 await bookmarkAPI.addBookmark(formData);
-                showToast('✨ 书签已添加', 'success');
+                showToast('书签已添加', 'success');
             }
             closeModal();
             await loadAndRenderBookmarks();
@@ -471,8 +480,8 @@ document.addEventListener('DOMContentLoaded', function() {
             isAiMode = !isAiMode;
             aiToggle.classList.toggle('active', isAiMode);
             searchInput.placeholder = isAiMode
-                ? '🤖 用自然语言描述，按 Enter 搜索...'
-                : '🔍 搜索标题、备注或标签...';
+                ? '用自然语言描述，按 Enter 搜索...'
+                : '搜索标题、备注或标签...';
             searchInput.value = '';
             // 切换时关闭 AI 结果，回到正常视图
             aiResults.classList.add('hidden');
