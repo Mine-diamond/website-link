@@ -2,21 +2,21 @@
 
 ## Current Style
 
-The current web UI uses a conventional responsive bookmark-card layout.
+The current web UI uses a Windows 11 Fluent/Mica inspired responsive bookmark workspace.
 
 Current characteristics:
 
 - Light and dark themes.
-- Blue/purple gradient primary buttons.
-- Card grid with rounded bookmark cards.
-- Favicon or first-letter fallback icon.
-- Tag pills.
-- Star-based importance display.
-- Modal form for add/edit.
-- Toast notifications created from JavaScript.
-- AI suggestion cards below the bookmark grid.
+- Mica-like radial background accents.
+- Glass panels with translucent surfaces, subtle borders, and backdrop blur.
+- A large workspace header with title, subtitle, and theme control.
+- A command-bar style search, filter, add, and AI toolbar.
+- Responsive bookmark cards with translucent surfaces, favicon or first-letter fallback icons, tag pills, star importance, and low-noise action buttons.
+- Glass modal form for add/edit.
+- Glass toast notifications created from JavaScript.
+- AI suggestion cards below the bookmark grid using the same panel/card language.
 
-The current style is functional, but it does not yet match Launch Desk.
+The current style is intended to align with Launch Desk's Fluent/Mica visual direction while remaining a responsive website.
 
 ## Current Theme Mechanism
 
@@ -42,32 +42,40 @@ or:
 
 ## Current CSS Variables
 
-Current variables include:
+Current primary variables include:
 
 ```css
---bg-color
---text-color
---header-bg
---card-bg
---group-bg
---input-bg
---input-border-color
---input-focus-border-color
---btn-primary-bg
---btn-secondary-bg
---bookmark-card-bg
---bookmark-favicon-fallback-bg
---star-filled-color
---star-empty-color
---tag-bg
---tag-color
+--color-bg
+--color-bg-elevated
+--color-panel
+--color-panel-strong
+--color-card
+--color-card-hover
+--color-input
+--color-text
+--color-text-muted
+--color-text-subtle
+--color-border
+--color-border-strong
+--color-accent
+--color-accent-hover
+--color-accent-text
+--color-accent-wash
+--radius-window
+--radius-panel
+--radius-card
+--radius-control
+--radius-pill
+--shadow-soft
+--shadow-panel
+--shadow-card
 ```
 
-These variables are useful, but their names and values do not match Launch Desk's current token system.
+Legacy variables such as `--bg-color`, `--text-color`, `--input-bg`, and `--bookmark-card-bg` are still mapped to the new tokens for compatibility with existing selectors.
 
 ## Target Direction
 
-Future redesign direction:
+The active redesign direction is:
 
 ```text
 Windows 11 Fluent + Mica Glass Bookmark Workspace
@@ -75,7 +83,7 @@ Windows 11 Fluent + Mica Glass Bookmark Workspace
 
 The redesigned website-link should visually align with Launch Desk while still behaving like a responsive website.
 
-## Target Visual Keywords
+## Visual Keywords
 
 - Fluent
 - Mica
@@ -88,7 +96,7 @@ The redesigned website-link should visually align with Launch Desk while still b
 - Light motion
 - Personal workspace
 
-## Target Font
+## Font
 
 Use the same font family as Launch Desk:
 
@@ -96,9 +104,9 @@ Use the same font family as Launch Desk:
 font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
 ```
 
-## Target Tokens
+## Token Direction
 
-The redesign should converge toward Launch Desk token names:
+The current UI now uses Launch Desk compatible token names:
 
 ```css
 --color-bg
@@ -154,11 +162,11 @@ Launch Desk dark theme reference:
 --color-accent-wash: rgba(76, 194, 255, 0.12);
 ```
 
-## Target Layout Direction
+## Layout Direction
 
 website-link should not copy the Launch Desk desktop shell exactly. It should adapt the same visual language for a web bookmark page.
 
-Recommended web layout:
+Current web layout:
 
 - A centered page shell with a soft radial accent background.
 - A compact top header with brand, theme toggle, and future settings/auth controls.
@@ -170,7 +178,7 @@ Recommended web layout:
 
 ## Bookmark Card Direction
 
-Bookmark cards should become calmer and more Launch Desk-like:
+Bookmark cards are designed to be calm and Launch Desk-like:
 
 - Less saturated gradients.
 - More transparent card surfaces.
@@ -182,7 +190,7 @@ Bookmark cards should become calmer and more Launch Desk-like:
 
 ## Modal Direction
 
-Add/edit modals should use:
+Add/edit modals use:
 
 - `--color-panel` background.
 - `backdrop-filter: blur(...) saturate(...)`.
@@ -190,17 +198,10 @@ Add/edit modals should use:
 - `--color-border`.
 - Consistent control radius and spacing.
 
-## Migration Rules
+## Maintenance Rules
 
-The style migration should be incremental:
+Do not change API behavior during style work unless a UI change requires it.
 
-1. Add Launch Desk compatible tokens while preserving existing behavior.
-2. Migrate page background, header, and toolbar.
-3. Migrate bookmark cards.
-4. Migrate modal, form controls, toast, loading, and empty states.
-5. Migrate AI suggestion cards.
-6. Remove obsolete legacy variables only after all references are replaced.
+Do not break mobile layout during future visual changes.
 
-Do not change API behavior during style migration unless a UI change requires it.
-
-Do not break mobile layout during the redesign.
+Keep legacy CSS variable aliases until all old selectors are removed or renamed deliberately.

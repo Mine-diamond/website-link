@@ -112,9 +112,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
-        const colors = { success: '#10b981', error: '#ef4444', warning: '#f59e0b', info: '#3b82f6' };
+        const accents = {
+            success: 'var(--color-success, #107c10)',
+            error: 'var(--color-danger, #c42b1c)',
+            warning: 'var(--color-warning, #f9a825)',
+            info: 'var(--color-accent, #0067c0)'
+        };
         
-        toast.style.cssText = `background: ${colors[type]}; color: white; padding: 10px 16px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; max-width: 320px; pointer-events: auto; transform: translateX(120%); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;`;
+        toast.style.cssText = `background: var(--color-panel-strong, rgba(255, 255, 255, 0.86)); color: var(--color-text, #1f1f1f); border: 1px solid var(--color-border, rgba(0, 0, 0, 0.08)); border-left: 4px solid ${accents[type] || accents.info}; backdrop-filter: blur(24px) saturate(150%); -webkit-backdrop-filter: blur(24px) saturate(150%); padding: 12px 14px; border-radius: 14px; box-shadow: var(--shadow-panel, 0 20px 60px rgba(0, 0, 0, 0.12)); display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; max-width: 340px; pointer-events: auto; transform: translateX(120%); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;`;
         
         toast.innerHTML = `${icons[type]} ${escapeHtml(message)}`;
         container.appendChild(toast);
