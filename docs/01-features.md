@@ -73,10 +73,8 @@ Current features:
 - Saves the bookmark to the configured website-link API.
 - Stores the API URL in `chrome.storage.sync`.
 - Supports system light/dark appearance through CSS media queries.
-
-Known issue:
-
-- The default extension API URL is currently `bookmark.minediamond.tech`, without `https://`. It should be changed to `https://bookmark.minediamond.tech`.
+- Uses a compact Fluent/Mica-aligned style with flat surfaces and inline SVG icons.
+- Defaults the API URL to `https://bookmark.minediamond.tech`.
 
 ## Launch Desk Integration
 

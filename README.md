@@ -126,10 +126,9 @@ See `docs/07-launch-desk-integration.md` for details.
 
 Recommended next improvements:
 
-1. Fix the extension default API URL to include `https://`.
-2. Add simple token authentication to the API.
-3. Return clear HTTP status codes for API errors.
-4. Add stricter backend validation for bookmark input.
-5. Add `updatedAt`, UUID IDs, and sync-friendly metadata.
-6. Migrate the UI toward the Launch Desk Fluent/Mica visual language.
-7. Consider incremental sync once the data model supports it.
+1. Add simple token authentication to the API.
+2. Return clear HTTP status codes for API errors.
+3. Add stricter backend validation for bookmark input.
+4. Add `updatedAt`, UUID IDs, and sync-friendly metadata.
+5. Continue refining the Launch Desk Fluent/Mica visual language.
+6. Consider incremental sync once the data model supports it.

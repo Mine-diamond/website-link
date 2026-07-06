@@ -26,11 +26,6 @@ The runtime depends on browser APIs and Cloudflare Pages Functions.
 
 ## Known Technical Issues
 
-Extension default API URL:
-
-- `extension/popup.js` uses `bookmark.minediamond.tech` without `https://`.
-- This should be changed to `https://bookmark.minediamond.tech`.
-
 API authentication:
 
 - No authentication is currently enforced.
@@ -66,15 +61,14 @@ AI query:
 ## Recommended Improvement Order
 
 1. Keep this documentation baseline current.
-2. Fix the extension default API URL.
-3. Add backend input validation.
-4. Add correct HTTP error status codes.
-5. Add optional bearer-token authentication.
-6. Add `updatedAt` and UUID IDs.
-7. Update Launch Desk compatibility if the data model changes.
-8. Start the Launch Desk aligned visual redesign.
-9. Add incremental sync only after sync metadata exists.
-10. Consider a D1 migration only if KV becomes a real limitation.
+2. Add backend input validation.
+3. Add correct HTTP error status codes.
+4. Add optional bearer-token authentication.
+5. Add `updatedAt` and UUID IDs.
+6. Update Launch Desk compatibility if the data model changes.
+7. Continue the Launch Desk aligned visual redesign.
+8. Add incremental sync only after sync metadata exists.
+9. Consider a D1 migration only if KV becomes a real limitation.
 
 ## Style Redesign Notes
 

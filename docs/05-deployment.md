@@ -111,10 +111,6 @@ For local installation:
 3. Load the `extension/` directory as an unpacked extension.
 4. Configure the API URL in the popup if needed.
 
-Known issue:
-
-- The extension default API URL currently lacks the `https://` scheme. Until fixed, set the API URL manually to `https://bookmark.minediamond.tech`.
-
 ## Local Development Notes
 
 Because there is no local dev server configuration in this project, opening `index.html` directly will not provide the Cloudflare Functions API.

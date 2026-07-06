@@ -1,5 +1,5 @@
 // 默认 API 地址（用户可在设置中修改，保存到 chrome.storage.sync）
-const DEFAULT_API_URL = 'bookmark.minediamond.tech';
+const DEFAULT_API_URL = 'https://bookmark.minediamond.tech';
 
 let selectedImportance = 3;
 
