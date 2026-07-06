@@ -3,29 +3,54 @@ class BookmarkAPI {
     constructor() {
         // 使用相对路径，自动使用当前域名
         this.baseUrl = '/api';
+        this.tokenKey = 'bookmark-api-token';
     }
 
-    async request(endpoint, options = {}) {
+    async request(endpoint, options = {}, hasRetriedAuth = false) {
         const url = `${this.baseUrl}${endpoint}`;
+        const headers = {
+            'Content-Type': 'application/json',
+            ...(options.headers || {}),
+        };
+        const token = localStorage.getItem(this.tokenKey);
+
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+
         const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
             ...options,
+            headers,
         };
 
         try {
             const response = await fetch(url, config);
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.error || `HTTP error! status: ${response.status}`);
+            const data = await this.readJson(response);
+
+            if ((response.status === 401 || response.status === 403) && !hasRetriedAuth) {
+                const nextToken = window.prompt('请输入 Bookmark API Token');
+                if (nextToken && nextToken.trim()) {
+                    localStorage.setItem(this.tokenKey, nextToken.trim());
+                    return await this.request(endpoint, options, true);
+                }
             }
-            
+
+            if (!response.ok) {
+                throw new Error(data?.error || `HTTP error! status: ${response.status}`);
+            }
+
             return data;
         } catch (error) {
             console.error('API request failed:', error);
             throw error;
+        }
+    }
+
+    async readJson(response) {
+        try {
+            return await response.json();
+        } catch (error) {
+            return null;
         }
     }
 
