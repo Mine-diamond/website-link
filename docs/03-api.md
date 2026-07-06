@@ -125,6 +125,7 @@ Current behavior:
 - `importance` defaults to `1` if not provided.
 - `dateAdded` and `updatedAt` are both set when the bookmark is created.
 - Invalid input returns `400`.
+- Launch Desk also uses this endpoint when promoting a local URL item into a remote website-link bookmark.
 
 ## POST /api/bookmarks/update
 
@@ -166,6 +167,7 @@ Current behavior:
 - `updatedAt` is written on every successful update.
 - Updating `url` regenerates `favicon` unless the request explicitly provides `favicon`.
 - Missing IDs return `400`; unknown IDs return `404`.
+- Launch Desk also uses this endpoint when editing remote URL proxy items from Home or All.
 
 ## POST /api/bookmarks/delete
 
@@ -192,6 +194,7 @@ Current behavior:
 - Missing IDs return `400`; unknown IDs return `404`.
 - Deletion is hard deletion from the KV array.
 - There is no tombstone or `deletedAt` field.
+- Launch Desk also uses this endpoint when deleting a remote URL proxy item or converting a remote URL proxy item back to a local URL item.
 
 ## GET /api/bookmarks/search
 

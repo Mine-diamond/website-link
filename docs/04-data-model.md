@@ -92,9 +92,11 @@ The most important fields for Launch Desk are:
 - `title`, used as the local URL item title.
 - `url`, used as the local URL item target.
 - `favicon`, used as the local URL item icon.
-- `tags` and `notes`, used for search matching.
-- `importance`, used for search scoring and URL page sorting.
+- `tags` and `notes`, used for search matching and cached on remote URL proxy items.
+- `importance`, used for search scoring, URL page sorting, and cached on remote URL proxy items.
 - `dateAdded`, used for sorting and local transient item metadata.
+
+Launch Desk local URL items mirror the same title, URL, favicon, tags, notes, and importance shape so local URLs can be promoted into website-link bookmarks and remote URL proxy items can be converted back to local URL items without losing metadata.
 
 Breaking changes to these fields should be coordinated with Launch Desk.
 

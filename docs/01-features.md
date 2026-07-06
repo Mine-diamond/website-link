@@ -86,8 +86,11 @@ Launch Desk currently supports:
 - Caching fetched bookmarks locally in SQLite.
 - Searching remote bookmarks locally.
 - Opening remote bookmarks.
-- Pinning remote bookmarks as local URL items.
-- Adding, editing, and deleting remote bookmarks through website-link API endpoints.
+- Pinning remote bookmarks as local remote URL proxy items.
+- Adding, editing, and deleting remote bookmarks through website-link API endpoints from URLs, Home, and All surfaces.
+- Promoting Launch Desk local URL items into website-link bookmarks.
+- Converting Launch Desk remote URL proxy items back to local URL items by deleting the backing website-link bookmark.
+- Keeping local URL metadata such as tags, notes, and importance aligned with remote bookmark fields for conversion.
 
 ## Current Limitations
 

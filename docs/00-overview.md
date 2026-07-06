@@ -21,9 +21,9 @@ website-link currently provides:
 
 website-link owns remote bookmark metadata.
 
-Launch Desk owns local launcher state.
+Launch Desk owns local launcher state and metadata for local-only URL items.
 
-This means website-link is responsible for website-specific data such as URL, title, tags, notes, importance, favicon, and added date. Launch Desk is responsible for whether a bookmark is pinned, where it appears in the local Home workspace, folder group membership, zones, and local usage tracking.
+This means website-link is responsible for website-specific data such as URL, title, tags, notes, importance, favicon, and added date for remote bookmarks. Launch Desk is responsible for whether a bookmark is pinned, where it appears in the local Home workspace, folder group membership, zones, local usage tracking, and full metadata for local-only URL items.
 
 ## Goals
 

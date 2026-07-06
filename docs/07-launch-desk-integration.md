@@ -7,13 +7,13 @@ website-link is the remote bookmark source for Launch Desk.
 The ownership split is:
 
 ```text
-website-link owns bookmark metadata.
-Launch Desk owns launcher state.
+website-link owns remote bookmark metadata.
+Launch Desk owns launcher state and local-only URL metadata.
 ```
 
 ## Remote-Owned Fields
 
-website-link owns:
+For remote bookmarks, website-link owns:
 
 - Title
 - URL
@@ -29,14 +29,14 @@ website-link owns:
 
 Launch Desk owns:
 
-- Whether a bookmark is pinned to Home.
+- Whether a remote bookmark has a local proxy item.
 - Home coordinates.
 - Zone membership.
 - Folder group placement.
 - Local URL item identity.
 - Local usage tracking.
 - Local cache state.
-- Local display or icon overrides if added later.
+- Title, URL, tags, notes, importance, and icon for local-only URL items.
 
 ## Current Launch Desk Behavior
 
@@ -50,8 +50,12 @@ Launch Desk currently:
 - Shows bookmarks on the URLs page.
 - Searches bookmark title, URL, notes, and tags.
 - Opens bookmarks directly in the default browser.
-- Pins remote bookmarks as local URL items.
+- Pins remote bookmarks as local remote URL proxy items.
 - Adds, edits, and deletes remote bookmarks through website-link API endpoints.
+- Edits and deletes remote URL proxy items from Home and All.
+- Promotes local URL items into website-link bookmarks.
+- Converts remote URL proxy items back to local URL items by deleting the backing website-link bookmark.
+- Automatically converts a remote URL proxy item to a local URL item after a successful full refresh confirms that the backing bookmark no longer exists.
 
 ## Pinning Model
 
@@ -65,6 +69,9 @@ When Launch Desk pins a remote bookmark, it creates a local item similar to:
   target: bookmark.url,
   icon: bookmark.favicon,
   remoteBookmarkId: bookmark.id,
+  tags: bookmark.tags,
+  notes: bookmark.notes,
+  importance: bookmark.importance,
   createdAt: "...",
   updatedAt: "...",
   lastOpenedAt: null,
@@ -72,24 +79,34 @@ When Launch Desk pins a remote bookmark, it creates a local item similar to:
 }
 ```
 
-The local item is then placed on the Launch Desk Home grid.
+The local item is then placed on the Launch Desk Home grid. Home placement, folder group placement, zone membership, and usage tracking remain local to Launch Desk.
 
 ## Duplicate Detection
 
-Launch Desk treats a bookmark as already pinned if either of these matches:
+Launch Desk treats a remote bookmark as already pinned when a local URL item has the same `remoteBookmarkId` as the remote bookmark ID.
 
-- Local URL item `remoteBookmarkId` equals the remote bookmark ID.
-- Local URL item target equals the remote bookmark URL after lowercasing.
+URL equality is not used for duplicate detection. A local URL item and a remote URL proxy item may point to the same URL while keeping ownership clear.
 
-## Remote Deletion Behavior
+## Remote Deletion And Conversion Behavior
 
-When Launch Desk deletes a remote bookmark through website-link:
+When Launch Desk deletes a remote bookmark through website-link from the URLs page, the remote bookmark is removed from website-link and the bookmark cache is refreshed.
 
-- The remote bookmark is removed from website-link.
-- The Launch Desk bookmark cache is refreshed.
-- Existing pinned local URL items are not automatically deleted.
+When Launch Desk deletes a remote URL proxy item from Home or All:
 
-This is intentional for the current MVP and should be handled carefully in future cleanup flows.
+- The backing website-link bookmark is deleted.
+- The local proxy item is removed from Launch Desk.
+
+When Launch Desk converts a remote URL proxy item to a local URL item:
+
+- The backing website-link bookmark is deleted.
+- `remoteBookmarkId` is cleared locally.
+- Title, URL, favicon, tags, notes, importance, placements, zones, folder group placement, and usage tracking are preserved locally.
+
+When Launch Desk promotes a local URL item to a remote URL item:
+
+- A website-link bookmark is created with the local URL metadata.
+- The returned bookmark ID is stored as `remoteBookmarkId`.
+- The local item becomes a remote URL proxy item.
 
 ## Compatibility Surface
 
@@ -142,4 +159,4 @@ GET /api/bookmarks/sync?since=<timestamp>
 
 This should return changed bookmarks and deleted tombstones since the provided timestamp.
 
-Do not add this until the data model includes `updatedAt` and deletion metadata.
+Do not add this until the data model includes `updatedAt`, version metadata, and deletion metadata.

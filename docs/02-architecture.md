@@ -133,4 +133,4 @@ The most important compatibility surface is:
 GET /api/bookmarks
 ```
 
-Launch Desk also currently uses add, update, and delete endpoints.
+Launch Desk also currently uses add, update, and delete endpoints from the URLs page, Home/All remote URL edit/delete flows, and local/remote URL conversion flows.

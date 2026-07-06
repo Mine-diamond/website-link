@@ -120,13 +120,15 @@ See `docs/03-api.md` for details.
 
 ## Relationship With Launch Desk
 
-Launch Desk fetches bookmarks from website-link and can add, edit, and delete remote bookmarks through the existing API. When a remote bookmark is pinned in Launch Desk, Launch Desk creates a local URL item and stores the remote bookmark ID as local metadata.
+Launch Desk fetches bookmarks from website-link and can add, edit, and delete remote bookmarks through the existing API. When a remote bookmark is pinned in Launch Desk, Launch Desk creates a local remote URL proxy item and stores the remote bookmark ID as local metadata.
+
+Launch Desk can also promote a local URL item into a website-link bookmark, or convert a remote URL proxy back to a local URL item by deleting the backing remote bookmark and keeping the local metadata.
 
 The ownership split is:
 
 ```text
 website-link owns bookmark metadata.
-Launch Desk owns launcher state.
+Launch Desk owns launcher state and metadata for local-only URL items.
 ```
 
 See `docs/07-launch-desk-integration.md` for details.
