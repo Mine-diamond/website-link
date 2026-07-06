@@ -9,11 +9,11 @@ Current characteristics:
 - Light and dark themes.
 - Mica-like radial background accents.
 - Flat Fluent surfaces with translucent panels, subtle borders, and restrained shadows.
-- A large workspace header with title, subtitle, and theme control.
+- A compact header with only the title and theme control.
 - A command-bar style search, filter, add, and AI toolbar.
 - Responsive flat bookmark cards with favicon or first-letter fallback icons, tag pills, star importance, and low-noise action buttons.
-- Glass modal form for add/edit, reserved for floating UI layers.
-- Glass toast notifications created from JavaScript, reserved for floating UI layers.
+- Lightly blurred modal form for add/edit, reserved for floating UI layers.
+- Lightly blurred toast notifications created from JavaScript, reserved for floating UI layers.
 - AI suggestion cards below the bookmark grid using the same panel/card language.
 - Remix Icon is used for the main web app icons through the CDN stylesheet.
 - The browser extension keeps inline SVG icons to avoid extension CSP and offline-loading issues.
@@ -171,11 +171,11 @@ website-link should not copy the Launch Desk desktop shell exactly. It should ad
 Current web layout:
 
 - A centered page shell with a soft radial accent background.
-- A compact top header with brand, theme toggle, and future settings/auth controls.
+- A compact top header with title and theme toggle.
 - A prominent search and filter toolbar.
-- Bookmark cards using translucent card surfaces.
-- Modals using glass-like panels with subtle borders.
-- Toasts using the same panel/card language.
+- Bookmark cards using flat translucent card surfaces.
+- Modals using lightly blurred floating panels with subtle borders.
+- Toasts using the same restrained floating panel language.
 - Mobile layout that keeps search and add actions easy to reach.
 
 ## Bookmark Card Direction
@@ -188,14 +188,14 @@ Bookmark cards are designed to be calm and Launch Desk-like:
 - Icon-first header.
 - Title and domain visible before notes.
 - Tags and importance shown as metadata, not dominant visual elements.
-- Hover should use `--color-card-hover` and a slight border/shadow change.
+- Hover should use `--color-card-hover` and a subtle border change, without elevation.
 
 ## Modal Direction
 
 Add/edit modals use:
 
-- `--color-panel` background.
-- `backdrop-filter: blur(...) saturate(...)`.
+- `--color-panel-strong` background.
+- Restrained `backdrop-filter` only for the floating modal layer.
 - `--radius-panel`.
 - `--color-border`.
 - Consistent control radius and spacing.
