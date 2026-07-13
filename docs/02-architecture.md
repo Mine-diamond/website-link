@@ -16,7 +16,7 @@ Cloudflare KV BOOKMARKS_KV, key "bookmarks"
 
 The browser extension uses the same API directly.
 
-Launch Desk also uses the same API directly.
+Vortex also uses the same API directly.
 
 ## Frontend
 
@@ -123,9 +123,9 @@ The `_redirects` file contains:
 
 This allows `/search?q=...` to load the same static app while preserving the URL. The frontend reads `q` from the query string and runs a search after the initial bookmark load.
 
-## Launch Desk Dependency
+## Vortex Dependency
 
-Launch Desk depends on the API and bookmark data shape. Any breaking API or schema change should be coordinated with Launch Desk.
+Vortex depends on the API and bookmark data shape. Any breaking API or schema change should be coordinated with Vortex.
 
 The most important compatibility surface is:
 
@@ -133,4 +133,4 @@ The most important compatibility surface is:
 GET /api/bookmarks
 ```
 
-Launch Desk also currently uses add, update, and delete endpoints from the URLs page, Home/All remote URL edit/delete flows, and local/remote URL conversion flows.
+Vortex also currently uses add, update, and delete endpoints from All > Remote URLs, linked Home item flows, and local/remote URL conversion flows. Native HTTP, credentials, and active-scope cache access are owned by typed Rust/Tauri commands rather than the WebView.

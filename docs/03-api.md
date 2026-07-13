@@ -26,7 +26,7 @@ If `BOOKMARK_API_TOKEN` is configured, every non-`OPTIONS` request must send:
 Authorization: Bearer <token>
 ```
 
-Launch Desk and the browser extension both support sending this token.
+Vortex and the browser extension both support sending this token. Vortex stores it in Windows Credential Manager under `tech.minediamond.vortex/bookmark-api-token`; only the Rust backend reads it and constructs the authorization header, so the WebView never receives the secret.
 
 ## CORS
 
@@ -84,7 +84,7 @@ Response:
 Used by:
 
 - website-link web app
-- Launch Desk
+- Vortex
 
 ## POST /api/bookmarks
 
@@ -125,7 +125,7 @@ Current behavior:
 - `importance` defaults to `1` if not provided.
 - `dateAdded` and `updatedAt` are both set when the bookmark is created.
 - Invalid input returns `400`.
-- Launch Desk also uses this endpoint when promoting a local URL item into a remote website-link bookmark.
+- Vortex also uses this endpoint when promoting a local URL item into a remote website-link bookmark.
 
 ## POST /api/bookmarks/update
 
@@ -167,7 +167,7 @@ Current behavior:
 - `updatedAt` is written on every successful update.
 - Updating `url` regenerates `favicon` unless the request explicitly provides `favicon`.
 - Missing IDs return `400`; unknown IDs return `404`.
-- Launch Desk also uses this endpoint when editing remote URL proxy items from Home or All.
+- Vortex also uses this endpoint when editing a linked remote URL proxy item from Home and when editing the remote bookmark record under All > Remote URLs.
 
 ## POST /api/bookmarks/delete
 
@@ -194,7 +194,7 @@ Current behavior:
 - Missing IDs return `400`; unknown IDs return `404`.
 - Deletion is hard deletion from the KV array.
 - There is no tombstone or `deletedAt` field.
-- Launch Desk also uses this endpoint when deleting a remote URL proxy item or converting a remote URL proxy item back to a local URL item.
+- Vortex also uses this endpoint when deleting a remote URL proxy item or converting a remote URL proxy item back to a local URL item.
 
 ## GET /api/bookmarks/search
 

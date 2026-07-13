@@ -82,7 +82,7 @@ When configured, the API checks:
 Authorization: Bearer <token>
 ```
 
-Launch Desk and the browser extension both have settings for this token. If this variable is not configured, the API remains open for compatibility.
+Vortex and the browser extension both support this token. Vortex stores it in Windows Credential Manager under `tech.minediamond.vortex/bookmark-api-token`; the token is used only by its Rust backend and is not returned to the WebView. If this variable is not configured, the API remains open for compatibility.
 
 ## Redirects
 
