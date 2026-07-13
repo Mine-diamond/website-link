@@ -19,7 +19,7 @@ Current characteristics:
 - The browser extension keeps inline SVG icons for extension CSP compatibility and offline loading.
 - The browser extension popup uses the same flat Fluent token direction as the main web app.
 
-The current style is intended to align with Launch Desk's Fluent/Mica visual direction while remaining a responsive website.
+The current style is intended to align with Vortex's Fluent/Mica visual direction while remaining a responsive website.
 
 ## Current Theme Mechanism
 
@@ -84,7 +84,7 @@ The active redesign direction is:
 Windows 11 Fluent + Mica Bookmark Workspace
 ```
 
-The redesigned website-link should visually align with Launch Desk while still behaving like a responsive website.
+The redesigned website-link should visually align with Vortex while still behaving like a responsive website.
 
 ## Visual Keywords
 
@@ -101,7 +101,7 @@ The redesigned website-link should visually align with Launch Desk while still b
 
 ## Font
 
-Use the same font family as Launch Desk:
+Use the same font family as Vortex:
 
 ```css
 font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
@@ -109,7 +109,7 @@ font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
 
 ## Token Direction
 
-The current UI now uses Launch Desk compatible token names:
+The current UI now uses Vortex compatible token names:
 
 ```css
 --color-bg
@@ -137,7 +137,7 @@ The current UI now uses Launch Desk compatible token names:
 --shadow-soft
 ```
 
-Launch Desk light theme reference:
+Vortex light theme reference:
 
 ```css
 --color-bg: #f5f5f5;
@@ -151,7 +151,7 @@ Launch Desk light theme reference:
 --color-accent-wash: rgba(0, 103, 192, 0.14);
 ```
 
-Launch Desk dark theme reference:
+Vortex dark theme reference:
 
 ```css
 --color-bg: #202020;
@@ -167,7 +167,7 @@ Launch Desk dark theme reference:
 
 ## Layout Direction
 
-website-link should not copy the Launch Desk desktop shell exactly. It should adapt the same visual language for a web bookmark page.
+website-link should not copy the Vortex desktop shell exactly. It should adapt the same visual language for a web bookmark page.
 
 Current web layout:
 
@@ -181,7 +181,7 @@ Current web layout:
 
 ## Bookmark Card Direction
 
-Bookmark cards are designed to be calm and Launch Desk-like:
+Bookmark cards are designed to be calm and Vortex-like:
 
 - Less saturated gradients.
 - More transparent card surfaces.

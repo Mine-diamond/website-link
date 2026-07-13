@@ -76,21 +76,24 @@ Current features:
 - Uses a compact Fluent/Mica-aligned style with flat surfaces and inline SVG icons.
 - Defaults the API URL to `https://bookmark.minediamond.tech`.
 
-## Launch Desk Integration
+## Vortex Integration
 
-Launch Desk uses website-link bookmarks as remote URL data.
+Vortex uses website-link bookmarks as remote URL data.
 
-Launch Desk currently supports:
+Vortex currently supports:
 
 - Fetching website-link bookmarks.
-- Caching fetched bookmarks locally in SQLite.
+- Loading and replacing an active-scope bookmark cache in local SQLite through Rust/Tauri commands.
 - Searching remote bookmarks locally.
 - Opening remote bookmarks.
 - Pinning remote bookmarks as local remote URL proxy items.
-- Adding, editing, and deleting remote bookmarks through website-link API endpoints from URLs, Home, and All surfaces.
-- Promoting Launch Desk local URL items into website-link bookmarks.
-- Converting Launch Desk remote URL proxy items back to local URL items by deleting the backing website-link bookmark.
+- Browsing and mutating remote bookmarks under All > Remote URLs.
+- Editing and deleting linked remote URL proxy items from Home.
+- Reconciling linked local proxies after remote mutations under All > Remote URLs.
+- Promoting Vortex local URL items into website-link bookmarks.
+- Converting Vortex remote URL proxy items back to local URL items by deleting the backing website-link bookmark.
 - Keeping local URL metadata such as tags, notes, and importance aligned with remote bookmark fields for conversion.
+- Keeping the bearer token in Windows Credential Manager behind the Rust boundary; the WebView receives only configured/not-configured state.
 
 ## Current Limitations
 

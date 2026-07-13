@@ -2,7 +2,7 @@
 
 website-link is a personal web bookmark manager. It provides a static web UI, a Cloudflare Pages Functions API, Cloudflare KV storage, and a browser extension for saving the current page.
 
-The deployed service is currently used as the remote bookmark source for Launch Desk.
+The deployed service is currently used as the remote bookmark source for Vortex.
 
 ## Current Role
 
@@ -16,7 +16,7 @@ website-link owns website bookmark metadata:
 - Favicon
 - Date added
 
-Launch Desk owns local launcher state such as Home placement, zones, folder groups, usage tracking, and pinned URL items.
+Vortex owns local launcher state such as Home placement, zones, folder groups, usage tracking, and pinned URL items.
 
 ## Main Capabilities
 
@@ -28,7 +28,7 @@ Launch Desk owns local launcher state such as Home placement, zones, folder grou
 - Run AI-assisted bookmark search and website suggestions.
 - Add AI-suggested websites as bookmarks.
 - Save the current browser tab through the browser extension.
-- Expose bookmark data to Launch Desk through the HTTP API.
+- Expose bookmark data to Vortex through the HTTP API.
 
 ## Project Structure
 
@@ -73,8 +73,8 @@ There is currently no build step, package manager setup, test runner, or framewo
 - `docs/03-api.md`: current API surface and request/response shapes.
 - `docs/04-data-model.md`: bookmark data model and future sync model.
 - `docs/05-deployment.md`: Cloudflare Pages, KV, and environment variable setup.
-- `docs/06-ui-style.md`: current UI style and future Launch Desk aligned direction.
-- `docs/07-launch-desk-integration.md`: relationship with Launch Desk.
+- `docs/06-ui-style.md`: current UI style and future Vortex aligned direction.
+- `docs/07-vortex-integration.md`: relationship with Vortex.
 - `docs/08-development-notes.md`: known limitations and recommended improvement order.
 
 ## Deployment Summary
@@ -118,25 +118,25 @@ POST /api/bookmarks/ai-query
 
 See `docs/03-api.md` for details.
 
-## Relationship With Launch Desk
+## Relationship With Vortex
 
-Launch Desk fetches bookmarks from website-link and can add, edit, and delete remote bookmarks through the existing API. When a remote bookmark is pinned in Launch Desk, Launch Desk creates a local remote URL proxy item and stores the remote bookmark ID as local metadata.
+Vortex uses typed Rust/Tauri commands to fetch bookmarks from website-link and to add, edit, and delete remote bookmarks through the existing API. Its WebView never receives the bearer token. When a remote bookmark is pinned in Vortex, Vortex creates a local remote URL proxy item and stores the remote bookmark ID as local metadata.
 
-Launch Desk can also promote a local URL item into a website-link bookmark, or convert a remote URL proxy back to a local URL item by deleting the backing remote bookmark and keeping the local metadata.
+Vortex can also promote a local URL item into a website-link bookmark, or convert a remote URL proxy back to a local URL item by deleting the backing remote bookmark and keeping the local metadata.
 
 The ownership split is:
 
 ```text
 website-link owns bookmark metadata.
-Launch Desk owns launcher state and metadata for local-only URL items.
+Vortex owns launcher state and metadata for local-only URL items.
 ```
 
-See `docs/07-launch-desk-integration.md` for details.
+See `docs/07-vortex-integration.md` for details.
 
 ## Current Improvement Priorities
 
 Recommended next improvements:
 
-1. Continue refining the Launch Desk Fluent/Mica visual language.
+1. Continue refining the Vortex Fluent/Mica visual language.
 2. Consider incremental sync once version and deletion metadata exist.
 3. Consider D1 only if KV single-array storage becomes a real limitation.

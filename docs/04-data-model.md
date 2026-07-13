@@ -82,23 +82,23 @@ Example:
 ]
 ```
 
-## Launch Desk Compatibility
+## Vortex Compatibility
 
-Launch Desk has a matching `WebsiteBookmark` type and depends on the current fields.
+Vortex has a matching `WebsiteBookmark` type and depends on the current fields.
 
-The most important fields for Launch Desk are:
+The most important fields for Vortex are:
 
 - `id`, used as `remoteBookmarkId` when pinned locally.
 - `title`, used as the local URL item title.
 - `url`, used as the local URL item target.
 - `favicon`, used as the local URL item icon.
 - `tags` and `notes`, used for search matching and cached on remote URL proxy items.
-- `importance`, used for search scoring, URL page sorting, and cached on remote URL proxy items.
+- `importance`, used for search scoring, All > Remote URLs sorting, and cached on remote URL proxy items.
 - `dateAdded`, used for sorting and local transient item metadata.
 
-Launch Desk local URL items mirror the same title, URL, favicon, tags, notes, and importance shape so local URLs can be promoted into website-link bookmarks and remote URL proxy items can be converted back to local URL items without losing metadata.
+Vortex local URL items mirror the same title, URL, favicon, tags, notes, and importance shape so local URLs can be promoted into website-link bookmarks and remote URL proxy items can be converted back to local URL items without losing metadata.
 
-Breaking changes to these fields should be coordinated with Launch Desk.
+Breaking changes to these fields should be coordinated with Vortex.
 
 ## Implemented API Hardening
 

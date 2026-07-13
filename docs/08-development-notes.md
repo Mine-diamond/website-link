@@ -61,14 +61,14 @@ AI query:
 ## Recommended Improvement Order
 
 1. Keep this documentation baseline current.
-2. Update Launch Desk compatibility if the data model changes.
-3. Continue the Launch Desk aligned visual redesign.
+2. Update Vortex compatibility if the data model changes.
+3. Continue the Vortex aligned visual redesign.
 4. Add incremental sync only after `version` and deletion metadata exist.
 5. Consider a D1 migration only if KV becomes a real limitation.
 
 ## Style Maintenance Notes
 
-The current UI is aligned with Launch Desk's Fluent/Mica visual language while remaining a responsive website.
+The current UI is aligned with Vortex's Fluent/Mica visual language while remaining a responsive website.
 
 The web app should remain:
 
@@ -85,7 +85,7 @@ When API behavior changes, update:
 
 - `docs/03-api.md`
 - `docs/04-data-model.md`
-- `docs/07-launch-desk-integration.md`
+- `docs/07-vortex-integration.md`
 
 When visual direction changes, update:
 
